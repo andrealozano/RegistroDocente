@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_estudiantes"
+            android:icon="@drawable/ic_menu_estudiante"
+            android:title="Estudiantes" />
+        <item
+            android:id="@+id/nav_asistencias"
+            android:icon="@drawable/ic_menu_asistencias"
+            android:title="Asistencias" />
+        <item
+            android:id="@+id/nav_notas"
+            android:icon="@drawable/ic_menu_notas"
+            android:title="Notas" >
+        </item>
+    </group>
+</menu>

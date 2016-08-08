@@ -1,0 +1,55 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.FragmentResumenNotasParcial">
+
+    <!-- TODO: Update blank fragment layout -->
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/tlResumenNotas"
+        android:baselineAligned="false">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/highlighted_text_material_dark"
+            android:padding="5dp">
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="N°"
+                android:id="@+id/textView2"
+                android:layout_column="0" />
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Nombres"
+                android:id="@+id/textView3"
+                android:layout_column="1" />
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Estado"
+                android:id="@+id/textView4"
+                android:layout_column="2" />
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Nota"
+                android:id="@+id/textView5"
+                android:layout_column="3" />
+
+            <TextView
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="% Asistencias"
+                android:id="@+id/textView6"
+                android:layout_column="4" />
+        </TableRow>
+
+    </TableLayout>
+
+</FrameLayout>

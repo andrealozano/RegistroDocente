@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <TableRow
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="01"
+            android:id="@+id/txtCodigo"
+            android:layout_column="9"
+            android:textColor="@color/colorAccent" />
+
+        <TextView
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Medium Text 2"
+            android:id="@+id/txtEstudiante"
+            android:layout_column="9"
+            android:textColor="@color/colorListItemPrimary" />
+
+    </TableRow>
+</TableLayout>

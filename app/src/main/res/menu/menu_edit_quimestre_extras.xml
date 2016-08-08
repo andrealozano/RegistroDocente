@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activity.EditQuimestre">
+
+    <item
+        android:id="@+id/action_parciales"
+        android:orderInCategory="103"
+        android:title="Parciales"
+        android:icon="@android:drawable/ic_menu_manage"
+        app:showAsAction="never" />
+</menu>

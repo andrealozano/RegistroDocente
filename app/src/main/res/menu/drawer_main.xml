@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/action_periodos"
+            android:icon="@drawable/ic_menu_periodo"
+            android:title="Periodos académicos" />
+        <item
+            android:id="@+id/action_clases"
+            android:icon="@drawable/ic_menu_clase"
+            android:title="Clases" />
+    </group>
+
+</menu>

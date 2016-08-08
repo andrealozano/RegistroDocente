@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.unl.lapc.registrodocente">
+
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <activity
+            android:name=".activity.Main"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.Periodos"
+            android:label="Periodos académicos"
+            android:parentActivityName=".activity.Main" />
+        <activity android:name=".activity.Quimestres" />
+        <activity
+            android:name=".activity.EditPeriodo"
+            android:label="Editar periodo"
+            android:parentActivityName=".activity.Periodos" />
+        <activity
+            android:name=".activity.Clases"
+            android:label="Clases"
+            android:parentActivityName=".activity.Main" />
+        <activity
+            android:name=".activity.EditClase"
+            android:label="Clases"
+            android:parentActivityName=".activity.Clases" />
+
+        <activity
+            android:name=".activity.Acreditables"
+            android:label="Acreditables" />
+        <activity
+            android:name=".activity.EditQuimestre"
+            android:label="Editar quimestre" />
+        <activity
+            android:name=".activity.EditAcreditable"
+            android:label="Editar Acreditable" />
+        <activity android:name=".activity.Calendarios" android:label="Calendario" />
+        <activity
+            android:name=".activity.MainClase"
+            android:label="@string/title_activity_main_notas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.Parciales" />
+        <activity
+            android:name=".activity.EditParcial"
+            android:label="@string/title_activity_edit_parcial"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity
+            android:name=".activity.EditEstudiante"
+            android:label="Editar estudiante"></activity>
+    </application>
+
+</manifest>
