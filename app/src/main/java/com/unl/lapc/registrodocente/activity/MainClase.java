@@ -153,9 +153,7 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
         getSupportActionBar().setTitle(clase.getNombre() + ": Resumen notas");
-
         mostrarMenu(true);
     }
 
@@ -168,7 +166,6 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
         getSupportActionBar().setTitle(clase.getNombre() + ": " + quimestre.getNombre());
     }
 
@@ -181,7 +178,6 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-
         getSupportActionBar().setTitle(clase.getNombre() + ": " + parcial.getNombre());
     }
 

@@ -11,7 +11,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/tlResumenNotas"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        android:stretchColumns="1">
 
         <TableRow
             android:layout_width="match_parent"

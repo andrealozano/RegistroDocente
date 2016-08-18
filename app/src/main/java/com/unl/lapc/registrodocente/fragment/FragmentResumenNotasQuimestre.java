@@ -91,11 +91,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_resumen_notas_quimestre, container, false);
-
         tlResumenNotas = (TableLayout)view.findViewById(R.id.tlResumenNotas);
-
         cargar();
-
         return view;
     }
 
