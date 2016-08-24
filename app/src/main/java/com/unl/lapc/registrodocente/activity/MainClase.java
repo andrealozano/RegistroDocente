@@ -10,15 +10,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.SubMenu;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
-import com.unl.lapc.registrodocente.dao.ParcialDao;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
-import com.unl.lapc.registrodocente.dao.QuimestreDao;
+import com.unl.lapc.registrodocente.dto.Parcial;
+import com.unl.lapc.registrodocente.dto.Quimestre;
 import com.unl.lapc.registrodocente.fragment.FragmentAsistancias;
 import com.unl.lapc.registrodocente.fragment.FragmentEstudiantes;
 import com.unl.lapc.registrodocente.fragment.FragmentResumenNotas;
@@ -26,9 +25,7 @@ import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.fragment.FragmentResumenNotasParcial;
 import com.unl.lapc.registrodocente.fragment.FragmentResumenNotasQuimestre;
 import com.unl.lapc.registrodocente.modelo.Clase;
-import com.unl.lapc.registrodocente.modelo.Parcial;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.modelo.Quimestre;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,8 +36,8 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
     private PeriodoDao periodoDao;
     private ClaseDao claseDao;
     private AcreditableDao daoAcreditable;
-    private QuimestreDao quimestreDao;
-    private ParcialDao parcialDao;
+    //private QuimestreDao quimestreDao;
+    //private ParcialDao parcialDao;
     private EstudianteDao estudianteDao;
 
     private Clase clase;
@@ -70,8 +67,8 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         periodoDao = new PeriodoDao(this);
         claseDao = new ClaseDao(this);
         daoAcreditable = new AcreditableDao(this);
-        quimestreDao = new QuimestreDao(this);
-        parcialDao = new ParcialDao(this);
+        //quimestreDao = new QuimestreDao(this);
+        //parcialDao = new ParcialDao(this);
         estudianteDao = new EstudianteDao(this);
 
         Bundle bundle = getIntent().getExtras();
@@ -81,28 +78,29 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         TextView txtNavSubtitle = (TextView)findViewById(R.id.txtNavSubtitle);
         //txtNavSubtitle.setText(String.format("%s (%s)", clase.getNombre(), periodo.getNombre()));
 
+        estudianteDao.initNotas(clase, periodo);
         cargarMenu(menu);
         cargarEstudiantes();
     }
 
     private void cargarMenu(Menu menu){
-        List<Quimestre> quimestres = quimestreDao.getAll(clase.getPeriodo());
+        //List<Quimestre> quimestres = quimestreDao.getAll(clase.getPeriodo());
 
         //group_id , item_id , order, nombre
         int gid = 1;
         int id = 1;
 
-        for(Quimestre q : quimestres){
-            MenuItem s = menu.add(gid, id, id, q.getNombre());
+        for(int q = 1; q <= periodo.getQuimestres(); q++){
+            MenuItem s = menu.add(gid, id, id, "Quimestre " + q);
             s.setIcon(R.drawable.ic_dashboard_black_18dp);
-            menuItems.put(s, q);
+            menuItems.put(s, new Quimestre(q));
             id++;
 
-            List<Parcial> parciales = parcialDao.getAll(q);
-            for (Parcial p: parciales){
-                MenuItem sp = menu.add(gid, id, id, p.getNombre());
+            //List<Parcial> parciales = parcialDao.getAll(q);
+            for (int p=1; p <= periodo.getParciales(); p++){
+                MenuItem sp = menu.add(gid, id, id, "Parcial " + p);
                 sp.setIcon(R.drawable.ic_toc_black_18dp);
-                menuItems.put(sp, p);
+                menuItems.put(sp, new Parcial(q, p));
 
                 id++;
             }
@@ -122,6 +120,8 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
 
         Bundle args = new Bundle();
         args.putParcelable("clase", clase);
+        args.putParcelable("periodo", periodo);
+
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -136,6 +136,7 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
 
         Bundle args = new Bundle();
         args.putParcelable("clase", clase);
+        args.putParcelable("periodo", periodo);
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -150,6 +151,7 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
 
         Bundle args = new Bundle();
         args.putParcelable("clase", clase);
+        args.putParcelable("periodo", periodo);
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
@@ -162,11 +164,12 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
 
         Bundle args = new Bundle();
         args.putParcelable("clase", clase);
+        args.putParcelable("periodo", periodo);
         args.putParcelable("quimestre", quimestre);
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-        getSupportActionBar().setTitle(clase.getNombre() + ": " + quimestre.getNombre());
+        getSupportActionBar().setTitle(clase.getNombre() + ": Quimestre " + quimestre.getNumero());
     }
 
     private void cargarResumenNotasParcial(Parcial parcial){
@@ -174,11 +177,12 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
 
         Bundle args = new Bundle();
         args.putParcelable("clase", clase);
+        args.putParcelable("periodo", periodo);
         args.putParcelable("parcial", parcial);
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-        getSupportActionBar().setTitle(clase.getNombre() + ": " + parcial.getNombre());
+        getSupportActionBar().setTitle(clase.getNombre() + ": Parcial " + parcial.getNumero());
     }
 
     @Override

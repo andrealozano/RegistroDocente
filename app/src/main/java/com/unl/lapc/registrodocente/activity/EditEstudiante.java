@@ -15,6 +15,7 @@ import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 public class EditEstudiante extends AppCompatActivity {
 
@@ -22,6 +23,7 @@ public class EditEstudiante extends AppCompatActivity {
     private ClaseDao daoClase;
 
     private Clase clase;
+    private Periodo periodo;
     private Estudiante estudiante;
     //private ClaseEstudiante claseEstudiante;
 
@@ -53,6 +55,7 @@ public class EditEstudiante extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         clase = bundle.getParcelable("clase");
         estudiante = bundle.getParcelable("estudiante");
+        periodo =  bundle.getParcelable("periodo");
 
         if(estudiante.getId() > 0){
             //Recarga porque solo vienen datos generales

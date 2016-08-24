@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".activity.EditPeriodo">
 
+    <!--
     <item
         android:id="@+id/action_quimestres"
         android:orderInCategory="200"
         android:title="Quimestres"
         android:icon="@drawable/ic_touch_app_black_18dp"
         app:showAsAction="never" />
+    -->
 
     <item
         android:id="@+id/action_acreditables"

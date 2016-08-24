@@ -88,7 +88,7 @@ public class Periodos extends AppCompatActivity {
             //menu.add(group_id , item_id , order, nombre);
             menu.add(0, 0, 0, "Editar");
             //------------------------------
-            menu.add(1, 1, 1, "Quimestres");
+            //menu.add(1, 1, 1, "Quimestres");
             menu.add(1, 2, 2, "Acreditables");
             menu.add(1, 3, 4, "Calendario");
         }
@@ -105,11 +105,11 @@ public class Periodos extends AppCompatActivity {
             editAction(p);
         }
 
-        if(id == 1) {
+        /*if(id == 1) {
             Intent intent = new Intent(this, Quimestres.class);
             intent.putExtra("periodo", p);
             startActivity(intent);
-        }
+        }*/
 
         if(id == 2) {
             Intent intent = new Intent(this, Acreditables.class);

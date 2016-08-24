@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
+import com.unl.lapc.registrodocente.dto.Parcial;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
-import com.unl.lapc.registrodocente.modelo.Parcial;
 
 import java.util.List;
 

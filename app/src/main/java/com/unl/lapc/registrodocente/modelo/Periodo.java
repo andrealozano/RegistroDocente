@@ -15,6 +15,8 @@ public class Periodo implements Parcelable{
     private Date inicio = new Date();
     private Date fin = new Date();
     private double escala = 10; //escala calificacion sobre 10, 20, 100
+    private int quimestres;
+    private int parciales;
 
     public Periodo(){
     }
@@ -28,12 +30,14 @@ public class Periodo implements Parcelable{
         this.nombre = nombre;
     }
 
-    public Periodo(int id, String nombre, Date inicio, Date fin, double escala){
+    public Periodo(int id, String nombre, Date inicio, Date fin, double escala, int quimestres, int parciales){
         this.id = id;
         this.nombre = nombre;
         this.inicio = inicio;
         this.fin = fin;
         this.escala = escala;
+        this.quimestres = quimestres;
+        this.parciales = parciales;
     }
 
     @Override
@@ -78,6 +82,12 @@ public class Periodo implements Parcelable{
     public double getEscala() {return escala;}
     public void setEscala(double escala) {this.escala = escala;}
 
+    public int getQuimestres() {return quimestres;}
+    public void setQuimestres(int quimestres) {this.quimestres = quimestres;}
+
+    public int getParciales() {return parciales;}
+    public void setParciales(int parciales) {this.parciales = parciales;}
+
     @Override
     public int describeContents() {
         return 0;
@@ -90,6 +100,8 @@ public class Periodo implements Parcelable{
         this.inicio = new Date(in.readLong());
         this.fin = new Date(in.readLong());
         this.escala = in.readDouble();
+        this.quimestres = in.readInt();
+        this.parciales = in.readInt();
     }
 
     @Override
@@ -99,6 +111,8 @@ public class Periodo implements Parcelable{
         parcel.writeLong(getInicio().getTime());
         parcel.writeLong(getFin().getTime());
         parcel.writeDouble(getEscala());
+        parcel.writeInt(getQuimestres());
+        parcel.writeInt(getParciales());
     }
 
     public static final Parcelable.Creator<Periodo> CREATOR = new Parcelable.Creator<Periodo>() {

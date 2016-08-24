@@ -12,12 +12,9 @@ import android.widget.ListView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.AcreditableAdapter;
-import com.unl.lapc.registrodocente.adapter.QuimestreAdapter;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
-import com.unl.lapc.registrodocente.dao.QuimestreDao;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.modelo.Quimestre;
 
 public class Acreditables extends AppCompatActivity {
 

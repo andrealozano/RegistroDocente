@@ -9,8 +9,6 @@ import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
-import com.unl.lapc.registrodocente.modelo.Quimestre;
-import com.unl.lapc.registrodocente.util.Convert;
 
 import java.util.List;
 

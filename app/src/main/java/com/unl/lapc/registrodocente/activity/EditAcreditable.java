@@ -7,16 +7,13 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
-import com.unl.lapc.registrodocente.dao.QuimestreDao;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.modelo.Quimestre;
 import com.unl.lapc.registrodocente.util.Convert;
 
 import java.util.Calendar;

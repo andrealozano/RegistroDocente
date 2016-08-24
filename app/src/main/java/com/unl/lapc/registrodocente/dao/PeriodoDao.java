@@ -27,6 +27,8 @@ public class PeriodoDao extends DBHandler {
         values.put("inicio", toShortDate(periodo.getInicio()));
         values.put("fin", toShortDate(periodo.getFin()));
         values.put("escala", periodo.getEscala());
+        values.put("quimestres", periodo.getQuimestres());
+        values.put("parciales", periodo.getParciales());
 
         db.insert("periodo", null, values);
         db.close();
@@ -40,17 +42,19 @@ public class PeriodoDao extends DBHandler {
         values.put("inicio", toShortDate(periodo.getInicio()));
         values.put("fin", toShortDate(periodo.getFin()));
         values.put("escala", periodo.getEscala());
+        values.put("quimestres", periodo.getQuimestres());
+        values.put("parciales", periodo.getParciales());
 
         return db.update("periodo", values, "id = ?", new String[]{String.valueOf(periodo.getId())});
     }
 
     public Periodo get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("periodo", new String[] { "id", "nombre", "inicio", "fin", "escala"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query("periodo", new String[] { "id", "nombre", "inicio", "fin", "escala", "quimestres", "parciales"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4));
+        Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4), cursor.getInt(5), cursor.getInt(6));
 
         return per;
     }
@@ -64,13 +68,13 @@ public class PeriodoDao extends DBHandler {
     public List<Periodo> getAll() {
         List<Periodo> lista = new ArrayList<>();
 
-        String selectQuery = "SELECT id, nombre, inicio, fin, escala FROM periodo";
+        String selectQuery = "SELECT id, nombre, inicio, fin, escala, quimestres, parciales FROM periodo";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4));
+                Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4), cursor.getInt(5), cursor.getInt(6));
                 lista.add(per);
             } while (cursor.moveToNext());
         }

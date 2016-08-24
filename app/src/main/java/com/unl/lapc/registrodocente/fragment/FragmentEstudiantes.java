@@ -20,13 +20,17 @@ import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 public class FragmentEstudiantes extends Fragment {
 
     private ListView mLeadsList;
     private ClaseDao dao;
     private EstudianteDao daoEstudiante;
+
     private Clase clase;
+    private Periodo periodo;
+
     private ClaseEstudianteAdapter mLeadsAdapter;
 
     @Override
@@ -44,6 +48,8 @@ public class FragmentEstudiantes extends Fragment {
 
         Bundle bundle = getArguments();
         clase = bundle.getParcelable("clase");
+        periodo = bundle.getParcelable("periodo");
+
         if(clase.getId() > 0){
             clase = dao.getClase(clase.getId());
         }
@@ -68,7 +74,7 @@ public class FragmentEstudiantes extends Fragment {
             public void onClick(View view) {
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                editEstudiante(new Estudiante(clase));
+                editEstudiante(new Estudiante(clase, periodo));
 
             }
         });
@@ -80,6 +86,7 @@ public class FragmentEstudiantes extends Fragment {
         Intent intent = new Intent(getContext(), EditEstudiante.class);
 
         intent.putExtra("clase", clase);
+        intent.putExtra("periodo", periodo);
         intent.putExtra("estudiante", estudiante);
 
         startActivity(intent);

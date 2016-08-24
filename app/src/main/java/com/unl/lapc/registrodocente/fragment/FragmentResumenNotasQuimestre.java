@@ -12,32 +12,45 @@ import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
+import com.unl.lapc.registrodocente.dto.Quimestre;
+import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
-import com.unl.lapc.registrodocente.modelo.Quimestre;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.List;
 
 public class FragmentResumenNotasQuimestre extends Fragment {
 
     private EstudianteDao estudianteDao;
+
+    private Periodo periodo;
     private Clase clase;
     private Quimestre quimestre;
+
     private TableLayout tlResumenNotas;
 
     public FragmentResumenNotasQuimestre() {
         // Required empty public constructor
     }
 
-    public void cargar(){
+    private void cargarTh(){
+
+    }
+
+    public void cargarTr(){
         Bundle args = getArguments();
+
         this.clase = args.getParcelable("clase");
         this.quimestre = args.getParcelable("quimestre");
+        this.periodo = args.getParcelable("periodo");
 
         estudianteDao = new EstudianteDao(getContext());
-        List<Estudiante> lista = estudianteDao.getEstudiantes(clase);
+        List<ResumenQuimestre> lista = estudianteDao.getResumenQuimestre(periodo, clase, quimestre.getNumero());
 
-        for(int i= 0; i < lista.size(); i++){
+        cargarTh();
+
+        /*for(int i= 0; i < lista.size(); i++){
             Estudiante e = lista.get(i);
 
             TableRow row = new TableRow(getContext());
@@ -84,7 +97,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             row.addView(tv5);
 
             tlResumenNotas.addView(row);
-        }
+        }*/
     }
 
     @Override
@@ -92,7 +105,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_resumen_notas_quimestre, container, false);
         tlResumenNotas = (TableLayout)view.findViewById(R.id.tlResumenNotas);
-        cargar();
+
+        cargarTr();
         return view;
     }
 

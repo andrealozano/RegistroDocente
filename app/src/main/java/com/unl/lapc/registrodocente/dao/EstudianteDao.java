@@ -5,11 +5,17 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
+import com.unl.lapc.registrodocente.dto.ResumenQuimestreParcial;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by Usuario on 15/07/2016.
@@ -37,6 +43,7 @@ public class EstudianteDao extends DBHandler {
         values.put("porcentajeAsistencias", est.getPorcentajeAsistencias());
         values.put("estado", est.getEstado());
         values.put("clase_id", est.getClase().getId());
+        values.put("periodo_id", est.getPeriodo().getId());
 
         long id = db.insert(TABLE_NAME, null, values);
         est.setId((int)id);
@@ -58,17 +65,18 @@ public class EstudianteDao extends DBHandler {
         values.put("porcentajeAsistencias", est.getPorcentajeAsistencias());
         values.put("estado", est.getEstado());
         values.put("clase_id", est.getClase().getId());
+        values.put("periodo_id", est.getPeriodo().getId());
 
         return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(est.getId())});
     }
 
     public Estudiante get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "cedula", "nombres", "apellidos", "email", "celular", "sexo", "orden", "notaFinal", "porcentajeAsistencias", "estado", "clase_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "cedula", "nombres", "apellidos", "email", "celular", "sexo", "orden", "notaFinal", "porcentajeAsistencias", "estado", "clase_id", "periodo_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Estudiante contact = new Estudiante(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getString(10), new Clase(cursor.getInt(11)));
+        Estudiante contact = new Estudiante(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getString(6), cursor.getInt(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getString(10), new Clase(cursor.getInt(11)), new Periodo(cursor.getInt(12)));
 
         return contact;
     }
@@ -139,6 +147,28 @@ public class EstudianteDao extends DBHandler {
         db.close();
     }
 
+    public void initNotas(Clase cls, Periodo periodo) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        for(int q = 1; q <= periodo.getQuimestres();q++){
+            String sqlrq = String.format("insert into registroquimestral (periodo_id, clase_id, estudiante_id, quimestre, notaParciales, notaExamenes, notaFinal) select e.periodo_id, e.clase_id, e.id, %d, 0, 0, 0 from estudiante e where e.clase_id = %d and not exists (select n.id from registroquimestral n where n.estudiante_id = e.id and n.quimestre = %d)", q, cls.getId(), q);
+            db.execSQL(sqlrq);
+
+            String sqlraq = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaFinal) select e.periodo_id, e.clase_id, e.id, a.id, %d, 0, 0 from estudiante e, acreditable a where e.periodo_id=a.periodo_id and a.tipo='Quimestre' and  e.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = e.id and b.tipo='Quimestre' and n.quimestre = %d)", q, cls.getId(), q);
+            db.execSQL(sqlraq);
+
+            for(int p = 1; p <= periodo.getParciales();p++){
+                String sqlrp = String.format("insert into registroparcial (periodo_id, clase_id, estudiante_id, quimestre, parcial, notaFinal) select e.periodo_id, e.clase_id, e.id, %d, %d, 0 from estudiante e where e.clase_id = %d and not exists (select n.id from registroparcial n where n.estudiante_id = e.id and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
+                db.execSQL(sqlrp);
+
+                String sqlrap = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaFinal) select e.periodo_id, e.clase_id, e.id, a.id, %d, %d, 0 from estudiante e, acreditable a where e.periodo_id=a.periodo_id and a.tipo='Parcial' and  e.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = e.id and b.tipo='Parcial' and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
+                db.execSQL(sqlrap);
+            }
+        }
+
+        db.close();
+    }
+
     public List<Estudiante> getEstudiantes(Clase clase) {
         List<Estudiante> shopList = new ArrayList<>();
 
@@ -159,6 +189,45 @@ public class EstudianteDao extends DBHandler {
         }
 
         return shopList;
+    }
+
+
+    public List<ResumenQuimestre> getResumenQuimestre(Periodo periodo, Clase clase, int quimestre) {
+        List<ResumenQuimestre> list = new ArrayList<>();
+
+        String selectQuery = "SELECT e.id, e.numero, (e.nombres || ' ' || a.apellidos) nombres, r.notaParciales, r.notaExamenes, r.notaFinal from estudiante e, registroquimestral r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " order by e.orden asc";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                ResumenQuimestre e = new ResumenQuimestre(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5));
+                list.add(e);
+            } while (cursor.moveToNext());
+        }
+
+
+        String selectQuery1 = "SELECT e.id, r.parcial, r.notaFinal from estudiante e, registroparcial r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = "+quimestre+" order by r.parcial asc, e.id asc";
+        Cursor cursor1 = db.rawQuery(selectQuery1, null);
+        List<ResumenQuimestreParcial> list1 = new ArrayList<>();
+
+        if (cursor1.moveToFirst()) {
+            do {
+                ResumenQuimestreParcial e = new ResumenQuimestreParcial(cursor.getInt(0),cursor.getInt(1), cursor.getDouble(2));
+                list1.add(e);
+            } while (cursor1.moveToNext());
+        }
+
+        for(ResumenQuimestre r: list){
+            for (ResumenQuimestreParcial r1: list1){
+                if(r.getId() == r1.getId()){
+                    r.getParciales().put(r1.getParcial(), r1.getNotaFinal());
+                }
+            }
+        }
+
+        return list;
     }
 
 }

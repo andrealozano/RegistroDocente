@@ -26,7 +26,6 @@
             android:name=".activity.Periodos"
             android:label="Periodos académicos"
             android:parentActivityName=".activity.Main" />
-        <activity android:name=".activity.Quimestres" />
         <activity
             android:name=".activity.EditPeriodo"
             android:label="Editar periodo"
@@ -44,9 +43,6 @@
             android:name=".activity.Acreditables"
             android:label="Acreditables" />
         <activity
-            android:name=".activity.EditQuimestre"
-            android:label="Editar quimestre" />
-        <activity
             android:name=".activity.EditAcreditable"
             android:label="Editar Acreditable" />
         <activity android:name=".activity.Calendarios" android:label="Calendario" />
@@ -54,11 +50,6 @@
             android:name=".activity.MainClase"
             android:label="@string/title_activity_main_notas"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.Parciales" />
-        <activity
-            android:name=".activity.EditParcial"
-            android:label="@string/title_activity_edit_parcial"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity
             android:name=".activity.EditEstudiante"
             android:label="Editar estudiante"></activity>

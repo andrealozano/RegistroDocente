@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.modelo.Quimestre;
 
 import java.util.ArrayList;
 import java.util.List;

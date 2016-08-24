@@ -40,22 +40,26 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PA = "CREATE TABLE periodo(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, escala REAL)";
+        String CREATE_PA = "CREATE TABLE periodo(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, escala REAL, quimestres INTEGER, parciales INTEGER)";
         String CREATE_AC = "CREATE TABLE acreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, alias TEXT, tipo TEXT, equivalencia REAL, numero INTEGER, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
-        String CREATE_QM = "CREATE TABLE quimestre(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, numero INTEGER, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
-        String CREATE_PR = "CREATE TABLE parcial(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, numero INTEGER, periodo_id INTEGER NOT NULL, quimestre_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(quimestre_id) REFERENCES quimestre(id))";
+        //String CREATE_QM = "CREATE TABLE quimestre(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, numero INTEGER, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
+        //String CREATE_PR = "CREATE TABLE parcial(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, numero INTEGER, periodo_id INTEGER NOT NULL, quimestre_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(quimestre_id) REFERENCES quimestre(id))";
         String CREATE_CR = "CREATE TABLE calendario(id INTEGER PRIMARY KEY AUTOINCREMENT, estado TEXT, fecha DATE, observacion TEXT, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         String CREATE_CL = "CREATE TABLE clase(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, activa BOOLEAN DEFAULT 1, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         //verificar
 
-        String CREATE_ES = "CREATE TABLE estudiante(id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT, apellidos TEXT, sexo TEXT, email TEXT, celular TEXT, orden INTEGER, notaFinal REAL, porcentajeAsistencias REAL, estado TEXT, clase_id INTEGER NOT NULL, FOREIGN KEY(clase_id) REFERENCES clase(id))";
+        String CREATE_ES = "CREATE TABLE estudiante(id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT, apellidos TEXT, sexo TEXT, email TEXT, celular TEXT, orden INTEGER, notaFinal REAL, porcentajeAsistencias REAL, estado TEXT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         //String CREATE_ES_CL = "CREATE TABLE clase_estudiante(id INTEGER PRIMARY KEY AUTOINCREMENT, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, orden INTEGER)";
         String CREATE_AS = "CREATE TABLE asistencia(id INTEGER PRIMARY KEY AUTOINCREMENT, calendario_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, fecha DATE, estado TEXT, FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id), FOREIGN KEY(calendario_id) REFERENCES calendario(id))";
 
+        String CREATE_NQ = "CREATE TABLE registroquimestral(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, quimestre INTEGER, notaParciales REAL, notaExamenes REAL, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id))";
+        String CREATE_NP = "CREATE TABLE registroparcial(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, quimestre INTEGER, parcial INTEGER, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id))";
+        String CREATE_NA = "CREATE TABLE registroacreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, acreditable_id INTEGER NOT NULL, quimestre INTEGER, parcial INTEGER, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id), FOREIGN KEY(acreditable_id) REFERENCES acreditable(id))";
+
         db.execSQL(CREATE_PA);
         db.execSQL(CREATE_AC);
-        db.execSQL(CREATE_QM);
-        db.execSQL(CREATE_PR);
+        //db.execSQL(CREATE_QM);
+        //db.execSQL(CREATE_PR);
         db.execSQL(CREATE_CL);
         db.execSQL(CREATE_CR);
 
@@ -63,6 +67,10 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_ES);
         //db.execSQL(CREATE_ES_CL);
         db.execSQL(CREATE_AS);
+
+        db.execSQL(CREATE_NQ);
+        db.execSQL(CREATE_NP);
+        db.execSQL(CREATE_NA);
 
         this.initData(db);
     }
@@ -78,10 +86,12 @@ public class DBHandler extends SQLiteOpenHelper {
         cvp.put("inicio", sfecha);
         cvp.put("fin", sfecha);
         cvp.put("escala", 10);
+        cvp.put("quimestres", 2);
+        cvp.put("parciales", 3);
         int pid = (int)db.insert("periodo", null, cvp);
 
         //QUIMESTRES
-        ContentValues cvq = new ContentValues();
+        /*ContentValues cvq = new ContentValues();
         cvq.put("nombre", "Quimestre 1");
         cvq.put("inicio", sfecha);
         cvq.put("fin", sfecha);
@@ -127,7 +137,7 @@ public class DBHandler extends SQLiteOpenHelper {
         cvpr.put("nombre", "Parcial 3");
         cvpr.put("numero", 3);
         cvpr.put("quimestre_id", qid2);
-        int pr6 = (int)db.insert("parcial", null, cvpr);
+        int pr6 = (int)db.insert("parcial", null, cvpr);*/
 
         //ACREDITABLES
         ContentValues ca1 = new ContentValues();
@@ -167,7 +177,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //
         db.execSQL("insert into clase (nombre, activa, periodo_id) values ('Clase 1', 1, 1)");
-        db.execSQL("insert into estudiante (cedula, nombres, apellidos, sexo, orden, estado, clase_id) values ('0000000000','Jhon', 'Doe', 'Hombre', 1, 'Registrado', 1)");
+        db.execSQL("insert into estudiante (cedula, nombres, apellidos, sexo, orden, estado, clase_id, periodo_id) values ('0000000000','Jhon', 'Doe', 'Hombre', 1, 'Registrado', 1, 1)");
     }
 
     @Override

@@ -28,6 +28,7 @@ public class Estudiante implements Parcelable{
     private String estado = ESTADO_REGISTRADO;
 
     private Clase clase;
+    private Periodo periodo;
 
     public Estudiante(){
     }
@@ -36,8 +37,9 @@ public class Estudiante implements Parcelable{
         this.id = id;
     }
 
-    public Estudiante(Clase clase){
+    public Estudiante(Clase clase, Periodo periodo){
         this.clase = clase;
+        this.periodo = periodo;
     }
 
     public Estudiante(int id, String nombres, String apellidos){
@@ -53,7 +55,7 @@ public class Estudiante implements Parcelable{
         this.setApellidos(apellidos);
     }
 
-    public Estudiante(int id, String cedula, String nombres, String apellidos, String email, String celular, String sexo, int orden, double notaFinal, double porcentajeAsistencias, String estado, Clase clase){
+    public Estudiante(int id, String cedula, String nombres, String apellidos, String email, String celular, String sexo, int orden, double notaFinal, double porcentajeAsistencias, String estado, Clase clase, Periodo periodo){
         this.setId(id);
         this.setCedula(cedula);
         this.setNombres(nombres);
@@ -66,6 +68,7 @@ public class Estudiante implements Parcelable{
         this.setPorcentajeAsistencias(porcentajeAsistencias);
         this.setEstado(estado);
         this.clase = clase;
+        this.periodo = periodo;
     }
 
 
@@ -106,6 +109,7 @@ public class Estudiante implements Parcelable{
         this.setPorcentajeAsistencias(in.readDouble());
         this.setEstado(in.readString());
         this.setClase(new Clase(in.readInt()));
+        this.setPeriodo(new Periodo(in.readInt()));
     }
 
     @Override
@@ -122,6 +126,7 @@ public class Estudiante implements Parcelable{
         parcel.writeDouble(getPorcentajeAsistencias());
         parcel.writeString(getEstado());
         parcel.writeInt(getClase().getId());
+        parcel.writeInt(getPeriodo().getId());
     }
 
     public static final Creator<Estudiante> CREATOR = new Creator<Estudiante>() {
@@ -218,5 +223,13 @@ public class Estudiante implements Parcelable{
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Periodo getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(Periodo periodo) {
+        this.periodo = periodo;
     }
 }

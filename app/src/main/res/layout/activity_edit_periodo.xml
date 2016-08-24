@@ -31,11 +31,33 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/txtQuimestres"
+        android:hint="Número quimestres"
+        android:layout_below="@+id/txtEscala"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="numberSigned"
+        android:ems="10"
+        android:id="@+id/txtParciales"
+        android:hint="Número parciales"
+        android:layout_below="@+id/txtQuimestres"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <DatePicker
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/dpInicio"
-        android:layout_below="@+id/txtEscala"
+        android:layout_below="@+id/txtParciales"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

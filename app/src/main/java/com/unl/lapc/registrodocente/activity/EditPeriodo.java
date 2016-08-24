@@ -26,6 +26,8 @@ public class EditPeriodo extends AppCompatActivity {
 
     private EditText txtNombre;
     private EditText txtEscala;
+    private EditText txtQuimestres;
+    private EditText txtParciales;
     private DatePicker dpInicio;
     private DatePicker dpFin;
 
@@ -36,6 +38,8 @@ public class EditPeriodo extends AppCompatActivity {
 
         txtNombre= (EditText)findViewById(R.id.txtNombre);
         txtEscala= (EditText)findViewById(R.id.txtEscala);
+        txtQuimestres= (EditText)findViewById(R.id.txtQuimestres);
+        txtParciales= (EditText)findViewById(R.id.txtParciales);
         dpInicio= (DatePicker)findViewById(R.id.dpInicio);
         dpFin= (DatePicker)findViewById(R.id.dpFin);
 
@@ -53,6 +57,8 @@ public class EditPeriodo extends AppCompatActivity {
 
             txtNombre.setText(periodo.getNombre());
             txtEscala.setText(""+periodo.getEscala());
+            txtQuimestres.setText(""+periodo.getQuimestres());
+            txtParciales.setText(""+periodo.getParciales());
 
             c.setTime(periodo.getInicio());
             dpInicio.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
@@ -86,12 +92,12 @@ public class EditPeriodo extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_quimestres) {
+        /*if (id == R.id.action_quimestres) {
             Intent intent = new Intent(this, Quimestres.class);
             intent.putExtra("periodo", periodo);
             startActivity(intent);
             return true;
-        }
+        }*/
 
         if (id == R.id.action_acreditables) {
             Intent intent = new Intent(this, Acreditables.class);
@@ -115,6 +121,8 @@ public class EditPeriodo extends AppCompatActivity {
         periodo.setEscala(Convert.toDouble(txtEscala.getText().toString()));
         periodo.setInicio(Convert.toDate(dpInicio));
         periodo.setFin(Convert.toDate(dpFin));
+        periodo.setQuimestres(Convert.toInt(txtQuimestres.getText().toString()));
+        periodo.setParciales(Convert.toInt(txtParciales.getText().toString()));
 
         if(validate()) {
             if (periodo.getId() == 0) {
