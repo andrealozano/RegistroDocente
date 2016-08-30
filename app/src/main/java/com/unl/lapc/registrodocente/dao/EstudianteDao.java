@@ -5,8 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
+import com.unl.lapc.registrodocente.dto.ResumenParcial;
+import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestreParcial;
+import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
@@ -183,6 +187,7 @@ public class EstudianteDao extends DBHandler {
                 Estudiante e = new Estudiante(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
                 e.setOrden(cursor.getInt(4));
                 e.setClase(clase);
+                e.setPeriodo(clase.getPeriodo());
 
                 shopList.add(e);
             } while (cursor.moveToNext());
@@ -195,7 +200,7 @@ public class EstudianteDao extends DBHandler {
     public List<ResumenQuimestre> getResumenQuimestre(Periodo periodo, Clase clase, int quimestre) {
         List<ResumenQuimestre> list = new ArrayList<>();
 
-        String selectQuery = "SELECT e.id, e.numero, (e.nombres || ' ' || a.apellidos) nombres, r.notaParciales, r.notaExamenes, r.notaFinal from estudiante e, registroquimestral r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " order by e.orden asc";
+        String selectQuery = "SELECT e.id, e.orden, (e.nombres || ' ' || e.apellidos) nombres, r.notaParciales, r.notaExamenes, r.notaFinal from estudiante e, registroquimestral r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " order by e.orden asc";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -214,7 +219,7 @@ public class EstudianteDao extends DBHandler {
 
         if (cursor1.moveToFirst()) {
             do {
-                ResumenQuimestreParcial e = new ResumenQuimestreParcial(cursor.getInt(0),cursor.getInt(1), cursor.getDouble(2));
+                ResumenQuimestreParcial e = new ResumenQuimestreParcial(cursor1.getInt(0),cursor1.getInt(1), cursor1.getDouble(2));
                 list1.add(e);
             } while (cursor1.moveToNext());
         }
@@ -223,6 +228,82 @@ public class EstudianteDao extends DBHandler {
             for (ResumenQuimestreParcial r1: list1){
                 if(r.getId() == r1.getId()){
                     r.getParciales().put(r1.getParcial(), r1.getNotaFinal());
+                }
+            }
+        }
+
+        return list;
+    }
+
+    public List<ResumenParcial> getResumenParcial(Periodo periodo, Clase clase, int quimestre, int parcial) {
+        List<ResumenParcial> list = new ArrayList<>();
+
+        String selectQuery = "SELECT e.id, e.orden, (e.nombres || ' ' || e.apellidos) nombres, r.notaFinal from estudiante e, registroparcial r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre=" + quimestre + " and r.parcial = " + parcial + " order by e.orden asc";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                ResumenParcial e = new ResumenParcial(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getDouble(3));
+                list.add(e);
+            } while (cursor.moveToNext());
+        }
+
+
+        String selectQuery1 = "SELECT e.id, a.id, r.notaFinal from estudiante e, registroacreditable r, acreditable a where r.estudiante_id = e.id and r.acreditable_id = a.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " and r.parcial = " + parcial + " order by a.numero asc, e.id asc";
+        Cursor cursor1 = db.rawQuery(selectQuery1, null);
+        List<ResumenParcialAcreditable> list1 = new ArrayList<>();
+
+        if (cursor1.moveToFirst()) {
+            do {
+                ResumenParcialAcreditable e = new ResumenParcialAcreditable(cursor1.getInt(0), cursor1.getInt(1), cursor1.getDouble(2));
+                list1.add(e);
+            } while (cursor1.moveToNext());
+        }
+
+        for(ResumenParcial r: list){
+            for (ResumenParcialAcreditable r1: list1){
+                if(r.getId() == r1.getId()){
+                    r.getAcreditables().put(r1.getAcreditableId(), r1.getNotaFinal());
+                }
+            }
+        }
+
+        return list;
+    }
+
+    public List<ResumenAcreditable> getResumenAcreditable(Periodo periodo, Clase clase, Acreditable acreditable, int quimestre, int parcial) {
+        List<ResumenAcreditable> list = new ArrayList<>();
+
+        String selectQuery = "SELECT e.id, e.orden, (e.nombres || ' ' || e.apellidos) nombres, r.notaFinal from estudiante e, registroacreditable r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.acreditable_id = " + acreditable.getId() + " and r.quimestre=" + quimestre + " and r.parcial = " + parcial + " order by e.orden asc";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+
+                ResumenAcreditable e = new ResumenAcreditable(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getDouble(3));
+                list.add(e);
+            } while (cursor.moveToNext());
+        }
+
+
+        String selectQuery1 = "SELECT e.id, r.itemacreditable_id, r.nota from estudiante e, registroitem r where r.estudiante_id = e.id and r.acreditable_id = " + acreditable.getId() + " and e.clase_id = " + clase.getId() + " order by e.id asc";
+        Cursor cursor1 = db.rawQuery(selectQuery1, null);
+        List<ResumenParcialAcreditable> list1 = new ArrayList<>();
+
+        if (cursor1.moveToFirst()) {
+            do {
+                ResumenParcialAcreditable e = new ResumenParcialAcreditable(cursor1.getInt(0), cursor1.getInt(1), cursor1.getDouble(2));
+                list1.add(e);
+            } while (cursor1.moveToNext());
+        }
+
+        for(ResumenAcreditable r: list){
+            for (ResumenParcialAcreditable r1: list1){
+                if(r.getId() == r1.getId()){
+                    r.getAcreditables().put(r1.getAcreditableId(), r1.getNotaFinal());
                 }
             }
         }

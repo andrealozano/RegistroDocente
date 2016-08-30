@@ -9,4 +9,7 @@
 
     <color name="colorListItemInactive">#444847</color>
     <color name="colorListItemSubtitleInactive">#636665</color>
+
+    <color name="backgroundTh">#2f9b77</color>
+    <color name="colorTh">#444847</color>
 </resources>
