@@ -257,21 +257,21 @@ public class EstudianteDao extends DBHandler {
         }
 
 
-        String selectQuery1 = "SELECT e.id, a.id, r.notaFinal from estudiante e, registroacreditable r, acreditable a where r.estudiante_id = e.id and r.acreditable_id = a.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " and r.parcial = " + parcial + " order by a.numero asc, e.id asc";
+        String selectQuery1 = "SELECT r.id, e.id, a.id, r.notaFinal from estudiante e, registroacreditable r, acreditable a where r.estudiante_id = e.id and r.acreditable_id = a.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " and r.parcial = " + parcial + " order by a.numero asc, e.id asc";
         Cursor cursor1 = db.rawQuery(selectQuery1, null);
         List<ResumenParcialAcreditable> list1 = new ArrayList<>();
 
         if (cursor1.moveToFirst()) {
             do {
-                ResumenParcialAcreditable e = new ResumenParcialAcreditable(cursor1.getInt(0), cursor1.getInt(1), cursor1.getDouble(2));
+                ResumenParcialAcreditable e = new ResumenParcialAcreditable(cursor1.getInt(0), cursor1.getInt(1), cursor1.getInt(2), cursor1.getDouble(3));
                 list1.add(e);
             } while (cursor1.moveToNext());
         }
 
         for(ResumenParcial r: list){
             for (ResumenParcialAcreditable r1: list1){
-                if(r.getId() == r1.getId()){
-                    r.getAcreditables().put(r1.getAcreditableId(), r1.getNotaFinal());
+                if(r.getId() == r1.getEstudianteId()){
+                    r.getAcreditables().put(r1.getAcreditableId(), r1);
                 }
             }
         }
@@ -295,21 +295,21 @@ public class EstudianteDao extends DBHandler {
         }
 
 
-        String selectQuery1 = "SELECT e.id, r.itemacreditable_id, r.nota from estudiante e, registroitem r where r.estudiante_id = e.id and r.acreditable_id = " + acreditable.getId() + " and e.clase_id = " + clase.getId() + " order by e.id asc";
+        String selectQuery1 = "SELECT r.id, e.id, r.itemacreditable_id, r.nota from estudiante e, registroitem r where r.estudiante_id = e.id and r.acreditable_id = " + acreditable.getId() + " and e.clase_id = " + clase.getId() + " order by e.id asc";
         Cursor cursor1 = db.rawQuery(selectQuery1, null);
         List<ResumenParcialAcreditable> list1 = new ArrayList<>();
 
         if (cursor1.moveToFirst()) {
             do {
-                ResumenParcialAcreditable e = new ResumenParcialAcreditable(cursor1.getInt(0), cursor1.getInt(1), cursor1.getDouble(2));
+                ResumenParcialAcreditable e = new ResumenParcialAcreditable(cursor1.getInt(0), cursor1.getInt(1), cursor1.getInt(2), cursor1.getDouble(3));
                 list1.add(e);
             } while (cursor1.moveToNext());
         }
 
         for(ResumenAcreditable r: list){
             for (ResumenParcialAcreditable r1: list1){
-                if(r.getId() == r1.getId()){
-                    r.getAcreditables().put(r1.getAcreditableId(), r1.getNotaFinal());
+                if(r.getId() == r1.getEstudianteId()){
+                    r.getAcreditables().put(r1.getAcreditableId(), r1);
                 }
             }
         }

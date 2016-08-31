@@ -12,7 +12,7 @@ public class ResumenParcial {
     private String nombres;
     private double notaFinal;
 
-    private HashMap<Integer, Double> acreditables = new HashMap<Integer, Double>();
+    private HashMap<Integer, ResumenParcialAcreditable> acreditables = new HashMap<Integer, ResumenParcialAcreditable>();
 
     public ResumenParcial(int id, int numero, String nombres, double notaFinal){
         this.id = id;
@@ -54,11 +54,11 @@ public class ResumenParcial {
         this.notaFinal = notaFinal;
     }
 
-    public HashMap<Integer, Double> getAcreditables() {
+    public HashMap<Integer, ResumenParcialAcreditable> getAcreditables() {
         return acreditables;
     }
 
-    public void setAcreditables(HashMap<Integer, Double> acreditables) {
+    public void setAcreditables(HashMap<Integer, ResumenParcialAcreditable> acreditables) {
         this.acreditables = acreditables;
     }
 }

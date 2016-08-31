@@ -128,7 +128,7 @@ public class FragmentResumenNotasParcial extends Fragment {
                 tv4.setGravity(Gravity.CENTER);
                 tv4.setTextSize(18);
                 tv4.setPadding(5, 2, 5, 2);
-                tv4.setText("" + e.getAcreditables().get(acreditables.get(j).getId()));
+                tv4.setText("" + e.getAcreditables().get(acreditables.get(j).getId()).getNotaFinal());
                 row.addView(tv4);
             }
 

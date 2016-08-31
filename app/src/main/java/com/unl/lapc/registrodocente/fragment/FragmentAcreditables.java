@@ -1,8 +1,6 @@
 package com.unl.lapc.registrodocente.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.Gravity;
@@ -10,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
@@ -23,7 +20,7 @@ import com.unl.lapc.registrodocente.activity.MainClase;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
-import com.unl.lapc.registrodocente.dto.ResumenParcial;
+import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
@@ -46,7 +43,7 @@ public class FragmentAcreditables extends Fragment {
 
     private EstudianteDao estudianteDao;
     private AcreditableDao acreditableDao;
-    private List<ItemAcreditable> acreditables;
+    private List<ItemAcreditable> itemsAcreditables;
 
     private TableLayout tlResumenNotas;
     private MainClase main;
@@ -84,7 +81,7 @@ public class FragmentAcreditables extends Fragment {
 
     private void customInit(){
         tlResumenNotas.removeAllViews();
-        this.acreditables = acreditableDao.getItemsAcreditables(acreditable);
+        this.itemsAcreditables = acreditableDao.getItemsAcreditables(acreditable);
         cargarTh();
         cargarTr();
     }
@@ -162,15 +159,15 @@ public class FragmentAcreditables extends Fragment {
         row.addView(tv2);
 
 
-        for(int j = 0; j < acreditables.size(); j++){
-            final ItemAcreditable itemAcreditable = acreditables.get(j);
+        for(int j = 0; j < itemsAcreditables.size(); j++){
+            final ItemAcreditable itemAcreditable = itemsAcreditables.get(j);
 
             TextView tv4 = new TextView(getContext());
             tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv4.setGravity(Gravity.CENTER);
             tv4.setTextSize(18);
             tv4.setPadding(5, 2, 5, 2);
-            tv4.setText(acreditables.get(j).getAlias());
+            tv4.setText(itemsAcreditables.get(j).getAlias());
             tv4.setClickable(true);
             tv4.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -218,13 +215,25 @@ public class FragmentAcreditables extends Fragment {
             tv2.setText(e.getNombres());
             row.addView(tv2);
 
-            for(int j = 0; j < acreditables.size(); j++){
+            for(int j = 0; j < itemsAcreditables.size(); j++){
+
+                final ItemAcreditable itemAcreditable = itemsAcreditables.get(j);
+                final ResumenParcialAcreditable registro = e.getAcreditables().get(itemAcreditable.getId());
+
                 TextView tv4 = new TextView(getContext());
                 tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
                 tv4.setGravity(Gravity.CENTER);
                 tv4.setTextSize(18);
                 tv4.setPadding(5, 2, 5, 2);
-                tv4.setText("" + e.getAcreditables().get(acreditables.get(j).getId()));
+                tv4.setText("" + registro.getNotaFinal());
+                tv4.setClickable(true);
+                tv4.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //editItem(itemAcreditable);
+                    }
+                });
+
                 row.addView(tv4);
             }
 

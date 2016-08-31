@@ -6,12 +6,14 @@ package com.unl.lapc.registrodocente.dto;
 public class ResumenParcialAcreditable {
 
     private int id;
+    private int estudianteId;
     private int acreditableId;
     private double notaFinal;
 
-    public ResumenParcialAcreditable(int id, int acreditableId, double notaFinal){
+    public ResumenParcialAcreditable(int id, int estudianteId, int acreditableId, double notaFinal){
         this.setId(id);
         this.setNotaFinal(notaFinal);
+        this.setEstudianteId(estudianteId);
         this.setAcreditableId(acreditableId);
     }
 
@@ -40,5 +42,13 @@ public class ResumenParcialAcreditable {
 
     public void setAcreditableId(int acreditableId) {
         this.acreditableId = acreditableId;
+    }
+
+    public void setEstudianteId(int estudianteId) {
+        this.estudianteId = estudianteId;
+    }
+
+    public int getEstudianteId() {
+        return estudianteId;
     }
 }
