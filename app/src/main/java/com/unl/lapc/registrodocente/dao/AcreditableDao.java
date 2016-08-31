@@ -194,7 +194,8 @@ public class AcreditableDao extends DBHandler {
                         new Acreditable(cursor.getInt(3)),
                         cursor.getString(4),
                         cursor.getString(5),
-                        new Date(cursor.getLong(6)),
+                        toDate(cursor.getString(6)),
+                        //new Date(cursor.getLong(6)),
                         cursor.getInt(7),
                         cursor.getInt(8)
                 );

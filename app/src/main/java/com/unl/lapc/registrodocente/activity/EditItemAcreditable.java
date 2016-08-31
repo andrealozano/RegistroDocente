@@ -95,10 +95,7 @@ public class EditItemAcreditable extends AppCompatActivity {
     public void guardar(){
         itemAcreditable.setNombre(txtNombre.getText().toString());
         itemAcreditable.setAlias(txtAlias.getText().toString());
-
-        Calendar c = GregorianCalendar.getInstance();
-        c.set(dpFecha.getYear(), dpFecha.getMonth(), dpFecha.getDayOfMonth());
-        itemAcreditable.setFecha(c.getTime());
+        itemAcreditable.setFecha(Convert.toDate(dpFecha));
 
         if(validate()) {
             if (itemAcreditable.getId() == 0) {
