@@ -138,6 +138,7 @@ public class ItemAcreditable implements Parcelable {
         this.setPeriodo(new Periodo(in.readInt()));
         this.setClase(new Clase(in.readInt()));
         this.setAcreditable(new Acreditable(in.readInt()));
+        this.setAlias(in.readString());
         this.setNombre(in.readString());
         this.setFecha(new Date(in.readLong()));
         this.setQuimestre(in.readInt());
@@ -150,6 +151,7 @@ public class ItemAcreditable implements Parcelable {
         parcel.writeInt(getPeriodo().getId());
         parcel.writeInt(getClase().getId());
         parcel.writeInt(getAcreditable().getId());
+        parcel.writeString(getAlias());
         parcel.writeString(getNombre());
         parcel.writeLong(fecha.getTime());
         parcel.writeInt(getQuimestre());
