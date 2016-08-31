@@ -9,7 +9,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.AcreditableAdapter;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;

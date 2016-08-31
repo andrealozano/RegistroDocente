@@ -16,10 +16,7 @@ import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.Observable;
 
 /**
  * Created by Usuario on 15/07/2016.
@@ -107,7 +104,7 @@ public class EstudianteDao extends DBHandler {
         if (cursor.moveToFirst()) {
             do {
                 Estudiante cls = new Estudiante();
-                cls.setId(Integer.parseInt(cursor.getString(0)));
+                cls.setEstudianteId(Integer.parseInt(cursor.getString(0)));
                 cls.setNombres(cursor.getString(1));
                 //cls.setActiva(cursor.getInt(2) > 0);
 
@@ -125,7 +122,7 @@ public class EstudianteDao extends DBHandler {
         String selectQuery = "SELECT count(*) FROM " + TABLE_NAME + " where lower(trim(nombres)) =? and id <> ?";
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(selectQuery, new  String[]{per.getNombres().toLowerCase(), ""+per.getId()});
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{per.getNombres().toLowerCase(), ""+per.getEstudianteId()});
         cursor.moveToFirst();
 
         return cursor.getInt(0) > 0;
@@ -164,14 +161,14 @@ public class EstudianteDao extends DBHandler {
             String sqlrq = String.format("insert into registroquimestral (periodo_id, clase_id, estudiante_id, quimestre, notaParciales, notaExamenes, notaFinal) select e.periodo_id, e.clase_id, e.id, %d, 0, 0, 0 from estudiante e where e.clase_id = %d and not exists (select n.id from registroquimestral n where n.estudiante_id = e.id and n.quimestre = %d)", q, cls.getId(), q);
             db.execSQL(sqlrq);
 
-            String sqlraq = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaFinal) select e.periodo_id, e.clase_id, e.id, a.id, %d, 0, 0 from estudiante e, acreditable a where e.periodo_id=a.periodo_id and a.tipo='Quimestre' and  e.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = e.id and b.tipo='Quimestre' and n.quimestre = %d)", q, cls.getId(), q);
+            String sqlraq = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaPromedio, notaFinal) select e.periodo_id, e.clase_id, e.id, a.id, %d, 0, 0, 0 from estudiante e, acreditable a where e.periodo_id=a.periodo_id and a.tipo='Quimestre' and  e.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = e.id and b.tipo='Quimestre' and n.quimestre = %d)", q, cls.getId(), q);
             db.execSQL(sqlraq);
 
             for(int p = 1; p <= periodo.getParciales();p++){
                 String sqlrp = String.format("insert into registroparcial (periodo_id, clase_id, estudiante_id, quimestre, parcial, notaFinal) select e.periodo_id, e.clase_id, e.id, %d, %d, 0 from estudiante e where e.clase_id = %d and not exists (select n.id from registroparcial n where n.estudiante_id = e.id and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
                 db.execSQL(sqlrp);
 
-                String sqlrap = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaFinal) select e.periodo_id, e.clase_id, e.id, a.id, %d, %d, 0 from estudiante e, acreditable a where e.periodo_id=a.periodo_id and a.tipo='Parcial' and  e.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = e.id and b.tipo='Parcial' and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
+                String sqlrap = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaPromedio, notaFinal) select e.periodo_id, e.clase_id, e.id, a.id, %d, %d, 0, 0 from estudiante e, acreditable a where e.periodo_id=a.periodo_id and a.tipo='Parcial' and  e.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = e.id and b.tipo='Parcial' and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
                 db.execSQL(sqlrap);
             }
         }
@@ -287,14 +284,13 @@ public class EstudianteDao extends DBHandler {
     public List<ResumenAcreditable> getResumenAcreditable(Periodo periodo, Clase clase, Acreditable acreditable, int quimestre, int parcial) {
         List<ResumenAcreditable> list = new ArrayList<>();
 
-        String selectQuery = "SELECT e.id, e.orden, (e.nombres || ' ' || e.apellidos) nombres, r.notaFinal from estudiante e, registroacreditable r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.acreditable_id = " + acreditable.getId() + " and r.quimestre=" + quimestre + " and r.parcial = " + parcial + " order by e.orden asc";
+        String selectQuery = "SELECT r.id, e.id, e.orden, (e.nombres || ' ' || e.apellidos) nombres, r.notaPromedio, r.notaFinal from estudiante e, registroacreditable r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.acreditable_id = " + acreditable.getId() + " and r.quimestre=" + quimestre + " and r.parcial = " + parcial + " order by e.orden asc";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-
-                ResumenAcreditable e = new ResumenAcreditable(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getDouble(3));
+                ResumenAcreditable e = new ResumenAcreditable(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getDouble(4), cursor.getDouble(5));
                 list.add(e);
             } while (cursor.moveToNext());
         }
@@ -313,11 +309,15 @@ public class EstudianteDao extends DBHandler {
 
         for(ResumenAcreditable r: list){
             for (ResumenParcialAcreditable r1: list1){
-                if(r.getId() == r1.getEstudianteId()){
+                if(r.getEstudianteId() == r1.getEstudianteId()){
                     r.getAcreditables().put(r1.getAcreditableId(), r1);
                 }
             }
         }
+
+        /*for(ResumenAcreditable r: list){
+            r.calcularPromedio(acreditable, periodo);
+        }*/
 
         return list;
     }

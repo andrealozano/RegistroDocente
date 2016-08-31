@@ -1,5 +1,9 @@
 package com.unl.lapc.registrodocente.dto;
 
+import com.unl.lapc.registrodocente.modelo.Acreditable;
+import com.unl.lapc.registrodocente.modelo.Periodo;
+import com.unl.lapc.registrodocente.util.Convert;
+
 import java.util.HashMap;
 
 /**
@@ -8,16 +12,21 @@ import java.util.HashMap;
 public class ResumenAcreditable {
 
     private int id;
+    private int estudianteId;
     private int numero;
     private String nombres;
+
+    private double notaPromedio;
     private double notaFinal;
 
     private HashMap<Integer, ResumenParcialAcreditable> acreditables = new HashMap<Integer, ResumenParcialAcreditable>();
 
-    public ResumenAcreditable(int id, int numero, String nombres, double notaFinal){
+    public ResumenAcreditable(int id, int estudianteId, int numero, String nombres, double notaPromedio, double notaFinal){
         this.id = id;
+        this.estudianteId = estudianteId;
         this.numero =  numero;
         this.nombres = nombres;
+        this.notaPromedio = notaPromedio;
         this.notaFinal = notaFinal;
 
     }
@@ -28,6 +37,14 @@ public class ResumenAcreditable {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getEstudianteId() {
+        return estudianteId;
+    }
+
+    public void setEstudianteId(int estudianteId) {
+        this.estudianteId = estudianteId;
     }
 
     public int getNumero() {
@@ -46,6 +63,14 @@ public class ResumenAcreditable {
         this.nombres = nombres;
     }
 
+    public double getNotaPromedio() {
+        return notaPromedio;
+    }
+
+    public void setNotaPromedio(double notaPromedio) {
+        this.notaPromedio = notaPromedio;
+    }
+
     public double getNotaFinal() {
         return notaFinal;
     }
@@ -60,5 +85,24 @@ public class ResumenAcreditable {
 
     public void setAcreditables(HashMap<Integer, ResumenParcialAcreditable> acreditables) {
         this.acreditables = acreditables;
+    }
+
+    public void calcularPromedio(Acreditable acreditable, Periodo periodo){
+
+        //Calculo del promedio
+        double s = 0;
+        for (ResumenParcialAcreditable r : this.getAcreditables().values()){
+            s += r.getNotaFinal();
+        }
+
+        double pm = s / this.getAcreditables().size();
+        notaPromedio = Convert.round(pm, 2);
+
+
+        //Calculo nota final
+        //      10   -> 2
+        //      7.16 -> x
+        double nf = (notaPromedio * acreditable.getEquivalencia()) / periodo.getEscala();
+        notaFinal = Convert.round(nf, 2);
     }
 }

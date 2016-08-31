@@ -150,13 +150,12 @@ public class FragmentAcreditables extends Fragment {
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         row.setBackgroundColor(getResources().getColor(R.color.backgroundTh));
 
-
-
         TextView tv1 = new TextView(getContext());
         tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv1.setGravity(Gravity.CENTER);
         tv1.setTextSize(18);
         tv1.setPadding(5, 5, 5, 5);
+        tv1.setBackgroundResource(R.drawable.cell_shape_head);
         tv1.setText("N°");
         row.addView(tv1);
 
@@ -165,6 +164,7 @@ public class FragmentAcreditables extends Fragment {
         tv2.setGravity(Gravity.CENTER);
         tv2.setTextSize(18);
         tv2.setPadding(5, 5, 5, 5);
+        tv2.setBackgroundResource(R.drawable.cell_shape_head);
         tv2.setText("NOMBRES");
         row.addView(tv2);
 
@@ -177,6 +177,7 @@ public class FragmentAcreditables extends Fragment {
             tv4.setGravity(Gravity.CENTER);
             tv4.setTextSize(18);
             tv4.setPadding(5, 5, 5, 5);
+            tv4.setBackgroundResource(R.drawable.cell_shape_head);
             tv4.setText(itemsAcreditables.get(j).getAlias());
             tv4.setClickable(true);
             tv4.setOnClickListener(new View.OnClickListener() {
@@ -186,6 +187,7 @@ public class FragmentAcreditables extends Fragment {
                 }
             });
 
+
             row.addView(tv4);
         }
 
@@ -194,8 +196,18 @@ public class FragmentAcreditables extends Fragment {
         tv6.setGravity(Gravity.CENTER);
         tv6.setTextSize(18);
         tv6.setPadding(5, 5, 5, 5);
-        tv6.setText("NF");
+        tv6.setBackgroundResource(R.drawable.cell_shape_head);
+        tv6.setText("Pm");
         row.addView(tv6);
+
+        TextView tv7 = new TextView(getContext());
+        tv7.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        tv7.setGravity(Gravity.CENTER);
+        tv7.setTextSize(18);
+        tv7.setPadding(5, 5, 5, 5);
+        tv7.setBackgroundResource(R.drawable.cell_shape_head);
+        tv7.setText("Eq");
+        row.addView(tv7);
 
         tlResumenNotas.addView(row);
     }
@@ -209,59 +221,74 @@ public class FragmentAcreditables extends Fragment {
             TableRow row = new TableRow(getContext());
             row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
 
-            TextView tv1 = new TextView(getContext());
-            tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            tv1.setGravity(Gravity.CENTER);
-            tv1.setTextSize(18);
-            tv1.setPadding(5, 5, 5, 5);
-            tv1.setText((i + 1) + ". ");
-            row.addView(tv1);
+            TextView tvOrd = new TextView(getContext());
+            tvOrd.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            tvOrd.setGravity(Gravity.CENTER);
+            tvOrd.setTextSize(18);
+            tvOrd.setPadding(5, 5, 5, 5);
+            tvOrd.setBackgroundResource(R.drawable.cell_shape);
+            tvOrd.setText((i + 1) + ". ");
+            row.addView(tvOrd);
 
-            TextView tv2 = new TextView(getContext());
-            tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            tv2.setGravity(Gravity.CENTER);
-            tv2.setTextSize(18);
-            tv2.setPadding(5, 5, 5, 5);
-            tv2.setText(e.getNombres());
-            row.addView(tv2);
+            TextView tvNom = new TextView(getContext());
+            tvNom.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            tvNom.setGravity(Gravity.CENTER);
+            tvNom.setTextSize(18);
+            tvNom.setPadding(5, 5, 5, 5);
+            tvNom.setBackgroundResource(R.drawable.cell_shape);
+            tvNom.setText(e.getNombres());
+            row.addView(tvNom);
+
+            final TextView tvPm = new TextView(getContext());
+            final TextView tvEq = new TextView(getContext());
 
             for(int j = 0; j < itemsAcreditables.size(); j++){
 
                 final ItemAcreditable itemAcreditable = itemsAcreditables.get(j);
                 final ResumenParcialAcreditable registro = e.getAcreditables().get(itemAcreditable.getId());
 
-                final TextView tv4 = new TextView(getContext());
-                tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-                tv4.setGravity(Gravity.CENTER);
-                tv4.setTextSize(18);
-                tv4.setPadding(5, 5, 5, 5);
-                tv4.setText("" + registro.getNotaFinal());
-                tv4.setClickable(true);
-                tv4.setOnClickListener(new View.OnClickListener() {
+                final TextView tvNot = new TextView(getContext());
+                tvNot.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+                tvNot.setGravity(Gravity.CENTER);
+                tvNot.setTextSize(18);
+                tvNot.setPadding(5, 5, 5, 5);
+                tvNot.setBackgroundResource(R.drawable.cell_shape);
+                tvNot.setText("" + registro.getNotaFinal());
+                tvNot.setClickable(true);
+                tvNot.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         //editItem(itemAcreditable);
-                        showDialogNota(tv4, e, itemAcreditable, registro);
+                        showDialogNota(tvNot, tvPm, tvEq, e, itemAcreditable, registro);
                     }
                 });
 
-                row.addView(tv4);
+                row.addView(tvNot);
             }
 
 
-            TextView tv6 = new TextView(getContext());
-            tv6.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
-            tv6.setGravity(Gravity.CENTER);
-            tv6.setTextSize(18);
-            tv6.setPadding(5, 5, 5, 5);
-            tv6.setText("" + e.getNotaFinal());
-            row.addView(tv6);
+
+            tvPm.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            tvPm.setGravity(Gravity.CENTER);
+            tvPm.setTextSize(18);
+            tvPm.setPadding(5, 5, 5, 5);
+            tvPm.setBackgroundResource(R.drawable.cell_shape_total);
+            tvPm.setText("" + e.getNotaPromedio());
+            row.addView(tvPm);
+
+            tvEq.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+            tvEq.setGravity(Gravity.CENTER);
+            tvEq.setTextSize(18);
+            tvEq.setPadding(5, 5, 5, 5);
+            tvEq.setBackgroundResource(R.drawable.cell_shape_total);
+            tvEq.setText("" + e.getNotaFinal());
+            row.addView(tvEq);
 
             tlResumenNotas.addView(row);
         }
     }
 
-    private void showDialogNota(final TextView tv, ResumenAcreditable resumen, ItemAcreditable itemAcreditable, final ResumenParcialAcreditable registro){
+    private void showDialogNota(final TextView tvNota, final TextView tvPm, final TextView tvEq, final ResumenAcreditable resumen, ItemAcreditable itemAcreditable, final ResumenParcialAcreditable registro){
         final View myView = View.inflate(getContext(), R.layout.content_dlg_nota, null);
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
@@ -282,8 +309,15 @@ public class FragmentAcreditables extends Fragment {
                 if(txtNota.getText().toString().length() > 0) {
                     double nota = Convert.toDouble(txtNota.getText().toString());
                     //validar ramgo
-                    acreditableDao.updateNota(registro.getId(), nota);
-                    tv.setText(""+nota);
+
+                    registro.setNotaFinal(nota);
+                    resumen.calcularPromedio(acreditable, periodo);
+
+                    acreditableDao.updateNota(resumen, registro);
+
+                    tvNota.setText(""+nota);
+                    tvPm.setText(""+resumen.getNotaPromedio());
+                    tvEq.setText(""+resumen.getNotaFinal());
                     dialog.dismiss();
                 }else{
                     Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();

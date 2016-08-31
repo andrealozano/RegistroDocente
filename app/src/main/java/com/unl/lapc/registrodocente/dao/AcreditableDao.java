@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
+import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
@@ -96,16 +98,17 @@ public class AcreditableDao extends DBHandler {
 
         int id = (int)db.insert("itemacreditable", null, values);
         itemAcreditable.setId(id);
-
-        initNotasItem(db, id);
-
         db.close();
+
+        initNotasItem(id);
     }
 
-    private void initNotasItem(SQLiteDatabase db, int id){
+    private void initNotasItem(int id){
+        SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("insert into registroitem (periodo_id, clase_id, estudiante_id, acreditable_id, itemacreditable_id, nota) " +
                 "select ia.periodo_id, ia.clase_id, e.id, ia.acreditable_id, ia.id, 0 from itemacreditable ia, estudiante e where e.clase_id = ia.clase_id and ia.id = " + id + " and " +
-                "not exists (select r.id from registroitem r where r.id = " + id + " and r.estudiante_id = e.id)");
+                "not exists (select r.id from registroitem r where r.itemacreditable_id = " + id + " and r.estudiante_id = e.id)");
+        db.close();
     }
 
     public int updateItem(ItemAcreditable itemAcreditable) {
@@ -121,18 +124,29 @@ public class AcreditableDao extends DBHandler {
         values.put("quimestre", itemAcreditable.getQuimestre());
         values.put("parcial", itemAcreditable.getParcial());
 
-        initNotasItem(db, itemAcreditable.getId());
+        int u = db.update("itemacreditable", values, "id = ?", new String[]{String.valueOf(itemAcreditable.getId())});
+        db.close();
 
-        return db.update("itemacreditable", values, "id = ?", new String[]{String.valueOf(itemAcreditable.getId())});
+        initNotasItem(itemAcreditable.getId());
+
+        return  u;
     }
 
-    public int updateNota(int registroItemId, double nota) {
+    public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro) {
         SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
 
-        values.put("nota", nota);
+        //Actualiza nota
+        ContentValues vri = new ContentValues();
+        vri.put("nota", registro.getNotaFinal());
+        int up = db.update("registroitem", vri, "id = ?", new String[]{String.valueOf(registro.getId())});
 
-        return db.update("registroitem", values, "id = ?", new String[]{String.valueOf(registroItemId)});
+        //Actualiza registo acreditable
+        ContentValues vre = new ContentValues();
+        vre.put("notaPromedio", resumen.getNotaPromedio());
+        vre.put("notaFinal", resumen.getNotaFinal());
+        int up1 = db.update("registroacreditable", vre, "id = ?", new String[]{String.valueOf(resumen.getId())});
+
+        return up;
     }
 
     public List<Acreditable> getAll(Periodo periodo) {

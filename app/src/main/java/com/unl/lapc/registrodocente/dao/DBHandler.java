@@ -17,7 +17,7 @@ import java.util.Date;
 public class DBHandler extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 3;
     private static final String DATABASE_NAME = "registro_docente.db";
 
     public DBHandler(Context context) {
@@ -51,7 +51,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         String CREATE_NQ = "CREATE TABLE registroquimestral(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, quimestre INTEGER, notaParciales REAL, notaExamenes REAL, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id))";
         String CREATE_NP = "CREATE TABLE registroparcial(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, quimestre INTEGER, parcial INTEGER, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id))";
-        String CREATE_NA = "CREATE TABLE registroacreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, acreditable_id INTEGER NOT NULL, quimestre INTEGER, parcial INTEGER, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id), FOREIGN KEY(acreditable_id) REFERENCES acreditable(id))";
+        String CREATE_NA = "CREATE TABLE registroacreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, acreditable_id INTEGER NOT NULL, quimestre INTEGER, parcial INTEGER, notaPromedio REAL, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id), FOREIGN KEY(acreditable_id) REFERENCES acreditable(id))";
 
         String CREATE_IA = "CREATE TABLE itemacreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, acreditable_id INTEGER NOT NULL, alias TEXT, nombre TEXT, fecha DATE, quimestre INTEGER, parcial INTEGER, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(acreditable_id) REFERENCES acreditable(id))";
         String CREATE_RI = "CREATE TABLE registroitem(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, acreditable_id INTEGER NOT NULL, itemacreditable_id INTEGER NOT NULL, nota REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id), FOREIGN KEY(acreditable_id) REFERENCES acreditable(id), FOREIGN KEY(itemacreditable_id) REFERENCES itemacreditable(id))";
@@ -136,6 +136,12 @@ public class DBHandler extends SQLiteOpenHelper {
         if (oldVersion < 2)
         {
             db.execSQL("ALTER TABLE itemacreditable ADD COLUMN alias TEXT");
+            //Log.i("Actualización", "Versión 2");
+        }
+
+        if (oldVersion < 3)
+        {
+            db.execSQL("ALTER TABLE registroacreditable ADD COLUMN notaPromedio REAL");
             //Log.i("Actualización", "Versión 2");
         }
 

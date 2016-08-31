@@ -31,7 +31,7 @@ public class AsistenciaDao extends DBHandler {
         ContentValues values = new ContentValues();
         values.put("fecha", toShortDate(asistencia.getFecha()));
         values.put("estado", asistencia.getEstado());
-        //values.put("claseestudiante_id", asistencia.getClaseEstudiante().getId());
+        //values.put("claseestudiante_id", asistencia.getClaseEstudiante().getEstudianteId());
         values.put("clase_id", asistencia.getClase().getId());
         values.put("estudiante_id", asistencia.getEstudiante().getId());
         values.put("calendario_id", asistencia.getCalendario().getId());
@@ -73,7 +73,7 @@ public class AsistenciaDao extends DBHandler {
         if (cursor.moveToFirst()) {
             do {
                 Periodo shop = new Periodo();
-                shop.setId(Integer.parseInt(cursor.getString(0)));
+                shop.setEstudianteId(Integer.parseInt(cursor.getString(0)));
                 shop.setNombre(cursor.getString(1));
                 shopList.add(shop);
             } while (cursor.moveToNext());
@@ -86,7 +86,7 @@ public class AsistenciaDao extends DBHandler {
         String selectQuery = "SELECT count(*) FROM " + TABLE_NAME + " where lower(trim(" + NOMBRE + ")) =? and " + ID +" <> ?";
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Cursor cursor = db.rawQuery(selectQuery, new  String[]{per.getNombre().toLowerCase(), ""+per.getId()});
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{per.getNombre().toLowerCase(), ""+per.getEstudianteId()});
         cursor.moveToFirst();
 
         return cursor.getInt(0) > 0;

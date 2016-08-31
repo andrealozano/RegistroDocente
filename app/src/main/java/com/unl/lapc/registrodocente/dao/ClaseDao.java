@@ -43,15 +43,15 @@ public class ClaseDao extends DBHandler {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("clase_id", cls.getClase().getId());
-        values.put("estudiante_id", cls.getEstudiante().getId());
+        values.put("clase_id", cls.getClase().getEstudianteId());
+        values.put("estudiante_id", cls.getEstudiante().getEstudianteId());
         values.put("orden", cls.getOrden());
 
-        if(cls.getId() == 0){
+        if(cls.getEstudianteId() == 0){
             int id = (int) db.insert("clase_estudiante", null, values);
-            cls.setId(id);
+            cls.setEstudianteId(id);
         }else{
-            db.update("clase_estudiante", values, ID + " = ?", new String[]{String.valueOf(cls.getId())});
+            db.update("clase_estudiante", values, ID + " = ?", new String[]{String.valueOf(cls.getEstudianteId())});
         }
         db.close();
     }*/

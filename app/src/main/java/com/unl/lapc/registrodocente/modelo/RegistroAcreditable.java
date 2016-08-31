@@ -15,6 +15,7 @@ public class RegistroAcreditable {
     private int quimestre; //{1,2}
     private int parcial; //{1,2, 3}
 
+    private double notaPromedio;
     private double notaFinal;
 
     public int getId() {
@@ -71,6 +72,14 @@ public class RegistroAcreditable {
 
     public void setParcial(int parcial) {
         this.parcial = parcial;
+    }
+
+    public double getNotaPromedio() {
+        return notaPromedio;
+    }
+
+    public void setNotaPromedio(double notaPromedio) {
+        this.notaPromedio = notaPromedio;
     }
 
     public double getNotaFinal() {

@@ -1,5 +1,7 @@
 package com.unl.lapc.registrodocente.dto;
 
+import com.unl.lapc.registrodocente.util.Convert;
+
 /**
  * Created by Usuario on 20/08/2016.
  */
@@ -26,8 +28,6 @@ public class ResumenParcialAcreditable {
         this.id = id;
     }
 
-
-
     public double getNotaFinal() {
         return notaFinal;
     }
@@ -51,4 +51,5 @@ public class ResumenParcialAcreditable {
     public int getEstudianteId() {
         return estudianteId;
     }
+
 }
