@@ -32,7 +32,7 @@ public class EditEstudiante extends AppCompatActivity {
     private EditText txtApellidos;
     private EditText txtEmail;
     private EditText txtTelefono;
-    private EditText txtOrden;
+    //private EditText txtOrden;
     private RadioGroup rgSexo;
 
     @Override
@@ -49,7 +49,7 @@ public class EditEstudiante extends AppCompatActivity {
         txtEmail = (EditText)findViewById(R.id.txtEmail);
         txtTelefono = (EditText)findViewById(R.id.txtTelefono);
         txtTelefono = (EditText)findViewById(R.id.txtTelefono);
-        txtOrden = (EditText)findViewById(R.id.txtOrden);
+        //txtOrden = (EditText)findViewById(R.id.txtOrden);
         rgSexo =(RadioGroup)findViewById(R.id.rgSexo);
 
         Bundle bundle = getIntent().getExtras();
@@ -102,7 +102,7 @@ public class EditEstudiante extends AppCompatActivity {
         estudiante.setEmail(txtEmail.getText().toString());
         estudiante.setCelular(txtTelefono.getText().toString());
         estudiante.setClase(clase);
-        estudiante.setOrden(Integer.parseInt(txtOrden.getText().toString()));
+        //estudiante.setOrden(Integer.parseInt(txtOrden.getText().toString()));
         int rbSexo = rgSexo.getCheckedRadioButtonId();
         if(rbSexo == R.id.rbHombre){
             estudiante.setSexo("Hombre");
@@ -154,7 +154,7 @@ public class EditEstudiante extends AppCompatActivity {
             }else{
                 rgSexo.check(R.id.rbMujer);
             }
-            txtOrden.setText(""+estudiante.getOrden());
+            //txtOrden.setText(""+estudiante.getOrden());
         }
     }
 

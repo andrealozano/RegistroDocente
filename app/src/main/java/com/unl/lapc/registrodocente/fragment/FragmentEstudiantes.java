@@ -103,7 +103,7 @@ public class FragmentEstudiantes extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_ord_apellido) {
+        /*if (id == R.id.action_ord_apellido) {
             daoEstudiante.ordernarApellidos(clase);
             mLeadsAdapter = new ClaseEstudianteAdapter(getContext(), daoEstudiante.getEstudiantes(clase));
             mLeadsList.setAdapter(mLeadsAdapter);
@@ -111,7 +111,7 @@ public class FragmentEstudiantes extends Fragment {
             mLeadsAdapter.notifyDataSetChanged();
             mLeadsList.invalidateViews();
             return true;
-        }
+        }*/
 
         /*if (id == R.id.action_asistencias) {
             Intent intent = new Intent(getContext(), FragmentAsistancias.class);

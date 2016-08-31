@@ -52,6 +52,8 @@ public class EstudianteDao extends DBHandler {
         long id = db.insert(TABLE_NAME, null, values);
         est.setId((int)id);
 
+        ordernarApellidos(db, est.getClase());
+
         db.close();
     }
 
@@ -71,7 +73,11 @@ public class EstudianteDao extends DBHandler {
         values.put("clase_id", est.getClase().getId());
         values.put("periodo_id", est.getPeriodo().getId());
 
-        return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(est.getId())});
+        int u = db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(est.getId())});
+
+        ordernarApellidos(db, est.getClase());
+
+        return u;
     }
 
     public Estudiante get(int id) {
@@ -125,8 +131,8 @@ public class EstudianteDao extends DBHandler {
         return cursor.getInt(0) > 0;
     }*/
 
-    public void ordernarApellidos(Clase cls) {
-        SQLiteDatabase db = this.getWritableDatabase();
+    public void ordernarApellidos(SQLiteDatabase db, Clase cls) {
+        //SQLiteDatabase db = this.getWritableDatabase();
 
         String selectQuery = "SELECT e.id FROM estudiante e where e.clase_id = " + cls.getId() + " order by e.apellidos asc, e.nombres asc";
 
@@ -148,7 +154,7 @@ public class EstudianteDao extends DBHandler {
             orden++;
         }
 
-        db.close();
+        //db.close();
     }
 
     public void initNotas(Clase cls, Periodo periodo) {
