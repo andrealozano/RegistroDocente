@@ -148,7 +148,7 @@ public class DBHandler extends SQLiteOpenHelper {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
                 db.setForeignKeyConstraintsEnabled(true);
             } else {
-                db.execSQL("PRAGMA foreign_keys = '1'");
+                db.execSQL("PRAGMA foreign_keys = '1';");
             }
         }
     }

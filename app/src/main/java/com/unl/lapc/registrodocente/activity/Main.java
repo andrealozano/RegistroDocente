@@ -2,12 +2,15 @@ package com.unl.lapc.registrodocente.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +22,13 @@ import com.unl.lapc.registrodocente.adapter.ClasesMainAdapter;
 import com.unl.lapc.registrodocente.fragment.FragmentEstudiantes;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -127,6 +137,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             return true;
         }
 
+        if (id == R.id.action_backup) {
+            backupdDatabase();
+        }
+
         /*
         if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -145,5 +159,43 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void backupdDatabase(){
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+            String packageName  = "com.unl.lapc.registrodocente";
+            String sourceDBName = "registro_docente.db";
+            String targetDBName = "registro_docente_";
+            if (sd.canWrite()) {
+                File sdapp = new File(sd.getAbsolutePath() + "/RegistroDocente/backup/");
+                if(!sdapp.exists()){
+                    sdapp.mkdirs();
+                }
+
+                Date now = new Date();
+                String currentDBPath = "data/" + packageName + "/databases/" + sourceDBName;
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+                String backupDBPath = targetDBName + dateFormat.format(now) + ".db";
+
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sdapp, backupDBPath);
+
+                Log.i("backup","backupDB=" + backupDB.getAbsolutePath());
+                Log.i("backup","sourceDB=" + currentDB.getAbsolutePath());
+
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+
+                Snackbar.make(listViewClases, "Respaldo realizado correctamente", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            }
+        } catch (Exception e) {
+            Log.i("Backup", e.toString());
+        }
     }
 }

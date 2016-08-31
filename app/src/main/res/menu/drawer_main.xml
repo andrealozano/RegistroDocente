@@ -10,6 +10,11 @@
             android:id="@+id/action_clases"
             android:icon="@drawable/ic_menu_clase"
             android:title="Clases" />
+
+        <item
+            android:id="@+id/action_backup"
+            android:icon="@android:drawable/ic_menu_agenda"
+            android:title="Backup" />
     </group>
 
 </menu>

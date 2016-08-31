@@ -176,6 +176,11 @@ public class EstudianteDao extends DBHandler {
             }
         }
 
+        String sqlrit = String.format("insert into registroitem (periodo_id, clase_id, estudiante_id, acreditable_id, itemacreditable_id, nota) " +
+                "select e.periodo_id, e.clase_id, e.id, a.acreditable_id, a.id, 0 from estudiante e, itemacreditable a where e.clase_id=a.clase_id and  e.clase_id = %d and " +
+                "not exists (select n.id from registroitem n, itemacreditable b where n.itemacreditable_id = b.id and n.estudiante_id = e.id and b.id = a.id)", cls.getId());
+        db.execSQL(sqlrit);
+
         db.close();
     }
 
