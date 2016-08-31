@@ -126,6 +126,15 @@ public class AcreditableDao extends DBHandler {
         return db.update("itemacreditable", values, "id = ?", new String[]{String.valueOf(itemAcreditable.getId())});
     }
 
+    public int updateNota(int registroItemId, double nota) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+
+        values.put("nota", nota);
+
+        return db.update("registroitem", values, "id = ?", new String[]{String.valueOf(registroItemId)});
+    }
+
     public List<Acreditable> getAll(Periodo periodo) {
         List<Acreditable> lista = new ArrayList<>();
 
