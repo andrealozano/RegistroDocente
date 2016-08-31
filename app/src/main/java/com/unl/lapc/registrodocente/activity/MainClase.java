@@ -3,6 +3,8 @@ package com.unl.lapc.registrodocente.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -85,7 +87,26 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
 
         estudianteDao.initNotas(clase, periodo);
         cargarMenu(menu);
-        cargarEstudiantes();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.content_frame);
+        if(fragment == null || fragment instanceof FragmentEstudiantes) {
+            cargarEstudiantes();
+        }else if(fragment instanceof FragmentAsistancias){
+            cargarAsistencias();
+        }else if(fragment instanceof FragmentResumenNotas){
+            cargarResumenNotas();
+        }else if(fragment instanceof FragmentResumenNotasQuimestre){
+            Quimestre q = fragment.getArguments().getParcelable("quimestre");
+            cargarResumenNotasQuimestre(q);
+        }else if(fragment instanceof FragmentResumenNotasParcial){
+            Parcial q = fragment.getArguments().getParcelable("parcial");
+            cargarResumenNotasParcial(q);
+        }else if(fragment instanceof FragmentAcreditables){
+            Acreditable a = fragment.getArguments().getParcelable("acreditable");
+            int q = fragment.getArguments().getInt("quimestre");
+            int p = fragment.getArguments().getInt("parcial");
+            cargarAcreditable(a, q, p);
+        }
     }
 
     private void cargarMenu(Menu menu){
