@@ -60,6 +60,7 @@ public class EditItemAcreditable extends AppCompatActivity {
         c.setTime(itemAcreditable.getFecha());
 
         txtNombre.setText(itemAcreditable.getNombre());
+        txtAlias.setText(itemAcreditable.getAlias());
         dpFecha.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
     }
 
