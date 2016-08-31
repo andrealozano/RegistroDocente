@@ -14,6 +14,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.activity.MainClase;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.Quimestre;
@@ -35,6 +36,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
     private Quimestre quimestre;
 
     private TableLayout tlResumenNotas;
+    private MainClase main;
 
     private List<Acreditable> acreditables;
 
@@ -181,6 +183,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         setHasOptionsMenu(true);
 
         tlResumenNotas = (TableLayout)view.findViewById(R.id.tlResumenNotas);
+        this.main = (MainClase) inflater.getContext();
 
         Bundle args = getArguments();
         this.clase = args.getParcelable("clase");
@@ -201,7 +204,15 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         for (int i= 0; i < getAcreditables().size(); i++){
             //   add(group_id , item_id , order, nombre);
-            MenuItem mi = menu.add(0, acreditables.get(i).getId(), i, String.format("%s (%s)", acreditables.get(i).getNombre(), acreditables.get(i).getAlias()));
+            final Acreditable acreditable = acreditables.get(i);
+            MenuItem mi = menu.add(0, acreditable.getId(), i, String.format("%s (%s)", acreditable.getNombre(), acreditable.getAlias()));
+            mi.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem menuItem) {
+                    main.cargarAcreditable(acreditable, quimestre.getNumero(), 0);
+                    return true;
+                }
+            });
         }
     }
 

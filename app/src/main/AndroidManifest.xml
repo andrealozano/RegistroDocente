@@ -55,7 +55,10 @@
         <activity
             android:name=".activity.EditEstudiante"
             android:label="Editar estudiante" />
-        <activity android:name=".activity.EditItemAcreditable"></activity>
+
+        <activity
+            android:name=".activity.EditItemAcreditable"
+            android:label="Item acreditable"></activity>
     </application>
 
 </manifest>
