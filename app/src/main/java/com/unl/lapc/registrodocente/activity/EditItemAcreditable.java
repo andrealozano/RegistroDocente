@@ -61,7 +61,7 @@ public class EditItemAcreditable extends AppCompatActivity {
 
         txtNombre.setText(itemAcreditable.getNombre());
         txtAlias.setText(itemAcreditable.getAlias());
-        dpFecha.init(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH), null);
+        dpFecha.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
