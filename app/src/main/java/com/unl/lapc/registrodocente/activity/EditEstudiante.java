@@ -110,17 +110,31 @@ public class EditEstudiante extends AppCompatActivity {
             estudiante.setSexo("Mujer");
         }
 
-       // if(validate()) {
+        if(validate()) {
 
             if (estudiante.getId() == 0) {
                 dao.add(estudiante);
             } else {
                 dao.update(estudiante);
             }
-        //}
+        }
 
         cancelarEdicion();
 
+    }
+
+    public boolean validate(){
+        boolean b = true;
+
+        if(estudiante.getNombres().trim().length() < 1){
+            txtNombres.setError("Ingrese el nombre"); b = false;
+        }
+
+        if(estudiante.getApellidos().trim().length() < 1){
+            txtApellidos.setError("Ingrese el apellido"); b = false;
+        }
+
+        return  b;
     }
 
     public void removerEstudiante(){
