@@ -34,7 +34,9 @@ public class PeriodoDao extends DBHandler {
         values.put("porcentajeAsistencias", periodo.getPorcentajeAsistencias());
         values.put("notaMinima", periodo.getNotaMinima());
 
-        db.insert("periodo", null, values);
+        int id = (int)db.insert("periodo", null, values);
+        periodo.setId(id);
+
         db.close();
     }
 

@@ -94,6 +94,13 @@ public class CalendarioDao extends DBHandler {
 
         SQLiteDatabase db = this.getWritableDatabase();
 
+        //Borra fuera periodo
+        db.execSQL(String.format("delete from asistencia where periodo_id = %d and (fecha < date('%s') or fecha > date('%s'))",
+                periodo.getId(), Convert.toShortDateString(periodo.getInicio()), Convert.toShortDateString(periodo.getFin())));
+        db.execSQL(String.format("delete from calendario where periodo_id = %d and (fecha < date('%s') or fecha > date('%s'))",
+                periodo.getId(), Convert.toShortDateString(periodo.getInicio()), Convert.toShortDateString(periodo.getFin())));
+
+
         while(c.getTime().before(fin)){
             int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 

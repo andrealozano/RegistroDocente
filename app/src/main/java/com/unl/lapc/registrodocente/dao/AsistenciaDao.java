@@ -35,6 +35,7 @@ public class AsistenciaDao extends DBHandler {
         values.put("clase_id", asistencia.getClase().getId());
         values.put("estudiante_id", asistencia.getEstudiante().getId());
         values.put("calendario_id", asistencia.getCalendario().getId());
+        values.put("periodo_id", asistencia.getPeriodo().getId());
 
         long id = db.insert(TABLE_NAME, null, values);
         asistencia.setId((int)id);
@@ -105,6 +106,7 @@ public class AsistenciaDao extends DBHandler {
                 a.setId(cursor.getInt(0));
                 a.setEstado(cursor.getString(1));
                 a.setFecha(fecha);
+                a.setPeriodo(clase.getPeriodo());
 
                 Estudiante e = new Estudiante(cursor.getInt(2));
                 e.setClase(clase);

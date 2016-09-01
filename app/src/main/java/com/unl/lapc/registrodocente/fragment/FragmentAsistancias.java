@@ -32,6 +32,7 @@ import com.unl.lapc.registrodocente.modelo.Asistencia;
 import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -42,6 +43,7 @@ import java.util.List;
 public class FragmentAsistancias extends Fragment {
 
     private Clase clase;
+    private Periodo periodo;
 
     //private ListView mLeadsList;
     private AsistenciaDao dao;
@@ -72,6 +74,7 @@ public class FragmentAsistancias extends Fragment {
 
         Bundle bundle = getArguments();
         clase = bundle.getParcelable("clase");
+        periodo = bundle.getParcelable("periodo");
 
         //mLeadsList = (ListView) findViewById(R.id.listViewAsistencias);
         //mLeadsAdapter = new RegistroAsistenciaAdapter(getApplicationContext(), dao.getEstudiantes(clase));
@@ -206,7 +209,7 @@ public class FragmentAsistancias extends Fragment {
                     }
 
                     if (asi == null) {
-                        asi = new Asistencia(0, fecha, c.getClase(), c, calendario);
+                        asi = new Asistencia(0, fecha, c.getClase(), c, calendario, periodo);
                         asi.setEstado(any ? "F" : "P");
                         dao.add(asi);
                     }

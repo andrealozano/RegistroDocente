@@ -97,10 +97,10 @@ public class Calendarios extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_refresh) {
+        /*if (id == R.id.action_refresh) {
             registrar();
             return true;
-        }
+        }*/
 
         if (id == R.id.action_back) {
             Intent intent = new Intent(this, Periodos.class);
@@ -144,10 +144,10 @@ public class Calendarios extends AppCompatActivity {
         }
     }
 
-    private void registrar(){
+    /*private void registrar(){
         dao.registrar(periodo);
         mostrarMes(periodo.getInicio());
-    }
+    }*/
 
     private void mostrarMes(Date fecha){
         calendar.setTime(fecha);

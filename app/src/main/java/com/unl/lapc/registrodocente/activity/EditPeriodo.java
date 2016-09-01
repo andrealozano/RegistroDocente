@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.dao.CalendarioDao;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
 import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
@@ -33,6 +34,7 @@ public class EditPeriodo extends AppCompatActivity {
 
     private Periodo periodo = null;
     private PeriodoDao dao = null;
+    private CalendarioDao calendarioDao;
 
     private EditText txtNombre;
     private EditText txtEscala;
@@ -89,7 +91,8 @@ public class EditPeriodo extends AppCompatActivity {
 
         setValue();
 
-        dao = new PeriodoDao(getApplicationContext());
+        dao = new PeriodoDao(this);
+        calendarioDao = new CalendarioDao(this);
     }
 
     private void setValue() {
@@ -185,6 +188,8 @@ public class EditPeriodo extends AppCompatActivity {
                 dao.update(periodo);
             }
 
+            calendarioDao.registrar(periodo);
+
             Intent intent = new Intent(this, Periodos.class);
             startActivity(intent);
         }
@@ -193,7 +198,6 @@ public class EditPeriodo extends AppCompatActivity {
     public void eliminarPeriodo(){
         if(periodo.getId() > 0){
             dao.delete(periodo);
-
             Intent intent = new Intent(this, Periodos.class);
             startActivity(intent);
         }else{

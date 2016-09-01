@@ -18,6 +18,7 @@ public class Asistencia implements Parcelable{
     private Clase clase;
     private Estudiante estudiante;
     private Calendario calendario;
+    private Periodo periodo;
 
     public Asistencia(){
     }
@@ -33,7 +34,7 @@ public class Asistencia implements Parcelable{
         this.estudiante = estudiante;
     }
 
-    public Asistencia(int id, Date fecha, Clase clase, Estudiante estudiante, Calendario calendario){
+    public Asistencia(int id, Date fecha, Clase clase, Estudiante estudiante, Calendario calendario, Periodo periodo){
         this.id = id;
         this.fecha = fecha;
         this.estado = "P";
@@ -41,6 +42,7 @@ public class Asistencia implements Parcelable{
         this.clase = clase;
         this.estudiante = estudiante;
         this.calendario = calendario;
+        this.periodo = periodo;
     }
 
     public int getId() {
@@ -64,6 +66,14 @@ public class Asistencia implements Parcelable{
 
     public Calendario getCalendario() {return calendario;}
     public void setCalendario(Calendario calendario) {this.calendario = calendario;}
+
+    public Periodo getPeriodo() {
+        return periodo;
+    }
+
+    public void setPeriodo(Periodo periodo) {
+        this.periodo = periodo;
+    }
 
     public String getEstado() {return estado;}
     public void setEstado(String estado) {this.estado = estado;}
