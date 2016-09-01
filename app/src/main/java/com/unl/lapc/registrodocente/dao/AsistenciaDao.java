@@ -40,16 +40,33 @@ public class AsistenciaDao extends DBHandler {
         long id = db.insert(TABLE_NAME, null, values);
         asistencia.setId((int)id);
 
+        this.calcularPorcentaje(db, asistencia.getEstudiante());
+
         db.close();
     }
 
     public int update(Asistencia asistencia) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-
         values.put("estado", asistencia.getEstado());
 
-        return db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(asistencia.getId())});
+        int up = db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(asistencia.getId())});
+
+        this.calcularPorcentaje(db, asistencia.getEstudiante());
+
+        return  up;
+    }
+
+    private void calcularPorcentaje(SQLiteDatabase db, Estudiante estudiante){
+        db.execSQL(
+                String.format(
+                "update estudiante set porcentajeAsistencias = round(" +
+                        "((select count(a.id) from asistencia a where a.estudiante_id = %d and a.estado = 'P') * 100) / " +
+                        "(select count(c.id) from calendario c where c.periodo_id = estudiante.periodo_id and c.estado = '%s'), 2) " +
+                        "where id = %d",
+                        estudiante.getId(), Calendario.ESTADO_ACTIVO, estudiante.getId()
+                )
+        );
     }
 
     public Asistencia get(int id) {

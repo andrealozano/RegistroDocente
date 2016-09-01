@@ -71,7 +71,20 @@ public class PeriodoDao extends DBHandler {
 
     public void delete(Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("asistencia", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("calendario", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+
+        db.delete("registroacreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("registroparcial", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("registroquimestral", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("registroitem", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("itemacreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("acreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+
+        db.delete("clase", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+
         db.delete("periodo", "id = ?", new String[] { String.valueOf(periodo.getId()) });
+
         db.close();
     }
 

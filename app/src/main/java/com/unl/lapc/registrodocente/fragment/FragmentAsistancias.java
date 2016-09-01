@@ -228,7 +228,7 @@ public class FragmentAsistancias extends Fragment {
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         this.fecha = calendario.getFecha();
 
-        ((MainClase)getActivity()).getSupportActionBar().setTitle(clase.getNombre() + ": Asistencias (" + sd.format(fecha)+ " - " + calendario.getEstado() + ")");
+        ((MainClase)getActivity()).getSupportActionBar().setTitle("Asistencias (" + sd.format(fecha)+ " - " + calendario.getEstado() + ")");
 
         tlAsistencias.removeAllViews();
         asistencias = dao.getAsistencias(clase, fecha);

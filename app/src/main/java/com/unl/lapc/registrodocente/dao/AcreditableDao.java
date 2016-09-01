@@ -133,6 +133,13 @@ public class AcreditableDao extends DBHandler {
         return  u;
     }
 
+    public void deleteItem(ItemAcreditable itemAcreditable) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("registroitem", "itemacreditable_id = ?", new String[] { String.valueOf(itemAcreditable.getId()) });
+        db.delete("itemacreditable", "id = ?", new String[] { String.valueOf(itemAcreditable.getId()) });
+        db.close();
+    }
+
     public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro, Periodo periodo, Clase clase, Estudiante estudiante, Acreditable acreditable, int quimestre, int parcial) {
         SQLiteDatabase db = this.getWritableDatabase();
 

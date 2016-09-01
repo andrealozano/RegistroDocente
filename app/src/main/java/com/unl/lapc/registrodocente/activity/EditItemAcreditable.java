@@ -117,8 +117,8 @@ public class EditItemAcreditable extends AppCompatActivity {
     }
 
     public void eliminar(){
-        if(acreditable.getId() > 0){
-            //dao.delete(acreditable);
+        if(itemAcreditable.getId() > 0){
+            dao.deleteItem(itemAcreditable);
             atras();
         }else{
             Snackbar.make(getCurrentFocus(), "No se puede eliminar porque aún no ha guardado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
