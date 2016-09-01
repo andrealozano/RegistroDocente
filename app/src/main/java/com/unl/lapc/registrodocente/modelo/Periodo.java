@@ -15,8 +15,8 @@ public class Periodo implements Parcelable{
     private Date inicio = new Date();
     private Date fin = new Date();
     private double escala = 10; //escala calificacion sobre 10, 20, 100
-    private int quimestres;
-    private int parciales;
+    private int quimestres = 2;
+    private int parciales = 3;
     private double equivalenciaParciales = 8; //Equivalencia de los parciales
     private double equivalenciaExamenes = 2; //Equivalencia de los examenes quimestrales
     private double porcentajeAsistencias = 80; //80%
