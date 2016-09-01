@@ -26,10 +26,7 @@
         android:layout_centerHorizontal="true"
         android:id="@+id/tlResumenNotas"
         android:baselineAligned="false"
-        android:stretchColumns="1"
         >
-
-
     </TableLayout>
     </HorizontalScrollView>
     </ScrollView>

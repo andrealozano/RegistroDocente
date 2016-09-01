@@ -24,8 +24,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/tlResumenNotas"
-        android:baselineAligned="false"
-        android:stretchColumns="1">
+        android:baselineAligned="false">
+        android:baselineAligned="false">
     </TableLayout>
     </HorizontalScrollView>
     </ScrollView>

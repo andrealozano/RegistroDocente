@@ -151,17 +151,46 @@ public class AcreditableDao extends DBHandler {
         if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
             String s = String.format(
                     "update registroparcial set notaFinal=(select sum(ra.notaFinal) from registroacreditable ra where ra.estudiante_id = %d and ra.quimestre = %d and ra.parcial = %d) " +
-                    "where registroparcial.estudiante_id = %d and registroparcial.quimestre = %d and registroparcial.parcial = %d", estudiante.getId(), quimestre, parcial, estudiante.getId(), quimestre, parcial);
+                    "where estudiante_id = %d and quimestre = %d and parcial = %d", estudiante.getId(), quimestre, parcial, estudiante.getId(), quimestre, parcial);
             db.execSQL(s);
         }
 
-        //Actualia registroquimestre
+        //Actualiza registroquimestre (Nota examenes)
         if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_QUIMESTRE)){
             String s = String.format(
-                    "update registroquimestre r set notaFinal=(select sum(ra.notaFinal) from registroacreditable ra where ra.estudiante_id = %d and ra.quimestre = %d and ra.parcial = %d) " +
-                            "where r.estudiante_id = %d and r.quimestre = %d and r.parcial = %d", estudiante.getId(), quimestre, parcial, estudiante.getId(), quimestre, parcial);
-            //db.execSQL(s);
+                    "update registroquimestral set notaExamenes=(select round(((sum(ra.notaPromedio)/(select count(a.id) from acreditable a where a.periodo_id = %d and a.tipo = '%s')) * %s), 2) from registroacreditable ra where ra.estudiante_id = %d and ra.quimestre = %d and ra.parcial = 0) " +
+                            "where estudiante_id = %d and quimestre = %d",
+                    periodo.getId(), Acreditable.TIPO_ACREDITABLE_QUIMESTRE,
+                    periodo.getEquivalenciaExamenes() / periodo.getEscala(),
+                    estudiante.getId(), quimestre,
+                    estudiante.getId(), quimestre);
+            db.execSQL(s);
         }
+
+        //Actualiza registroquimestre (Nota parciales)
+        String s1 = String.format(
+                "update registroquimestral set notaParciales=(select round(((sum(rp.notaFinal)/%d)) * %s, 2) from registroparcial rp where rp.estudiante_id = %d and rp.quimestre = %d) " +
+                        "where estudiante_id = %d and quimestre = %d",
+                periodo.getParciales(),
+                periodo.getEquivalenciaParciales() / periodo.getEscala(),
+                estudiante.getId(), quimestre,
+                estudiante.getId(), quimestre);
+        db.execSQL(s1);
+
+        //Actualiza nota final quimestre
+        String s = String.format("update registroquimestral set notaFinal=(notaParciales + notaExamenes) where estudiante_id = %d and quimestre = %d",
+                estudiante.getId(), quimestre);
+        db.execSQL(s);
+
+        //Actualiza nota estudiante
+        String s2 = String.format("update estudiante set notaFinal = " +
+                "(select round((sum(rq.notaFinal) / %d), 2) from registroquimestral rq where rq.estudiante_id = %d) " +
+                "where id = %d",
+                periodo.getQuimestres(),
+                estudiante.getId(),
+                estudiante.getId()
+        );
+        db.execSQL(s2);
 
         return up;
     }

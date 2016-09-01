@@ -184,7 +184,7 @@ public class EstudianteDao extends DBHandler {
     public List<Estudiante> getEstudiantes(Clase clase) {
         List<Estudiante> shopList = new ArrayList<>();
 
-        String selectQuery = "SELECT e.id, e.cedula, e.nombres, e.apellidos, e.orden FROM estudiante e where e.clase_id = " + clase.getId() + " order by e.orden asc";
+        String selectQuery = "SELECT e.id, e.cedula, e.nombres, e.apellidos, e.orden, e.notaFinal, e.porcentajeAsistencias, e.estado FROM estudiante e where e.clase_id = " + clase.getId() + " order by e.orden asc";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -194,6 +194,9 @@ public class EstudianteDao extends DBHandler {
 
                 Estudiante e = new Estudiante(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3));
                 e.setOrden(cursor.getInt(4));
+                e.setNotaFinal(cursor.getDouble(5));
+                e.setPorcentajeAsistencias(cursor.getDouble(6));
+                e.setEstado(cursor.getString(7));
                 e.setClase(clase);
                 e.setPeriodo(clase.getPeriodo());
 
