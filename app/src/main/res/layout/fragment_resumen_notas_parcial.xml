@@ -18,13 +18,15 @@
         android:scrollbars="horizontal|vertical"
         android:layout_width="wrap_content"
         android:layout_marginTop="5dip">
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/tlResumenNotas"
-        android:baselineAligned="false">
+        android:baselineAligned="false"
+        >
 
 
     </TableLayout>

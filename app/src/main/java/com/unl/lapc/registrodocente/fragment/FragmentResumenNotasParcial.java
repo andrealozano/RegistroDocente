@@ -57,13 +57,12 @@ public class FragmentResumenNotasParcial extends Fragment {
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         row.setBackgroundColor(getResources().getColor(R.color.backgroundTh));
 
-
-
         TextView tv1 = new TextView(getContext());
         tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv1.setGravity(Gravity.CENTER);
         tv1.setTextSize(18);
-        tv1.setPadding(5, 2, 5, 2);
+        tv1.setPadding(5, 5, 5, 5);
+        tv1.setBackgroundResource(R.drawable.cell_shape_head);
         tv1.setText("N°");
         row.addView(tv1);
 
@@ -71,7 +70,8 @@ public class FragmentResumenNotasParcial extends Fragment {
         tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv2.setGravity(Gravity.CENTER);
         tv2.setTextSize(18);
-        tv2.setPadding(5, 2, 5, 2);
+        tv2.setPadding(5, 5, 5, 5);
+        tv2.setBackgroundResource(R.drawable.cell_shape_head);
         tv2.setText("NOMBRES");
         row.addView(tv2);
 
@@ -81,8 +81,10 @@ public class FragmentResumenNotasParcial extends Fragment {
             tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv4.setGravity(Gravity.CENTER);
             tv4.setTextSize(18);
-            tv4.setPadding(5, 2, 5, 2);
+            tv4.setPadding(5, 5, 5, 5);
+            tv4.setBackgroundResource(R.drawable.cell_shape_head);
             tv4.setText(acreditables.get(j).getAlias());
+            tv4.setHint(acreditables.get(j).getNombre());
             row.addView(tv4);
         }
 
@@ -90,8 +92,10 @@ public class FragmentResumenNotasParcial extends Fragment {
         tv6.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv6.setGravity(Gravity.CENTER);
         tv6.setTextSize(18);
-        tv6.setPadding(5, 2, 5, 2);
-        tv6.setText("NF");
+        tv6.setPadding(5, 5, 5, 5);
+        tv6.setBackgroundResource(R.drawable.cell_shape_head);
+        tv6.setText("Nf"); //Nota final
+        tv6.setHint("Nota final");
         row.addView(tv6);
 
         tlResumenNotas.addView(row);
@@ -110,7 +114,8 @@ public class FragmentResumenNotasParcial extends Fragment {
             tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv1.setGravity(Gravity.CENTER);
             tv1.setTextSize(18);
-            tv1.setPadding(5, 2, 5, 2);
+            tv1.setPadding(5, 5, 5, 5);
+            tv1.setBackgroundResource(R.drawable.cell_shape);
             tv1.setText((i + 1) + ". ");
             row.addView(tv1);
 
@@ -118,7 +123,8 @@ public class FragmentResumenNotasParcial extends Fragment {
             tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv2.setGravity(Gravity.CENTER);
             tv2.setTextSize(18);
-            tv2.setPadding(5, 2, 5, 2);
+            tv2.setPadding(5, 5, 5, 5);
+            tv2.setBackgroundResource(R.drawable.cell_shape);
             tv2.setText(e.getNombres());
             row.addView(tv2);
 
@@ -127,7 +133,8 @@ public class FragmentResumenNotasParcial extends Fragment {
                 tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
                 tv4.setGravity(Gravity.CENTER);
                 tv4.setTextSize(18);
-                tv4.setPadding(5, 2, 5, 2);
+                tv4.setPadding(5, 5, 5, 5);
+                tv4.setBackgroundResource(R.drawable.cell_shape);
                 tv4.setText("" + e.getAcreditables().get(acreditables.get(j).getId()).getNotaFinal());
                 row.addView(tv4);
             }
@@ -138,7 +145,8 @@ public class FragmentResumenNotasParcial extends Fragment {
             tv6.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv6.setGravity(Gravity.CENTER);
             tv6.setTextSize(18);
-            tv6.setPadding(5, 2, 5, 2);
+            tv6.setPadding(5, 5, 5, 5);
+            tv6.setBackgroundResource(R.drawable.cell_shape);
             tv6.setText("" + e.getNotaFinal());
             row.addView(tv6);
 

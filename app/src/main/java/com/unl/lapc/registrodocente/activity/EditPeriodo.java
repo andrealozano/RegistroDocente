@@ -1,22 +1,32 @@
 package com.unl.lapc.registrodocente.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
+import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
+import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.modelo.Calendario;
+import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Convert;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class EditPeriodo extends AppCompatActivity {
@@ -28,8 +38,12 @@ public class EditPeriodo extends AppCompatActivity {
     private EditText txtEscala;
     private EditText txtQuimestres;
     private EditText txtParciales;
+    private TextView txtInicio;
+    private TextView txtFin;
+
+    /*
     private DatePicker dpInicio;
-    private DatePicker dpFin;
+    private DatePicker dpFin;*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +54,25 @@ public class EditPeriodo extends AppCompatActivity {
         txtEscala= (EditText)findViewById(R.id.txtEscala);
         txtQuimestres= (EditText)findViewById(R.id.txtQuimestres);
         txtParciales= (EditText)findViewById(R.id.txtParciales);
-        dpInicio= (DatePicker)findViewById(R.id.dpInicio);
-        dpFin= (DatePicker)findViewById(R.id.dpFin);
+        //dpInicio= (DatePicker)findViewById(R.id.dpInicio);
+        //dpFin= (DatePicker)findViewById(R.id.dpFin);
+        txtInicio = (TextView)findViewById(R.id.txtInicio);
+        txtFin = (TextView)findViewById(R.id.txtFin);
+
+        txtInicio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogFecha("inicio", txtInicio);
+            }
+        });
+
+        txtFin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                showDialogFecha("fin", txtFin);
+            }
+        });
+
 
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
@@ -53,18 +84,21 @@ public class EditPeriodo extends AppCompatActivity {
 
     private void setValue() {
         if (periodo != null) {
-            Calendar c = GregorianCalendar.getInstance();
+            //Calendar c = GregorianCalendar.getInstance();
 
             txtNombre.setText(periodo.getNombre());
             txtEscala.setText(""+periodo.getEscala());
             txtQuimestres.setText(""+periodo.getQuimestres());
             txtParciales.setText(""+periodo.getParciales());
 
-            c.setTime(periodo.getInicio());
-            dpInicio.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+            //c.setTime(periodo.getInicio());
+            //dpInicio.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 
-            c.setTime(periodo.getFin());
-            dpFin.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+            //c.setTime(periodo.getFin());
+            //dpFin.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+
+            txtInicio.setText(Convert.toShortDateString(periodo.getInicio()));
+            txtFin.setText(Convert.toShortDateString(periodo.getFin()));
         }
     }
 
@@ -119,8 +153,8 @@ public class EditPeriodo extends AppCompatActivity {
     public void guardarPeriodo(){
         periodo.setNombre(txtNombre.getText().toString());
         periodo.setEscala(Convert.toDouble(txtEscala.getText().toString()));
-        periodo.setInicio(Convert.toDate(dpInicio));
-        periodo.setFin(Convert.toDate(dpFin));
+        //periodo.setInicio(Convert.toDate(dpInicio));
+        //periodo.setFin(Convert.toDate(dpFin));
         periodo.setQuimestres(Convert.toInt(txtQuimestres.getText().toString()));
         periodo.setParciales(Convert.toInt(txtParciales.getText().toString()));
 
@@ -174,5 +208,49 @@ public class EditPeriodo extends AppCompatActivity {
         }
 
         return v;
+    }
+
+    private void showDialogFecha(final String tipo, final TextView txt){
+        final View myView = View.inflate(this, R.layout.content_dlg_fecha, null);
+
+        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        builder.setView(myView);
+        builder.setTitle("Fecha de " + tipo);
+        builder.setCancelable(false);
+
+        final DatePicker dpFecha = (DatePicker)myView.findViewById(R.id.dpFecha);
+        final Calendar c = GregorianCalendar.getInstance();
+
+        if(tipo.equals("inicio")){
+            c.setTime(periodo.getInicio());
+        }else{
+            c.setTime(periodo.getFin());
+        }
+
+
+        dpFecha.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
+
+        builder.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                c.set(dpFecha.getYear(),dpFecha.getMonth(),dpFecha.getDayOfMonth());
+                Date fecha = c.getTime();
+                if(tipo.equals("inicio")){
+                    periodo.setInicio(fecha);
+                }else{
+                    periodo.setFin(fecha);
+                }
+                txt.setText(Convert.toShortDateString(fecha));
+                dialog.dismiss();
+            }
+        });
+
+        builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id){
+                dialog.dismiss();
+            }
+        });
+
+        AlertDialog alert=builder.create();
+        alert.show();
     }
 }

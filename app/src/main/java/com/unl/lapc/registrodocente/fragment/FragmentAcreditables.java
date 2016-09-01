@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TableLayout;
@@ -29,6 +31,7 @@ import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
+import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Convert;
@@ -91,7 +94,7 @@ public class FragmentAcreditables extends Fragment {
 
     private void customInit(){
         tlResumenNotas.removeAllViews();
-        this.itemsAcreditables = acreditableDao.getItemsAcreditables(acreditable);
+        this.itemsAcreditables = acreditableDao.getItemsAcreditables(acreditable, quimestre, parcial);
         cargarTh();
         cargarTr();
     }
@@ -303,6 +306,11 @@ public class FragmentAcreditables extends Fragment {
         txtAcre.setText("Acreditable: " + itemAcreditable.getNombre());
         txtEstu.setText("Estudiante : " + resumen.getNombres());
         txtNota.setText(""+registro.getNotaFinal());
+        txtNota.selectAll();
+
+        final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+
+
 
         builder.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -313,11 +321,13 @@ public class FragmentAcreditables extends Fragment {
                     registro.setNotaFinal(nota);
                     resumen.calcularPromedio(acreditable, periodo);
 
-                    acreditableDao.updateNota(resumen, registro);
+                    Estudiante estudiante = new Estudiante(resumen.getEstudianteId());
+                    acreditableDao.updateNota(resumen, registro, periodo, clase, estudiante, acreditable, quimestre, parcial);
 
                     tvNota.setText(""+nota);
                     tvPm.setText(""+resumen.getNotaPromedio());
                     tvEq.setText(""+resumen.getNotaFinal());
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                     dialog.dismiss();
                 }else{
                     Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();
@@ -329,12 +339,16 @@ public class FragmentAcreditables extends Fragment {
 
         builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
                 dialog.dismiss();
             }
         });
 
         AlertDialog alert=builder.create();
         alert.show();
+
+        txtNota.requestFocus();
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
 

@@ -63,7 +63,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv1.setGravity(Gravity.CENTER);
         tv1.setTextSize(18);
-        tv1.setPadding(5, 2, 5, 2);
+        tv1.setPadding(5, 5, 5, 5);
+        tv1.setBackgroundResource(R.drawable.cell_shape_head);
         tv1.setText("N°");
         row.addView(tv1);
 
@@ -71,7 +72,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv2.setGravity(Gravity.CENTER);
         tv2.setTextSize(18);
-        tv2.setPadding(5, 2, 5, 2);
+        tv2.setPadding(5, 5, 5, 5);
+        tv2.setBackgroundResource(R.drawable.cell_shape_head);
         tv2.setText("NOMBRES");
         row.addView(tv2);
 
@@ -81,7 +83,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv4.setGravity(Gravity.CENTER);
             tv4.setTextSize(18);
-            tv4.setPadding(5, 2, 5, 2);
+            tv4.setPadding(5, 5, 5, 5);
+            tv4.setBackgroundResource(R.drawable.cell_shape_head);
             tv4.setText("P" + (j+1));
             row.addView(tv4);
         }
@@ -90,7 +93,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv4.setGravity(Gravity.CENTER);
         tv4.setTextSize(18);
-        tv4.setPadding(5, 2, 5, 2);
+        tv4.setPadding(5, 5, 5, 5);
+        tv4.setBackgroundResource(R.drawable.cell_shape_head);
         tv4.setText("NP"); //nota parciales
         row.addView(tv4);
 
@@ -98,7 +102,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         tv5.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv5.setGravity(Gravity.CENTER);
         tv5.setTextSize(18);
-        tv5.setPadding(2, 2, 2, 2);
+        tv5.setPadding(5, 5, 5, 5);
+        tv5.setBackgroundResource(R.drawable.cell_shape_head);
         tv5.setText("NE"); //nota exmanes
         row.addView(tv5);
 
@@ -106,8 +111,9 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         tv6.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv6.setGravity(Gravity.CENTER);
         tv6.setTextSize(18);
-        tv6.setPadding(5, 2, 5, 2);
-        tv6.setText("NF");
+        tv6.setPadding(5, 5, 5, 5);
+        tv6.setBackgroundResource(R.drawable.cell_shape_head);
+        tv6.setText("NF"); //Nota fina
         row.addView(tv6);
 
         tlResumenNotas.addView(row);
@@ -126,7 +132,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv1.setGravity(Gravity.CENTER);
             tv1.setTextSize(18);
-            tv1.setPadding(5, 2, 5, 2);
+            tv1.setPadding(5, 5, 5, 5);
+            tv1.setBackgroundResource(R.drawable.cell_shape);
             tv1.setText((i + 1) + ". ");
             row.addView(tv1);
 
@@ -134,7 +141,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv2.setGravity(Gravity.CENTER);
             tv2.setTextSize(18);
-            tv2.setPadding(5, 2, 5, 2);
+            tv2.setPadding(5, 5, 5, 5);
+            tv2.setBackgroundResource(R.drawable.cell_shape);
             tv2.setText(e.getNombres());
             row.addView(tv2);
 
@@ -143,7 +151,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
                 tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
                 tv4.setGravity(Gravity.CENTER);
                 tv4.setTextSize(18);
-                tv4.setPadding(5, 2, 5, 2);
+                tv4.setPadding(5, 5, 5, 5);
+                tv4.setBackgroundResource(R.drawable.cell_shape);
                 tv4.setText("" + e.getParciales().get(j+1));
                 row.addView(tv4);
             }
@@ -152,7 +161,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv4.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv4.setGravity(Gravity.CENTER);
             tv4.setTextSize(18);
-            tv4.setPadding(5, 2, 5, 2);
+            tv4.setPadding(5, 5, 5, 5);
+            tv4.setBackgroundResource(R.drawable.cell_shape_total);
             tv4.setText("" + e.getNotaParciales());
             row.addView(tv4);
 
@@ -160,7 +170,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv5.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv5.setGravity(Gravity.CENTER);
             tv5.setTextSize(18);
-            tv5.setPadding(5, 2, 5, 2);
+            tv5.setPadding(5, 5, 5, 5);
+            tv5.setBackgroundResource(R.drawable.cell_shape_total);
             tv5.setText("" + e.getNotaExamenes());
             row.addView(tv5);
 
@@ -168,7 +179,8 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv6.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
             tv6.setGravity(Gravity.CENTER);
             tv6.setTextSize(18);
-            tv6.setPadding(5, 2, 5, 2);
+            tv6.setPadding(5, 5, 5, 5);
+            tv6.setBackgroundResource(R.drawable.cell_shape_total);
             tv6.setText("" + e.getNotaFinal());
             row.addView(tv6);
 

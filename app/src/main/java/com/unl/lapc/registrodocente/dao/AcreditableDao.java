@@ -9,6 +9,7 @@ import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
+import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
@@ -132,7 +133,7 @@ public class AcreditableDao extends DBHandler {
         return  u;
     }
 
-    public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro) {
+    public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro, Periodo periodo, Clase clase, Estudiante estudiante, Acreditable acreditable, int quimestre, int parcial) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         //Actualiza nota
@@ -145,6 +146,22 @@ public class AcreditableDao extends DBHandler {
         vre.put("notaPromedio", resumen.getNotaPromedio());
         vre.put("notaFinal", resumen.getNotaFinal());
         int up1 = db.update("registroacreditable", vre, "id = ?", new String[]{String.valueOf(resumen.getId())});
+
+        //Actualiza registro parcial (Si acreditable tipo=Parcial)
+        if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
+            String s = String.format(
+                    "update registroparcial set notaFinal=(select sum(ra.notaFinal) from registroacreditable ra where ra.estudiante_id = %d and ra.quimestre = %d and ra.parcial = %d) " +
+                    "where registroparcial.estudiante_id = %d and registroparcial.quimestre = %d and registroparcial.parcial = %d", estudiante.getId(), quimestre, parcial, estudiante.getId(), quimestre, parcial);
+            db.execSQL(s);
+        }
+
+        //Actualia registroquimestre
+        if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_QUIMESTRE)){
+            String s = String.format(
+                    "update registroquimestre r set notaFinal=(select sum(ra.notaFinal) from registroacreditable ra where ra.estudiante_id = %d and ra.quimestre = %d and ra.parcial = %d) " +
+                            "where r.estudiante_id = %d and r.quimestre = %d and r.parcial = %d", estudiante.getId(), quimestre, parcial, estudiante.getId(), quimestre, parcial);
+            //db.execSQL(s);
+        }
 
         return up;
     }
@@ -201,10 +218,10 @@ public class AcreditableDao extends DBHandler {
         return lista;
     }
 
-    public List<ItemAcreditable> getItemsAcreditables(Acreditable acreditable) {
+    public List<ItemAcreditable> getItemsAcreditables(Acreditable acreditable, int quimestre, int parcial) {
         List<ItemAcreditable> lista = new ArrayList<>();
 
-        String selectQuery = "SELECT id, periodo_id, clase_id, acreditable_id, alias, nombre, fecha, quimestre, parcial FROM itemacreditable where acreditable_id = " + acreditable.getId() + " order by fecha asc, id asc";
+        String selectQuery = "SELECT id, periodo_id, clase_id, acreditable_id, alias, nombre, fecha, quimestre, parcial FROM itemacreditable where acreditable_id = " + acreditable.getId() + " and quimestre = "+quimestre+" and parcial = "+parcial+" order by fecha asc, id asc";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
