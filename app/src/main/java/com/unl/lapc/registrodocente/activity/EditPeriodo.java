@@ -41,6 +41,11 @@ public class EditPeriodo extends AppCompatActivity {
     private TextView txtInicio;
     private TextView txtFin;
 
+    private EditText txtEqvParciales;
+    private EditText txtEqvExamenes;
+    private EditText txtPorcentajeAsis;
+    private EditText txtNotaMinima;
+
     /*
     private DatePicker dpInicio;
     private DatePicker dpFin;*/
@@ -58,6 +63,11 @@ public class EditPeriodo extends AppCompatActivity {
         //dpFin= (DatePicker)findViewById(R.id.dpFin);
         txtInicio = (TextView)findViewById(R.id.txtInicio);
         txtFin = (TextView)findViewById(R.id.txtFin);
+
+        txtEqvParciales= (EditText)findViewById(R.id.txtEqvParciales);
+        txtEqvExamenes= (EditText)findViewById(R.id.txtEqvExamenes);
+        txtPorcentajeAsis= (EditText)findViewById(R.id.txtPorcentajeAsis);
+        txtNotaMinima= (EditText)findViewById(R.id.txtNotaMinima);
 
         txtInicio.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,6 +109,11 @@ public class EditPeriodo extends AppCompatActivity {
 
             txtInicio.setText(Convert.toShortDateString(periodo.getInicio()));
             txtFin.setText(Convert.toShortDateString(periodo.getFin()));
+
+            txtEqvParciales.setText(""+periodo.getEquivalenciaParciales());
+            txtEqvExamenes.setText(""+periodo.getEquivalenciaExamenes());
+            txtPorcentajeAsis.setText(""+periodo.getPorcentajeAsistencias());
+            txtNotaMinima.setText(""+periodo.getNotaMinima());
         }
     }
 
@@ -157,6 +172,11 @@ public class EditPeriodo extends AppCompatActivity {
         //periodo.setFin(Convert.toDate(dpFin));
         periodo.setQuimestres(Convert.toInt(txtQuimestres.getText().toString()));
         periodo.setParciales(Convert.toInt(txtParciales.getText().toString()));
+
+        periodo.setEquivalenciaParciales(Convert.toDouble(txtEqvParciales.getText().toString()));
+        periodo.setEquivalenciaExamenes(Convert.toDouble(txtEqvExamenes.getText().toString()));
+        periodo.setPorcentajeAsistencias(Convert.toDouble(txtPorcentajeAsis.getText().toString()));
+        periodo.setNotaMinima(Convert.toDouble(txtNotaMinima.getText().toString()));
 
         if(validate()) {
             if (periodo.getId() == 0) {

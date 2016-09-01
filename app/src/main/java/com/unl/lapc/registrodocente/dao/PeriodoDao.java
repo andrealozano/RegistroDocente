@@ -29,6 +29,10 @@ public class PeriodoDao extends DBHandler {
         values.put("escala", periodo.getEscala());
         values.put("quimestres", periodo.getQuimestres());
         values.put("parciales", periodo.getParciales());
+        values.put("equivalenciaParciales", periodo.getEquivalenciaParciales());
+        values.put("equivalenciaExamenes", periodo.getEquivalenciaExamenes());
+        values.put("porcentajeAsistencias", periodo.getPorcentajeAsistencias());
+        values.put("notaMinima", periodo.getNotaMinima());
 
         db.insert("periodo", null, values);
         db.close();
@@ -44,17 +48,21 @@ public class PeriodoDao extends DBHandler {
         values.put("escala", periodo.getEscala());
         values.put("quimestres", periodo.getQuimestres());
         values.put("parciales", periodo.getParciales());
+        values.put("equivalenciaParciales", periodo.getEquivalenciaParciales());
+        values.put("equivalenciaExamenes", periodo.getEquivalenciaExamenes());
+        values.put("porcentajeAsistencias", periodo.getPorcentajeAsistencias());
+        values.put("notaMinima", periodo.getNotaMinima());
 
         return db.update("periodo", values, "id = ?", new String[]{String.valueOf(periodo.getId())});
     }
 
     public Periodo get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("periodo", new String[] { "id", "nombre", "inicio", "fin", "escala", "quimestres", "parciales"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query("periodo", new String[] { "id", "nombre", "inicio", "fin", "escala", "quimestres", "parciales", "equivalenciaParciales", "equivalenciaExamenes", "porcentajeAsistencias", "notaMinima"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
-        Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4), cursor.getInt(5), cursor.getInt(6));
+        Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4), cursor.getInt(5), cursor.getInt(6), cursor.getDouble(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getDouble(10));
 
         return per;
     }
@@ -68,13 +76,13 @@ public class PeriodoDao extends DBHandler {
     public List<Periodo> getAll() {
         List<Periodo> lista = new ArrayList<>();
 
-        String selectQuery = "SELECT id, nombre, inicio, fin, escala, quimestres, parciales FROM periodo";
+        String selectQuery = "SELECT id, nombre, inicio, fin, escala, quimestres, parciales, equivalenciaParciales, equivalenciaExamenes, porcentajeAsistencias, notaMinima FROM periodo";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
         if (cursor.moveToFirst()) {
             do {
-                Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4), cursor.getInt(5), cursor.getInt(6));
+                Periodo per = new Periodo(cursor.getInt(0), cursor.getString(1), toDate(cursor.getString(2)), toDate(cursor.getString(3)), cursor.getDouble(4), cursor.getInt(5), cursor.getInt(6), cursor.getDouble(7), cursor.getDouble(8), cursor.getDouble(9), cursor.getDouble(10));
                 lista.add(per);
             } while (cursor.moveToNext());
         }

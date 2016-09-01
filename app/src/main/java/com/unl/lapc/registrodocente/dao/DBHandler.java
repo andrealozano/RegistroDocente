@@ -17,7 +17,7 @@ import java.util.Date;
 public class DBHandler extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 3;
+    private static final int DATABASE_VERSION = 1;
     private static final String DATABASE_NAME = "registro_docente.db";
 
     public DBHandler(Context context) {
@@ -40,7 +40,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_PA = "CREATE TABLE periodo(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, escala REAL, quimestres INTEGER, parciales INTEGER)";
+        String CREATE_PA = "CREATE TABLE periodo(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, escala REAL, quimestres INTEGER, parciales INTEGER, equivalenciaParciales REAL, equivalenciaExamenes REAL, porcentajeAsistencias REAL, notaMinima REAL)";
         String CREATE_AC = "CREATE TABLE acreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, alias TEXT, tipo TEXT, equivalencia REAL, numero INTEGER, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         String CREATE_CR = "CREATE TABLE calendario(id INTEGER PRIMARY KEY AUTOINCREMENT, estado TEXT, fecha DATE, observacion TEXT, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         String CREATE_CL = "CREATE TABLE clase(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, activa BOOLEAN DEFAULT 1, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
@@ -133,7 +133,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (oldVersion < 2)
+        /*if (oldVersion < 2)
         {
             db.execSQL("ALTER TABLE itemacreditable ADD COLUMN alias TEXT");
             //Log.i("Actualización", "Versión 2");
@@ -144,6 +144,18 @@ public class DBHandler extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE registroacreditable ADD COLUMN notaPromedio REAL");
             //Log.i("Actualización", "Versión 2");
         }
+
+        if (oldVersion < 5)
+        {
+            db.execSQL("ALTER TABLE periodo ADD COLUMN equivalenciaParciales REAL DEFAULT 8");
+            db.execSQL("ALTER TABLE periodo ADD COLUMN equivalenciaExamenes REAL DEFAULT 2");
+            db.execSQL("ALTER TABLE periodo ADD COLUMN porcentajeAsistencias REAL DEFAULT 80");
+            db.execSQL("ALTER TABLE periodo ADD COLUMN notaMinima REAL DEFAULT 7");
+            //Log.i("Actualización", "Versión 2");
+        }
+        */
+
+
 
     }
 

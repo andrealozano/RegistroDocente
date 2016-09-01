@@ -17,6 +17,11 @@ public class Periodo implements Parcelable{
     private double escala = 10; //escala calificacion sobre 10, 20, 100
     private int quimestres;
     private int parciales;
+    private double equivalenciaParciales = 8; //Equivalencia de los parciales
+    private double equivalenciaExamenes = 2; //Equivalencia de los examenes quimestrales
+    private double porcentajeAsistencias = 80; //80%
+    private double notaMinima = 7; //Nota minima para aprobar
+
 
     public Periodo(){
     }
@@ -30,7 +35,7 @@ public class Periodo implements Parcelable{
         this.nombre = nombre;
     }
 
-    public Periodo(int id, String nombre, Date inicio, Date fin, double escala, int quimestres, int parciales){
+    public Periodo(int id, String nombre, Date inicio, Date fin, double escala, int quimestres, int parciales, double eqvParciales, double eqvExamenes, double pAsistencias, double notaMinima){
         this.id = id;
         this.nombre = nombre;
         this.inicio = inicio;
@@ -38,6 +43,10 @@ public class Periodo implements Parcelable{
         this.escala = escala;
         this.quimestres = quimestres;
         this.parciales = parciales;
+        this.equivalenciaParciales = eqvParciales;
+        this.equivalenciaExamenes = eqvExamenes;
+        this.porcentajeAsistencias = pAsistencias;
+        this.notaMinima = notaMinima;
     }
 
     @Override
@@ -88,6 +97,38 @@ public class Periodo implements Parcelable{
     public int getParciales() {return parciales;}
     public void setParciales(int parciales) {this.parciales = parciales;}
 
+    public double getEquivalenciaParciales() {
+        return equivalenciaParciales;
+    }
+
+    public void setEquivalenciaParciales(double equivalenciaParciales) {
+        this.equivalenciaParciales = equivalenciaParciales;
+    }
+
+    public double getEquivalenciaExamenes() {
+        return equivalenciaExamenes;
+    }
+
+    public void setEquivalenciaExamenes(double equivalenciaExamenes) {
+        this.equivalenciaExamenes = equivalenciaExamenes;
+    }
+
+    public double getPorcentajeAsistencias() {
+        return porcentajeAsistencias;
+    }
+
+    public void setPorcentajeAsistencias(double porcentajeAsistencias) {
+        this.porcentajeAsistencias = porcentajeAsistencias;
+    }
+
+    public double getNotaMinima() {
+        return notaMinima;
+    }
+
+    public void setNotaMinima(double notaMinima) {
+        this.notaMinima = notaMinima;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -102,6 +143,10 @@ public class Periodo implements Parcelable{
         this.escala = in.readDouble();
         this.quimestres = in.readInt();
         this.parciales = in.readInt();
+        this.equivalenciaParciales = in.readDouble();
+        this.equivalenciaExamenes = in.readDouble();
+        this.porcentajeAsistencias = in.readDouble();
+        this.notaMinima = in.readDouble();
     }
 
     @Override
@@ -113,6 +158,10 @@ public class Periodo implements Parcelable{
         parcel.writeDouble(getEscala());
         parcel.writeInt(getQuimestres());
         parcel.writeInt(getParciales());
+        parcel.writeDouble(getEquivalenciaParciales());
+        parcel.writeDouble(getEquivalenciaExamenes());
+        parcel.writeDouble(getPorcentajeAsistencias());
+        parcel.writeDouble(getNotaMinima());
     }
 
     public static final Parcelable.Creator<Periodo> CREATOR = new Parcelable.Creator<Periodo>() {
@@ -123,4 +172,6 @@ public class Periodo implements Parcelable{
             return new Periodo[size];
         }
     };
+
+
 }
