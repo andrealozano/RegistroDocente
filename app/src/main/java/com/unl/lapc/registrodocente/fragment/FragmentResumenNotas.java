@@ -14,6 +14,7 @@ import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class FragmentResumenNotas extends Fragment {
 
     private EstudianteDao estudianteDao;
     private Clase clase;
+    private Periodo periodo;
     private TableLayout tlResumenNotas;
 
     public FragmentResumenNotas() {
@@ -86,6 +88,7 @@ public class FragmentResumenNotas extends Fragment {
     public void cargarTr(){
         Bundle args = getArguments();
         this.clase = args.getParcelable("clase");
+        this.periodo = args.getParcelable("periodo");
 
         estudianteDao = new EstudianteDao(getContext());
         List<Estudiante> lista = estudianteDao.getEstudiantes(clase);
@@ -130,6 +133,9 @@ public class FragmentResumenNotas extends Fragment {
             tv4.setPadding(5, 5, 5, 5);
             tv4.setBackgroundResource(R.drawable.cell_shape);
             tv4.setText("" + e.getNotaFinal());
+            if(e.getNotaFinal() < periodo.getNotaMinima()){
+                tv4.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
             row.addView(tv4);
 
             TextView tv5 = new TextView(getContext());
@@ -139,6 +145,9 @@ public class FragmentResumenNotas extends Fragment {
             tv5.setPadding(5, 5, 5, 5);
             tv5.setBackgroundResource(R.drawable.cell_shape);
             tv5.setText("" + e.getPorcentajeAsistencias() + " %");
+            if(e.getPorcentajeAsistencias() < periodo.getPorcentajeAsistencias()){
+                tv5.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
             row.addView(tv5);
 
             tlResumenNotas.addView(row);
