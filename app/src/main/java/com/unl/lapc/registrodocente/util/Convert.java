@@ -1,7 +1,10 @@
 package com.unl.lapc.registrodocente.util;
 
+import android.os.Environment;
 import android.widget.DatePicker;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -51,4 +54,55 @@ public class Convert {
         long tmp = Math.round(value);
         return (double) tmp / factor;
     }
+
+    public static String currentReportDate(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
+        return  dateFormat.format(new Date());
+    }
+
+    public static void writeCsvLine(StringBuilder sb, Object... prm){
+        for(int i=0; i < prm.length; i++){
+            Object p = prm[i];
+            sb.append("\"" + p + "\"");
+            if(i+1 == prm.length){
+                sb.append("\n");
+            }else{
+                sb.append(";");
+            }
+        }
+    }
+
+    public static File getExternalStorageDirectory(String folder){
+        File sd = Environment.getExternalStorageDirectory();
+        if(sd.canWrite()) {
+            File sdapp = new File(sd.getAbsolutePath() + "/RegistroDocente/"+folder+"/");
+            if (!sdapp.exists()) {
+                sdapp.mkdirs();
+            }
+            return  sdapp;
+        }
+        return null;
+    }
+
+    public static File getExternalStorageFile(String folder, String fileName){
+        File file = getExternalStorageDirectory(folder);
+        if(file != null){
+            File fext = new File(file, fileName);
+            return  fext;
+        }
+        return  null;
+    }
+
+    public static void writeToFile(StringBuilder sb, File file){
+        FileWriter writer = null;
+        try{
+            writer = new FileWriter(file);
+            writer.append(sb.toString());
+            writer.flush();
+        }catch (Exception e){
+        }finally {
+            try{writer.close();}catch (Exception ex){}
+        }
+    }
+
 }

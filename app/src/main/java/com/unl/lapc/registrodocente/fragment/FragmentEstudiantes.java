@@ -1,9 +1,15 @@
 package com.unl.lapc.registrodocente.fragment;
 
+import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +27,15 @@ import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
+import com.unl.lapc.registrodocente.util.Convert;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.util.List;
 
 public class FragmentEstudiantes extends Fragment {
+
+    static final int PICK_DESTINO_REPORTE_REQUEST = 1;
 
     private ListView mLeadsList;
     private ClaseDao dao;
@@ -32,6 +45,8 @@ public class FragmentEstudiantes extends Fragment {
     private Periodo periodo;
 
     private ClaseEstudianteAdapter mLeadsAdapter;
+
+    private File emailFile = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
@@ -127,8 +142,51 @@ public class FragmentEstudiantes extends Fragment {
             return true;
         }*/
 
+        if (id == R.id.action_share) {
+            reporteEstudiantes();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
+    private void reporteEstudiantes(){
+        new AlertDialog.Builder(getContext()).setTitle("Reporte estudiates").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                List<Estudiante> lista = daoEstudiante.getEstudiantes(clase);
+                StringBuilder sb= new StringBuilder();
+                Convert.writeCsvLine(sb, "N","CEDULA", "NOMBRES", "APELLIDOS");
+                for (int i = 0; i < lista.size(); i++){
+                    Estudiante e = lista.get(i);
+                    Convert.writeCsvLine(sb, i + 1, e.getCedula(), e.getNombres(), e.getApellidos());
+                }
 
+                emailFile = Convert.getExternalStorageFile("reportes", String.format("Estudiantes_%s_%s.csv", clase.getNombre(),  Convert.currentReportDate()));
+                Convert.writeToFile(sb, emailFile);
+
+                if (which == 0){
+                    emailFile = null;
+                }else{
+                    //Envia al correo
+                    Uri u1 = Uri.fromFile(emailFile);
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Lista estudiantes");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Lista estudiantes: " + emailFile.getName());
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.setType("text/html");
+                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
+                }
+            }
+        }).create().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PICK_DESTINO_REPORTE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK && emailFile != null) {
+                emailFile.delete();
+                emailFile = null;
+            }
+        }
+    }
 }

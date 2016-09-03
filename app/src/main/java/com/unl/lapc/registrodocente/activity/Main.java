@@ -25,6 +25,7 @@ import com.unl.lapc.registrodocente.adapter.ClasesMainAdapter;
 import com.unl.lapc.registrodocente.fragment.FragmentEstudiantes;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
+import com.unl.lapc.registrodocente.util.Convert;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -168,48 +169,37 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     }
 
     public void backupdDatabase(){
-        try {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Respaldar base de datos")
-                    .setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            // The 'which' argument contains the index position of the selected item
-                            if (which == 0){
-                                File backupDB = backupdDatabaseToFile();
-                                if(backupDB != null) {
-                                    Snackbar.make(listViewClases, "Respaldo realizado correctamente: " + backupDB.getAbsolutePath(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                                }
-                            }else{
-                                backupdDatabaseToEmail();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Respaldar base de datos")
+                .setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position of the selected item
+                        if (which == 0){
+                            File backupDB = backupdDatabaseToFile();
+                            if(backupDB != null) {
+                                Snackbar.make(listViewClases, "Respaldo realizado correctamente: " + backupDB.getAbsolutePath(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             }
+                        }else{
+                            backupdDatabaseToEmail();
                         }
-                    });
-            builder.create().show();
-        } catch (Exception e) {
-            Log.i("Backup", e.toString());
-        }
+                    }
+                });
+        builder.create().show();
     }
 
     private File backupdDatabaseToFile(){
         try {
-            File sd = Environment.getExternalStorageDirectory();
+
             File data = Environment.getDataDirectory();
+
             String packageName  = "com.unl.lapc.registrodocente";
             String sourceDBName = "registro_docente.db";
-            String targetDBName = "registro_docente_";
-            if (sd.canWrite()) {
-                File sdapp = new File(sd.getAbsolutePath() + "/RegistroDocente/backup/");
-                if(!sdapp.exists()){
-                    sdapp.mkdirs();
-                }
+            String backupDBPath = "registro_docente_" + Convert.currentReportDate() + ".db";
+            File backupDB = Convert.getExternalStorageFile("backup", backupDBPath);
 
-                Date now = new Date();
+            if (backupDB != null) {
                 String currentDBPath = "data/" + packageName + "/databases/" + sourceDBName;
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
-                String backupDBPath = targetDBName + dateFormat.format(now) + ".db";
-
                 File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(sdapp, backupDBPath);
 
                 Log.i("backup","backupDB=" + backupDB.getAbsolutePath());
                 Log.i("backup","sourceDB=" + currentDB.getAbsolutePath());
