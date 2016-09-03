@@ -1,7 +1,12 @@
 package com.unl.lapc.registrodocente.fragment;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,10 +28,14 @@ import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
+import com.unl.lapc.registrodocente.util.Utils;
 
+import java.io.File;
 import java.util.List;
 
 public class FragmentResumenNotasQuimestre extends Fragment {
+
+    static final int PICK_DESTINO_REPORTE_REQUEST = 1;
 
     private EstudianteDao estudianteDao;
     private AcreditableDao acreditableDao;
@@ -39,6 +48,9 @@ public class FragmentResumenNotasQuimestre extends Fragment {
     private MainClase main;
 
     private List<Acreditable> acreditables;
+    private List<ResumenQuimestre> lista;
+
+    private File emailFile;
 
     public FragmentResumenNotasQuimestre() {
         // Required empty public constructor
@@ -120,7 +132,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
     }
 
     public void cargarTr(){
-        List<ResumenQuimestre> lista = estudianteDao.getResumenQuimestre(periodo, clase, quimestre.getNumero());
+        lista = estudianteDao.getResumenQuimestre(periodo, clase, quimestre.getNumero());
 
         for(int i= 0; i < lista.size(); i++){
             ResumenQuimestre e = lista.get(i);
@@ -217,7 +229,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         for (int i= 0; i < getAcreditables().size(); i++){
             //   add(group_id , item_id , order, nombre);
             final Acreditable acreditable = acreditables.get(i);
-            MenuItem mi = menu.add(0, acreditable.getId(), i, String.format("%s (%s)", acreditable.getNombre(), acreditable.getAlias()));
+            MenuItem mi = menu.add(1, acreditable.getId(), i, String.format("%s (%s)", acreditable.getNombre(), acreditable.getAlias()));
             mi.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem menuItem) {
@@ -226,15 +238,69 @@ public class FragmentResumenNotasQuimestre extends Fragment {
                 }
             });
         }
+        inflater.inflate(R.menu.menu_main_quimestre, menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-
+        if (id == R.id.action_share) {
+            reporteNotas();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+    private void reporteNotas(){
+        new AlertDialog.Builder(getContext()).setTitle("Reporte notas quimestral").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                StringBuilder sb= new StringBuilder();
+                Utils.writeCsv(sb, "N","NOMBRES");
+                for(int j = 0; j < periodo.getParciales(); j++){
+                    Utils.writeCsv(sb, "PARCIAL " + (j+1));
+                }
+                Utils.writeCsvLine(sb, "NOTA PARCIALES","NOTA EXAMENES", "NOTA FINAL");
+
+                for (int i = 0; i < lista.size(); i++){
+                    ResumenQuimestre e = lista.get(i);
+                    Utils.writeCsv(sb, i + 1, e.getNombres());
+                    for(int j = 0; j < periodo.getParciales(); j++){
+                        Utils.writeCsv(sb, e.getParciales().get(j+1));
+                    }
+                    Utils.writeCsvLine(sb, e.getNotaParciales(), e.getNotaExamenes(), e.getNotaFinal());
+                }
+
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("NotasQuimeste_%d_%s_%s.csv", quimestre.getNumero(), clase.getNombre(),  Utils.currentReportDate()));
+                Utils.writeToFile(sb, emailFile);
+
+                if (which == 0){
+                    emailFile = null;
+                }else{
+                    //Envia al correo
+                    Uri u1 = Uri.fromFile(emailFile);
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Notas quimestre " + quimestre);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Notas quimestre: " + emailFile.getName());
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.setType("text/html");
+                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
+                }
+            }
+        }).create().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PICK_DESTINO_REPORTE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK && emailFile != null) {
+                emailFile.delete();
+                emailFile = null;
+            }
+        }
     }
 
 

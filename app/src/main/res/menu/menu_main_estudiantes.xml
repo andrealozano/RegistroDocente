@@ -6,7 +6,7 @@
     <item
         android:id="@+id/action_share"
         android:orderInCategory="102"
-        android:title="Exportar"
+        android:title="Exportar csv"
         android:icon="@android:drawable/ic_menu_share"
         app:showAsAction="never" />
 </menu>

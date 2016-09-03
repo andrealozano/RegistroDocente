@@ -1,19 +1,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.unl.lapc.registrodocente.fragment.FragmentAcreditables">
-
-    <item
-        android:id="@+id/action_add"
-        android:orderInCategory="101"
-        android:title="Agregar"
-        android:icon="@android:drawable/ic_menu_add"
-        app:showAsAction="ifRoom" />
-
-    <item
+    tools:context=".fragment.FragmentResumenNotasParcial">
+    <group>
+        <item
         android:id="@+id/action_share"
         android:orderInCategory="102"
         android:title="Exportar csv"
         android:icon="@android:drawable/ic_menu_share"
         app:showAsAction="never" />
+    </group>
 </menu>

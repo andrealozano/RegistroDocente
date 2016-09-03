@@ -60,6 +60,18 @@ public class Utils {
         return  dateFormat.format(new Date());
     }
 
+    public static void writeCsv(StringBuilder sb, Object... prm){
+        for(int i=0; i < prm.length; i++){
+            Object p = prm[i];
+            sb.append("\"" + p + "\"");
+            if(i+1 == prm.length){
+                sb.append(";");
+            }else{
+                sb.append(";");
+            }
+        }
+    }
+
     public static void writeCsvLine(StringBuilder sb, Object... prm){
         for(int i=0; i < prm.length; i++){
             Object p = prm[i];

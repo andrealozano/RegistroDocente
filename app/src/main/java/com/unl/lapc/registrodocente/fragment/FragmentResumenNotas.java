@@ -1,9 +1,17 @@
 package com.unl.lapc.registrodocente.fragment;
 
+import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TableLayout;
@@ -12,18 +20,26 @@ import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
+import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
+import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
+import com.unl.lapc.registrodocente.util.Utils;
 
+import java.io.File;
 import java.util.List;
 
 public class FragmentResumenNotas extends Fragment {
+
+    static final int PICK_DESTINO_REPORTE_REQUEST = 1;
 
     private EstudianteDao estudianteDao;
     private Clase clase;
     private Periodo periodo;
     private TableLayout tlResumenNotas;
+    private List<Estudiante> lista;
+    private File emailFile;
 
     public FragmentResumenNotas() {
         // Required empty public constructor
@@ -91,7 +107,7 @@ public class FragmentResumenNotas extends Fragment {
         this.periodo = args.getParcelable("periodo");
 
         estudianteDao = new EstudianteDao(getContext());
-        List<Estudiante> lista = estudianteDao.getEstudiantes(clase);
+        lista = estudianteDao.getEstudiantes(clase);
 
         for(int i= 0; i < lista.size(); i++){
             Estudiante e = lista.get(i);
@@ -158,6 +174,7 @@ public class FragmentResumenNotas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_resumen_notas, container, false);
+        setHasOptionsMenu(true);
 
         tlResumenNotas = (TableLayout)view.findViewById(R.id.tlResumenNotas);
 
@@ -165,6 +182,66 @@ public class FragmentResumenNotas extends Fragment {
         cargarTr();
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        inflater.inflate(R.menu.menu_main_notas, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.action_share) {
+            reporteNotas();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    private void reporteNotas(){
+        new AlertDialog.Builder(getContext()).setTitle("Reporte resumen notas").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                StringBuilder sb= new StringBuilder();
+                Utils.writeCsvLine(sb, "N","NOMBRES", "ESTADO", "NOTA", "ASISTENCIA (%)");
+
+                for (int i = 0; i < lista.size(); i++){
+                    Estudiante e = lista.get(i);
+                    Utils.writeCsvLine(sb, i + 1, e.getNombres(), e.getEstado(), e.getNotaFinal(), e.getPorcentajeAsistencias());
+                }
+
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("ResumenNotas_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
+                Utils.writeToFile(sb, emailFile);
+
+                if (which == 0){
+                    emailFile = null;
+                }else{
+                    //Envia al correo
+                    Uri u1 = Uri.fromFile(emailFile);
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Resumen notas " + clase.getNombre());
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Resumen de notas: " + emailFile.getName());
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.setType("text/html");
+                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
+                }
+            }
+        }).create().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PICK_DESTINO_REPORTE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK && emailFile != null) {
+                emailFile.delete();
+                emailFile = null;
+            }
+        }
     }
 
 

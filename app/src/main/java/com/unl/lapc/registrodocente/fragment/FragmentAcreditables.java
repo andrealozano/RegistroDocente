@@ -1,7 +1,9 @@
 package com.unl.lapc.registrodocente.fragment;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -26,6 +28,7 @@ import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
+import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
@@ -33,6 +36,7 @@ import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -41,6 +45,8 @@ import java.util.List;
  * to handle interaction events.
  */
 public class FragmentAcreditables extends Fragment {
+
+    static final int PICK_DESTINO_REPORTE_REQUEST = 1;
 
     private Clase clase;
     private Periodo periodo;
@@ -51,7 +57,9 @@ public class FragmentAcreditables extends Fragment {
     private EstudianteDao estudianteDao;
     private AcreditableDao acreditableDao;
     private List<ItemAcreditable> itemsAcreditables;
+    private List<ResumenAcreditable> lista;
 
+    private File emailFile;
     private TableLayout tlResumenNotas;
     private MainClase main;
 
@@ -129,6 +137,11 @@ public class FragmentAcreditables extends Fragment {
             return true;
         }
 
+        if(id == R.id.action_share){
+            reporteNotas();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -194,7 +207,7 @@ public class FragmentAcreditables extends Fragment {
         tv6.setTextSize(18);
         tv6.setPadding(5, 5, 5, 5);
         tv6.setBackgroundResource(R.drawable.cell_shape_head);
-        tv6.setText("Pm");
+        tv6.setText("Pm"); //Promedio
         row.addView(tv6);
 
         TextView tv7 = new TextView(getContext());
@@ -203,14 +216,14 @@ public class FragmentAcreditables extends Fragment {
         tv7.setTextSize(18);
         tv7.setPadding(5, 5, 5, 5);
         tv7.setBackgroundResource(R.drawable.cell_shape_head);
-        tv7.setText("Eq");
+        tv7.setText("Eq"); //Equivalencia
         row.addView(tv7);
 
         tlResumenNotas.addView(row);
     }
 
     public void cargarTr(){
-        List<ResumenAcreditable> lista = estudianteDao.getResumenAcreditable(periodo, clase, acreditable, quimestre, parcial);
+        lista = estudianteDao.getResumenAcreditable(periodo, clase, acreditable, quimestre, parcial);
 
         for(int i= 0; i < lista.size(); i++){
             final ResumenAcreditable e = lista.get(i);
@@ -329,8 +342,6 @@ public class FragmentAcreditables extends Fragment {
             }
         });
 
-
-
         builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
                 imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
@@ -343,6 +354,59 @@ public class FragmentAcreditables extends Fragment {
 
         txtNota.requestFocus();
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+
+    private void reporteNotas(){
+        new AlertDialog.Builder(getContext()).setTitle("Reporte notas " + acreditable.getNombre()).setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                StringBuilder sb= new StringBuilder();
+                Utils.writeCsv(sb, "N","NOMBRES");
+                for(int j = 0; j < itemsAcreditables.size(); j++){
+                    ItemAcreditable itemAcreditable = itemsAcreditables.get(j);
+                    Utils.writeCsv(sb, itemsAcreditables.get(j).getNombre());
+                }
+                Utils.writeCsvLine(sb, "PROMEDIO","EQUIVALENCIA");
+
+                for (int i = 0; i < lista.size(); i++){
+                    ResumenAcreditable e = lista.get(i);
+                    Utils.writeCsv(sb, i + 1, e.getNombres());
+
+                    for(int j = 0; j < itemsAcreditables.size(); j++){
+                        ItemAcreditable itemAcreditable = itemsAcreditables.get(j);
+                        ResumenParcialAcreditable registro = e.getAcreditables().get(itemAcreditable.getId());
+                        Utils.writeCsv(sb, registro.getNotaFinal());
+                    }
+                    Utils.writeCsvLine(sb, e.getNotaPromedio(), e.getNotaFinal());
+                }
+
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("%s_Q%d_P%d_%s_%s.csv", acreditable.getNombre(), quimestre, parcial, clase.getNombre(),  Utils.currentReportDate()));
+                Utils.writeToFile(sb, emailFile);
+
+                if (which == 0){
+                    emailFile = null;
+                }else{
+                    //Envia al correo
+                    Uri u1 = Uri.fromFile(emailFile);
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - " + acreditable.getNombre());
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Acreditable: " + acreditable.getNombre() + "<br/>" + "Clase: " + clase.getNombre() + "<br/>Quimestre: " + quimestre+ "<br/>Parcial: " + parcial);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.setType("text/html");
+                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
+                }
+            }
+        }).create().show();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PICK_DESTINO_REPORTE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK && emailFile != null) {
+                emailFile.delete();
+                emailFile = null;
+            }
+        }
     }
 
 
