@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
+import com.unl.lapc.registrodocente.dto.ResumenGeneral;
 import com.unl.lapc.registrodocente.dto.ResumenParcial;
 import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
@@ -328,6 +329,68 @@ public class EstudianteDao extends DBHandler {
         }*/
 
         return list;
+    }
+
+    public List<ResumenGeneral> getResumenGeneral(Periodo periodo, Clase clase) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        List<ResumenGeneral> lisEst = new ArrayList<>();
+
+        String sqlEst = "SELECT e.id, e.orden, (e.nombres || ' ' || e.apellidos) nombres, notaFinal, porcentajeAsistencias from estudiante e where e.clase_id = " + clase.getId() + " order by e.orden asc";
+        Cursor curEst = db.rawQuery(sqlEst, null);
+
+        if (curEst.moveToFirst()) {
+            do {
+
+                ResumenGeneral e = new ResumenGeneral(curEst.getInt(0), curEst.getInt(1), curEst.getString(2), curEst.getDouble(3), curEst.getDouble(4));
+                lisEst.add(e);
+            } while (curEst.moveToNext());
+        }
+
+        for(int quimestre = 1; quimestre <= periodo.getQuimestres(); quimestre++) {
+
+            String sqlQui = "SELECT e.id, r.notaParciales, r.notaExamenes, r.notaFinal from estudiante e, registroquimestral r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " order by e.orden asc";
+            Cursor curQui = db.rawQuery(sqlQui, null);
+            List<ResumenQuimestre> lisQui = new ArrayList<>();
+
+            if (curQui.moveToFirst()) {
+                do {
+
+                    ResumenQuimestre e = new ResumenQuimestre(curQui.getInt(0), quimestre, "", curQui.getDouble(1), curQui.getDouble(2), curQui.getDouble(3));
+                    lisQui.add(e);
+                } while (curQui.moveToNext());
+            }
+
+            for (ResumenGeneral r : lisEst) {
+                for (ResumenQuimestre r1 : lisQui) {
+                    if (r.getId() == r1.getId()) {
+                        r.getQuimestres().put(r1.getNumero(), r1);
+                    }
+                }
+            }
+
+
+            String sqlPar = "SELECT e.id, r.parcial, r.notaFinal from estudiante e, registroparcial r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " order by r.parcial asc, e.id asc";
+            Cursor curPar = db.rawQuery(sqlEst, null);
+            List<ResumenQuimestreParcial> lisPar = new ArrayList<>();
+
+            if (curPar.moveToFirst()) {
+                do {
+                    ResumenQuimestreParcial e = new ResumenQuimestreParcial(curPar.getInt(0), curPar.getInt(1), curPar.getDouble(2));
+                    lisPar.add(e);
+                } while (curPar.moveToNext());
+            }
+
+            for (ResumenQuimestre r : lisQui) {
+                for (ResumenQuimestreParcial r1 : lisPar) {
+                    if (r.getId() == r1.getId()) {
+                        r.getParciales().put(r1.getParcial(), r1.getNotaFinal());
+                    }
+                }
+            }
+        }
+
+        return lisEst;
     }
 
 }

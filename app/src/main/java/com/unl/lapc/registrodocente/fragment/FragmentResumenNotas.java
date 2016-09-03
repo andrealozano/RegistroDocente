@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
+import com.unl.lapc.registrodocente.dto.ResumenGeneral;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
@@ -199,6 +200,11 @@ public class FragmentResumenNotas extends Fragment {
             return true;
         }
 
+        if (id == R.id.action_share_detalle) {
+            reporteNotasGeneral();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -226,6 +232,73 @@ public class FragmentResumenNotas extends Fragment {
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Resumen notas " + clase.getNombre());
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Resumen de notas: " + emailFile.getName());
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.setType("text/html");
+                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
+                }
+            }
+        }).create().show();
+    }
+
+    private void reporteNotasGeneral(){
+
+        new AlertDialog.Builder(getContext()).setTitle("Reporte notas").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+
+                List<ResumenGeneral> lista = estudianteDao.getResumenGeneral(periodo, clase);
+
+                StringBuilder sb= new StringBuilder();
+
+                //Th 1
+                Utils.writeCsv(sb, "","");
+                for (int quimestre = 1; quimestre <= periodo.getQuimestres(); quimestre++){
+                    for (int parcial = 1; parcial <= periodo.getParciales(); parcial++){
+                        if(parcial == 1) {
+                            Utils.writeCsv(sb, "QUIMESTRE " + quimestre);
+                        }else{
+                            Utils.writeCsv(sb, "");
+                        }
+                    }
+                    Utils.writeCsv(sb, "","", "");
+                }
+                Utils.writeCsvLine(sb, "");
+
+                //Th2
+                Utils.writeCsv(sb, "N","NOMBRES");
+                for (int quimestre = 1; quimestre <= periodo.getQuimestres(); quimestre++){
+                    for (int parcial = 1; parcial <= periodo.getParciales(); parcial++){
+                        Utils.writeCsv(sb, "PARCIAL " + parcial);
+                    }
+                    Utils.writeCsv(sb, "NOTA PARCIALES","NOTA EXAMENES", "NOTA QUIMESTRE");
+                }
+                Utils.writeCsvLine(sb, "NOTA FINAL");
+
+                //Datos
+                for (int i = 0; i < lista.size(); i++){
+                    ResumenGeneral e = lista.get(i);
+                    Utils.writeCsv(sb, i + 1, e.getNombres());
+
+                    for (int quimestre = 1; quimestre <= periodo.getQuimestres(); quimestre++) {
+                        ResumenQuimestre rq = e.getQuimestres().get(quimestre);
+                        for (int parcial = 1; parcial <= periodo.getParciales(); parcial++) {
+                            Utils.writeCsv(sb, rq.getParciales().get(parcial));
+                        }
+                        Utils.writeCsv(sb, rq.getNotaParciales(), rq.getNotaExamenes(), rq.getNotaFinal());
+                    }
+                    Utils.writeCsvLine(sb, e.getNotaFinal());
+                }
+
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("Notas_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
+                Utils.writeToFile(sb, emailFile);
+
+                if (which == 0){
+                    emailFile = null;
+                }else{
+                    //Envia al correo
+                    Uri u1 = Uri.fromFile(emailFile);
+                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Notas " + clase.getNombre());
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Notas: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
