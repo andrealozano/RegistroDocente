@@ -371,7 +371,7 @@ public class EstudianteDao extends DBHandler {
 
 
             String sqlPar = "SELECT e.id, r.parcial, r.notaFinal from estudiante e, registroparcial r where r.estudiante_id = e.id and e.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " order by r.parcial asc, e.id asc";
-            Cursor curPar = db.rawQuery(sqlEst, null);
+            Cursor curPar = db.rawQuery(sqlPar, null);
             List<ResumenQuimestreParcial> lisPar = new ArrayList<>();
 
             if (curPar.moveToFirst()) {
