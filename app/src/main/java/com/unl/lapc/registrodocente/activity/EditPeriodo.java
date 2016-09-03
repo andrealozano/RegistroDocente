@@ -197,9 +197,21 @@ public class EditPeriodo extends AppCompatActivity {
 
     public void eliminarPeriodo(){
         if(periodo.getId() > 0){
-            dao.delete(periodo);
-            Intent intent = new Intent(this, Periodos.class);
-            startActivity(intent);
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Remover periodo")
+                    .setMessage("¿Desea remover esta periodo académico?")
+                    .setPositiveButton("Remover", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dao.delete(periodo);
+                            Intent intent = new Intent(EditPeriodo.this, Periodos.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
         }else{
             Snackbar.make(getCurrentFocus(), "No se puede eliminar porque aún no ha guardado", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

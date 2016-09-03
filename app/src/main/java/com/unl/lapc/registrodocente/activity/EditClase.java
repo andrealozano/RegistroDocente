@@ -1,7 +1,9 @@
 package com.unl.lapc.registrodocente.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -118,10 +120,22 @@ public class EditClase extends AppCompatActivity {
 
     public void eliminar(){
         if(clase.getId() > 0){
-            dao.deleteClase(clase);
+            new AlertDialog.Builder(this)
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Remover clase")
+                    .setMessage("¿Desea remover esta clase?")
+                    .setPositiveButton("Remover", new DialogInterface.OnClickListener()
+                    {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dao.delete(clase);
 
-            Intent intent = new Intent(this, Clases.class);
-            startActivity(intent);
+                            Intent intent = new Intent(EditClase.this, Clases.class);
+                            startActivity(intent);
+                        }
+                    })
+                    .setNegativeButton("Cancelar", null)
+                    .show();
         }else{
             Snackbar.make(getCurrentFocus(), "No se puede eliminar porque aún no ha guardado", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show();

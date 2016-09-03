@@ -81,8 +81,8 @@ public class PeriodoDao extends DBHandler {
         db.delete("itemacreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
         db.delete("acreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
 
+        db.delete("estudiante", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
         db.delete("clase", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
-
         db.delete("periodo", "id = ?", new String[] { String.valueOf(periodo.getId()) });
 
         db.close();

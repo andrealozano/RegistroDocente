@@ -90,9 +90,16 @@ public class ClaseDao extends DBHandler {
         return contact;
     }
 
-    public void deleteClase(Clase clase) {
+    public void delete(Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_NAME, ID + " = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("asistencia", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("registroitem", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("registroparcial", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("registroquimestral", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("registroacreditable", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("itemacreditable", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("estudiante", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("clase", "id = ?", new String[] { String.valueOf(clase.getId()) });
         db.close();
     }
 

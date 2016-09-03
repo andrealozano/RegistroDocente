@@ -79,6 +79,9 @@ public class AcreditableDao extends DBHandler {
 
     public void delete(Acreditable acreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
+        db.delete("registroitem", "acreditable_id = ?", new String[] { String.valueOf(acreditable.getId()) });
+        db.delete("itemacreditable", "acreditable_id = ?", new String[] { String.valueOf(acreditable.getId()) });
+        db.delete("registroacreditable", "acreditable_id = ?", new String[] { String.valueOf(acreditable.getId()) });
         db.delete("acreditable", "id = ?", new String[] { String.valueOf(acreditable.getId()) });
         db.close();
     }

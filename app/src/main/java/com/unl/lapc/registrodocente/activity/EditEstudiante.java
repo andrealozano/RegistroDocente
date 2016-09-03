@@ -1,6 +1,8 @@
 package com.unl.lapc.registrodocente.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -138,8 +140,20 @@ public class EditEstudiante extends AppCompatActivity {
     }
 
     public void removerEstudiante(){
-        //dao.removerEstudiante(claseEstudiante);
-        cancelarEdicion();
+        new AlertDialog.Builder(this)
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Remover estudiante")
+                .setMessage("¿Desea remover el estudiante de esta clase?")
+                .setPositiveButton("Remover", new DialogInterface.OnClickListener()
+                {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dao.delete(estudiante);
+                        cancelarEdicion();
+                    }
+                })
+                .setNegativeButton("Cancelar", null)
+                .show();
     }
 
     private void setValue() {
