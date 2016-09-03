@@ -4,9 +4,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -27,10 +25,9 @@ import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.util.List;
 
 public class FragmentEstudiantes extends Fragment {
@@ -155,14 +152,14 @@ public class FragmentEstudiantes extends Fragment {
             public void onClick(DialogInterface dialog, int which) {
                 List<Estudiante> lista = daoEstudiante.getEstudiantes(clase);
                 StringBuilder sb= new StringBuilder();
-                Convert.writeCsvLine(sb, "N","CEDULA", "NOMBRES", "APELLIDOS");
+                Utils.writeCsvLine(sb, "N","CEDULA", "NOMBRES", "APELLIDOS");
                 for (int i = 0; i < lista.size(); i++){
                     Estudiante e = lista.get(i);
-                    Convert.writeCsvLine(sb, i + 1, e.getCedula(), e.getNombres(), e.getApellidos());
+                    Utils.writeCsvLine(sb, i + 1, e.getCedula(), e.getNombres(), e.getApellidos());
                 }
 
-                emailFile = Convert.getExternalStorageFile("reportes", String.format("Estudiantes_%s_%s.csv", clase.getNombre(),  Convert.currentReportDate()));
-                Convert.writeToFile(sb, emailFile);
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("Estudiantes_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
+                Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;

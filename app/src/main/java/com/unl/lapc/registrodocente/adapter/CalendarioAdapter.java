@@ -1,7 +1,6 @@
 package com.unl.lapc.registrodocente.adapter;
 
 import android.content.Context;
-import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,15 +8,12 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
-import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Calendario;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Dictionary;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,7 +56,7 @@ public class CalendarioAdapter extends ArrayAdapter<Calendario> {
         String s = lead.getObservacion() == null ? "" : lead.getObservacion().trim();
         if(s.equals("")) s = ": " + s;
 
-        name.setText(String.format("%s", Convert.toShortDateString(lead.getFecha())));
+        name.setText(String.format("%s", Utils.toShortDateString(lead.getFecha())));
         desc.setText(String.format("%s (%s%s)", sdf.format(lead.getFecha()), lead.getEstado(), s));
 
 

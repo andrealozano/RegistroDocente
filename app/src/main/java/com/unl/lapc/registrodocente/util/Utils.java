@@ -12,7 +12,7 @@ import java.util.GregorianCalendar;
 /**
  * Created by Usuario on 29/07/2016.
  */
-public class Convert {
+public class Utils {
 
     public static double toDouble(String s){
         try{

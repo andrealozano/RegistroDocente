@@ -1,7 +1,5 @@
 package com.unl.lapc.registrodocente.dto;
 
-import com.unl.lapc.registrodocente.util.Convert;
-
 /**
  * Created by Usuario on 20/08/2016.
  */

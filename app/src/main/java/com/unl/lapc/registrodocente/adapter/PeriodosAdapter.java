@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.List;
 
@@ -43,7 +43,7 @@ public class PeriodosAdapter extends ArrayAdapter<Periodo> {
 
         final Periodo lead = getItem(position);
         txtNombre.setText(lead.getNombre());
-        txtDesc.setText(String.format("%s - %s", Convert.toShortDateString(lead.getInicio()), Convert.toShortDateString(lead.getFin())));
+        txtDesc.setText(String.format("%s - %s", Utils.toShortDateString(lead.getInicio()), Utils.toShortDateString(lead.getFin())));
 
         return convertView;
     }

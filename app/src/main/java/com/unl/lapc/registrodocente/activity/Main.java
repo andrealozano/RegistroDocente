@@ -22,17 +22,14 @@ import android.widget.ListView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.ClasesMainAdapter;
-import com.unl.lapc.registrodocente.fragment.FragmentEstudiantes;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -194,8 +191,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
             String packageName  = "com.unl.lapc.registrodocente";
             String sourceDBName = "registro_docente.db";
-            String backupDBPath = "registro_docente_" + Convert.currentReportDate() + ".db";
-            File backupDB = Convert.getExternalStorageFile("backup", backupDBPath);
+            String backupDBPath = "registro_docente_" + Utils.currentReportDate() + ".db";
+            File backupDB = Utils.getExternalStorageFile("backup", backupDBPath);
 
             if (backupDB != null) {
                 String currentDBPath = "data/" + packageName + "/databases/" + sourceDBName;

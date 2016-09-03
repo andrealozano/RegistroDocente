@@ -16,7 +16,7 @@ import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -101,8 +101,8 @@ public class EditAcreditable extends AppCompatActivity {
     public void guardar(){
         acreditable.setNombre(txtNombre.getText().toString());
         acreditable.setAlias(txtAlias.getText().toString());
-        acreditable.setNumero(Convert.toInt(txtNumero.getText().toString()));
-        acreditable.setEquivalencia(Convert.toDouble(txtEquivalencia.getText().toString()));
+        acreditable.setNumero(Utils.toInt(txtNumero.getText().toString()));
+        acreditable.setEquivalencia(Utils.toDouble(txtEquivalencia.getText().toString()));
 
         int rbTipo = rgTipo.getCheckedRadioButtonId();
         if(rbTipo == R.id.rbParcial){

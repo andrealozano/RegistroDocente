@@ -10,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -18,13 +17,8 @@ import android.widget.TextView;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.CalendarioDao;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
-import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
-import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
-import com.unl.lapc.registrodocente.modelo.Calendario;
-import com.unl.lapc.registrodocente.modelo.Estudiante;
-import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -110,8 +104,8 @@ public class EditPeriodo extends AppCompatActivity {
             //c.setTime(periodo.getFin());
             //dpFin.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 
-            txtInicio.setText(Convert.toShortDateString(periodo.getInicio()));
-            txtFin.setText(Convert.toShortDateString(periodo.getFin()));
+            txtInicio.setText(Utils.toShortDateString(periodo.getInicio()));
+            txtFin.setText(Utils.toShortDateString(periodo.getFin()));
 
             txtEqvParciales.setText(""+periodo.getEquivalenciaParciales());
             txtEqvExamenes.setText(""+periodo.getEquivalenciaExamenes());
@@ -170,16 +164,16 @@ public class EditPeriodo extends AppCompatActivity {
 
     public void guardarPeriodo(){
         periodo.setNombre(txtNombre.getText().toString());
-        periodo.setEscala(Convert.toDouble(txtEscala.getText().toString()));
-        //periodo.setInicio(Convert.toDate(dpInicio));
-        //periodo.setFin(Convert.toDate(dpFin));
-        periodo.setQuimestres(Convert.toInt(txtQuimestres.getText().toString()));
-        periodo.setParciales(Convert.toInt(txtParciales.getText().toString()));
+        periodo.setEscala(Utils.toDouble(txtEscala.getText().toString()));
+        //periodo.setInicio(Utils.toDate(dpInicio));
+        //periodo.setFin(Utils.toDate(dpFin));
+        periodo.setQuimestres(Utils.toInt(txtQuimestres.getText().toString()));
+        periodo.setParciales(Utils.toInt(txtParciales.getText().toString()));
 
-        periodo.setEquivalenciaParciales(Convert.toDouble(txtEqvParciales.getText().toString()));
-        periodo.setEquivalenciaExamenes(Convert.toDouble(txtEqvExamenes.getText().toString()));
-        periodo.setPorcentajeAsistencias(Convert.toDouble(txtPorcentajeAsis.getText().toString()));
-        periodo.setNotaMinima(Convert.toDouble(txtNotaMinima.getText().toString()));
+        periodo.setEquivalenciaParciales(Utils.toDouble(txtEqvParciales.getText().toString()));
+        periodo.setEquivalenciaExamenes(Utils.toDouble(txtEqvExamenes.getText().toString()));
+        periodo.setPorcentajeAsistencias(Utils.toDouble(txtPorcentajeAsis.getText().toString()));
+        periodo.setNotaMinima(Utils.toDouble(txtNotaMinima.getText().toString()));
 
         if(validate()) {
             if (periodo.getId() == 0) {
@@ -275,7 +269,7 @@ public class EditPeriodo extends AppCompatActivity {
                 }else{
                     periodo.setFin(fecha);
                 }
-                txt.setText(Convert.toShortDateString(fecha));
+                txt.setText(Utils.toShortDateString(fecha));
                 dialog.dismiss();
             }
         });

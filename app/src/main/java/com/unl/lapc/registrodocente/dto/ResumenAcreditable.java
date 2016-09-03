@@ -2,7 +2,7 @@ package com.unl.lapc.registrodocente.dto;
 
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.HashMap;
 
@@ -96,13 +96,13 @@ public class ResumenAcreditable {
         }
 
         double pm = s / this.getAcreditables().size();
-        notaPromedio = Convert.round(pm, 2);
+        notaPromedio = Utils.round(pm, 2);
 
 
         //Calculo nota final
         //      10   -> 2
         //      7.16 -> x
         double nf = (notaPromedio * acreditable.getEquivalencia()) / periodo.getEscala();
-        notaFinal = Convert.round(nf, 2);
+        notaFinal = Utils.round(nf, 2);
     }
 }

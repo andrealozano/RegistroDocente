@@ -10,20 +10,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RadioGroup;
 
 import com.unl.lapc.registrodocente.R;
-import com.unl.lapc.registrodocente.adapter.AcreditableAdapter;
 import com.unl.lapc.registrodocente.adapter.CalendarioAdapter;
 import com.unl.lapc.registrodocente.dao.CalendarioDao;
-import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Calendario;
-import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -155,7 +151,7 @@ public class Calendarios extends AppCompatActivity {
 
         Date i = calendar.getTime();
         this.fecha = i;
-        setTitle("Calendario: " + Convert.toYearMonthNameString(fecha));
+        setTitle("Calendario: " + Utils.toYearMonthNameString(fecha));
 
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date f = calendar.getTime();

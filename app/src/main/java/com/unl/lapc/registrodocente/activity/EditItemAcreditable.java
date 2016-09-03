@@ -1,7 +1,6 @@
 package com.unl.lapc.registrodocente.activity;
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -18,10 +17,9 @@ import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class EditItemAcreditable extends AppCompatActivity {
@@ -97,7 +95,7 @@ public class EditItemAcreditable extends AppCompatActivity {
     public void guardar(){
         itemAcreditable.setNombre(txtNombre.getText().toString());
         itemAcreditable.setAlias(txtAlias.getText().toString());
-        itemAcreditable.setFecha(Convert.toDate(dpFecha));
+        itemAcreditable.setFecha(Utils.toDate(dpFecha));
 
         if(validate()) {
             if (itemAcreditable.getId() == 0) {

@@ -5,11 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Calendario;
-import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,7 +62,7 @@ public class CalendarioDao extends DBHandler {
     public List<Calendario> getAll(Periodo periodo, Date inicio, Date fin) {
         List<Calendario> lista = new ArrayList<>();
 
-        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha >= date('%s') and fecha <= date('%s')", periodo.getId(), Convert.toShortDateString(inicio), Convert.toShortDateString(fin));
+        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha >= date('%s') and fecha <= date('%s')", periodo.getId(), Utils.toShortDateString(inicio), Utils.toShortDateString(fin));
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -96,9 +94,9 @@ public class CalendarioDao extends DBHandler {
 
         //Borra fuera periodo
         db.execSQL(String.format("delete from asistencia where periodo_id = %d and (fecha < date('%s') or fecha > date('%s'))",
-                periodo.getId(), Convert.toShortDateString(periodo.getInicio()), Convert.toShortDateString(periodo.getFin())));
+                periodo.getId(), Utils.toShortDateString(periodo.getInicio()), Utils.toShortDateString(periodo.getFin())));
         db.execSQL(String.format("delete from calendario where periodo_id = %d and (fecha < date('%s') or fecha > date('%s'))",
-                periodo.getId(), Convert.toShortDateString(periodo.getInicio()), Convert.toShortDateString(periodo.getFin())));
+                periodo.getId(), Utils.toShortDateString(periodo.getInicio()), Utils.toShortDateString(periodo.getFin())));
 
 
         while(c.getTime().before(fin)){
@@ -106,7 +104,7 @@ public class CalendarioDao extends DBHandler {
 
             if(dayOfWeek != Calendar.SATURDAY && dayOfWeek != Calendar.SUNDAY) {
                 Date fecha = c.getTime();
-                String sfecha = Convert.toShortDateString(fecha);
+                String sfecha = Utils.toShortDateString(fecha);
                 String sql = String.format("insert into calendario (estado, fecha, periodo_id) select '%s', date('%s'), %s where not exists (select c.id from calendario c where c.periodo_id = %s and c.fecha = date('%s'))", Calendario.ESTADO_ACTIVO, sfecha, periodo.getId(), periodo.getId(), sfecha);
                 db.execSQL(sql);
             }
@@ -121,7 +119,7 @@ public class CalendarioDao extends DBHandler {
     public Calendario get(Periodo periodo, Date fecha) {
 
 
-        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha = date('%s')", periodo.getId(), Convert.toShortDateString(fecha));
+        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha = date('%s')", periodo.getId(), Utils.toShortDateString(fecha));
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -144,7 +142,7 @@ public class CalendarioDao extends DBHandler {
     public Calendario getPrevius(Periodo periodo, Date fecha) {
 
 
-        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha < date('%s') order by fecha desc limit 1", periodo.getId(), Convert.toShortDateString(fecha));
+        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha < date('%s') order by fecha desc limit 1", periodo.getId(), Utils.toShortDateString(fecha));
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -167,7 +165,7 @@ public class CalendarioDao extends DBHandler {
     public Calendario getNext(Periodo periodo, Date fecha) {
 
 
-        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha > date('%s') order by fecha asc limit 1", periodo.getId(), Convert.toShortDateString(fecha));
+        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha > date('%s') order by fecha asc limit 1", periodo.getId(), Utils.toShortDateString(fecha));
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

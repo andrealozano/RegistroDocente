@@ -13,9 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -29,16 +27,12 @@ import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
-import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
-import com.unl.lapc.registrodocente.util.Convert;
+import com.unl.lapc.registrodocente.util.Utils;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -315,7 +309,7 @@ public class FragmentAcreditables extends Fragment {
         builder.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 if(txtNota.getText().toString().length() > 0) {
-                    double nota = Convert.toDouble(txtNota.getText().toString());
+                    double nota = Utils.toDouble(txtNota.getText().toString());
                     //validar ramgo
 
                     registro.setNotaFinal(nota);
