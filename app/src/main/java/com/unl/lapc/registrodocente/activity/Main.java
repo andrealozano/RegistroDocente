@@ -1,6 +1,8 @@
 package com.unl.lapc.registrodocente.activity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.design.widget.NavigationView;
@@ -8,6 +10,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -32,8 +35,11 @@ import java.util.Date;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    static final int PICK_DESTINO_RESPALDO_REQUEST = 1;
+
     private ListView listViewClases;
     private ClaseDao dao;
+    private File backupDB;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +169,29 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     public void backupdDatabase(){
         try {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Respaldar base de datos")
+                    .setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // The 'which' argument contains the index position of the selected item
+                            if (which == 0){
+                                File backupDB = backupdDatabaseToFile();
+                                if(backupDB != null) {
+                                    Snackbar.make(listViewClases, "Respaldo realizado correctamente: " + backupDB.getAbsolutePath(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                                }
+                            }else{
+                                backupdDatabaseToEmail();
+                            }
+                        }
+                    });
+            builder.create().show();
+        } catch (Exception e) {
+            Log.i("Backup", e.toString());
+        }
+    }
+
+    private File backupdDatabaseToFile(){
+        try {
             File sd = Environment.getExternalStorageDirectory();
             File data = Environment.getDataDirectory();
             String packageName  = "com.unl.lapc.registrodocente";
@@ -191,11 +220,37 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 src.close();
                 dst.close();
 
-                Snackbar.make(listViewClases, "Respaldo realizado correctamente", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                return backupDB;
             }
         } catch (Exception e) {
             Log.i("Backup", e.toString());
+        }
+
+        return null;
+    }
+
+    private void backupdDatabaseToEmail(){
+        backupDB = backupdDatabaseToFile();
+        if(backupDB != null) {
+            //Envia al correo
+            Uri u1 = Uri.fromFile(backupDB);
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Backup");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "Backup: " + backupDB.getName());
+            sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+            sendIntent.setType("text/html");
+            startActivityForResult(Intent.createChooser(sendIntent, "Destino respaldo"), PICK_DESTINO_RESPALDO_REQUEST);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        //super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == PICK_DESTINO_RESPALDO_REQUEST) {
+            if (resultCode == RESULT_OK && backupDB != null) {
+                backupDB.delete();
+                backupDB = null;
+            }
         }
     }
 }
