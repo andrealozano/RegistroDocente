@@ -263,8 +263,9 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         int id = item.getItemId();
 
         if (id == R.id.action_back) {
-            Intent intent = new Intent(this, Main.class);
-            startActivity(intent);
+            //Intent intent = new Intent(this, Main.class);
+            //startActivity(intent);
+            onBackPressed();
             return true;
         }
 

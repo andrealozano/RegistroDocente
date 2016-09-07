@@ -1,5 +1,6 @@
 package com.unl.lapc.registrodocente.activity;
 
+import android.accounts.AccountManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -17,6 +18,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethod;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -33,11 +35,16 @@ import java.nio.channels.FileChannel;
 
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
-    static final int PICK_DESTINO_RESPALDO_REQUEST = 1;
+    static final int AUTENTICATION_REQUEST = 1;
+    static final int PICK_DESTINO_RESPALDO_REQUEST = 2;
+
+    protected static String login = null;
+
 
     private ListView listViewClases;
     private ClaseDao dao;
     private File backupDB;
+    //private String login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,18 +53,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        /*FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });*/
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
@@ -65,7 +62,20 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         navigationView.setNavigationItemSelectedListener(this);
 
         CustomInit();
+
+        if(Main.login == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            startActivityForResult(intent, AUTENTICATION_REQUEST);
+        }
     }
+
+    /*
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        // TODO Auto-generated method stub
+        super.onSaveInstanceState(outState);
+        outState.putString("login", login);
+    }*/
 
     private void CustomInit(){
         listViewClases = (ListView) findViewById(R.id.listView);
@@ -116,9 +126,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        /*if (id == R.id.action_settings) {
+        if (id == R.id.action_settings) {
+            Intent i = new Intent(this, SettingsActivity.class);
+            startActivity(i);
             return true;
-        }*/
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -232,11 +244,20 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        //super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
+
         if(requestCode == PICK_DESTINO_RESPALDO_REQUEST) {
             if (resultCode == RESULT_OK && backupDB != null) {
                 backupDB.delete();
                 backupDB = null;
+            }
+        }
+
+        if(requestCode == AUTENTICATION_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                CustomInit();
+            }else{
+                finish();
             }
         }
     }
