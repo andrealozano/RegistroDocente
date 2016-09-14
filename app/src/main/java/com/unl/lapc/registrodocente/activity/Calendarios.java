@@ -84,6 +84,13 @@ public class Calendarios extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, Periodos.class);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_calendarios, menu);
         return true;
@@ -98,11 +105,11 @@ public class Calendarios extends AppCompatActivity {
             return true;
         }*/
 
-        if (id == R.id.action_back) {
+        /*if (id == R.id.action_back) {
             Intent intent = new Intent(this, Periodos.class);
             startActivity(intent);
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }

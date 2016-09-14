@@ -139,6 +139,29 @@ public class CalendarioDao extends DBHandler {
         return null;
     }
 
+    public Calendario getLast(Periodo periodo, Date fecha) {
+
+
+        String selectQuery = String.format("SELECT id, estado, fecha, observacion FROM calendario where periodo_id = %s and fecha <= date('%s') order by fecha desc limit 1", periodo.getId(), Utils.toShortDateString(fecha));
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                Calendario cls = new Calendario(periodo);
+                cls.setId(Integer.parseInt(cursor.getString(0)));
+                cls.setEstado(cursor.getString(1));
+                cls.setFecha(toDate(cursor.getString(2)));
+                cls.setObservacion(cursor.getString(3));
+
+                return  cls;
+            } while (cursor.moveToNext());
+        }
+
+        return null;
+    }
+
     public Calendario getPrevius(Periodo periodo, Date fecha) {
 
 

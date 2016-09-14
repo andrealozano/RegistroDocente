@@ -6,6 +6,6 @@
         android:id="@+id/action_periodo_clase"
         android:orderInCategory="100"
         android:title="Fecha"
-        android:icon="@android:drawable/ic_menu_manage"
+        android:icon="@android:drawable/ic_menu_today"
         app:showAsAction="ifRoom" />
 </menu>

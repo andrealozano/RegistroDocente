@@ -75,6 +75,13 @@ public class EditClase extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, Clases.class);
+        startActivity(intent);
+        finish();
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.menu_edit_clase, menu);
@@ -113,8 +120,7 @@ public class EditClase extends AppCompatActivity {
                 dao.update(clase);
             }
 
-            Intent intent = new Intent(this, Clases.class);
-            startActivity(intent);
+            onBackPressed();
         }
     }
 
@@ -130,8 +136,7 @@ public class EditClase extends AppCompatActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             dao.delete(clase);
 
-                            Intent intent = new Intent(EditClase.this, Clases.class);
-                            startActivity(intent);
+                            onBackPressed();
                         }
                     })
                     .setNegativeButton("Cancelar", null)

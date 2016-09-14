@@ -114,6 +114,13 @@ public class EditPeriodo extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, Periodos.class);
+        startActivity(intent);
+        finish();
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater=getMenuInflater();
         inflater.inflate(R.menu.menu_edit_periodo, menu);

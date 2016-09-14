@@ -64,17 +64,19 @@ public class Acreditables extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_back) {
+        /*if (id == R.id.action_back) {
             back();
             return true;
-        }
+        }*/
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void back(){
+    @Override
+    public void onBackPressed() {
         Intent intent = new Intent(this, Periodos.class);
         startActivity(intent);
+        finish();
     }
 
     private void editAction(Acreditable acreditable){
@@ -82,5 +84,6 @@ public class Acreditables extends AppCompatActivity {
         intent.putExtra("periodo", periodo);
         intent.putExtra("acreditable", acreditable);
         startActivity(intent);
+        finish();
     }
 }

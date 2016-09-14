@@ -57,6 +57,13 @@ public class Periodos extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(this, Main.class);
+        startActivity(intent);
+        finish();
+    }
+
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_periodos, menu);

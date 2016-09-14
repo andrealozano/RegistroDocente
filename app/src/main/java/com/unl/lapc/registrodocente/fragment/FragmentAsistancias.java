@@ -13,6 +13,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -57,6 +59,7 @@ public class FragmentAsistancias extends Fragment {
     private List<Asistencia> asistencias;
     private List<Estudiante> estudiantes;
     private Calendario calendario;
+    private boolean cancelarMarcar = false;
 
     @Override
     //protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +84,14 @@ public class FragmentAsistancias extends Fragment {
         //mLeadsList.setAdapter(mLeadsAdapter);
         estudiantes = daoEstudiante.getEstudiantes(clase);
 
-        FloatingActionButton btnAsiToday = (FloatingActionButton) view.findViewById(R.id.btnAsiToday);
+        /*FloatingActionButton btnAsiToday = (FloatingActionButton) view.findViewById(R.id.btnAsiToday);
         btnAsiToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
                 registrar(newCal);
             }
-        });
+        });*/
 
         FloatingActionButton btnAsiNext = (FloatingActionButton) view.findViewById(R.id.btnAsiNext);
         btnAsiNext.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +111,7 @@ public class FragmentAsistancias extends Fragment {
 
         tlAsistencias = (TableLayout) view.findViewById(R.id.tlAsistencias);
 
-        calendario = daoCalendario.get(clase.getPeriodo(), new Date());
+        calendario = daoCalendario.getLast(clase.getPeriodo(), new Date());
         if (calendario != null) {
             mostrarDia(calendario);
         } else {
@@ -145,7 +148,7 @@ public class FragmentAsistancias extends Fragment {
 
         AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
         builder.setView(myView);
-        builder.setTitle("Asistencia del día");
+        builder.setTitle("Seleccionar día");
         builder.setCancelable(false);
 
         Calendar c = GregorianCalendar.getInstance();
@@ -154,35 +157,35 @@ public class FragmentAsistancias extends Fragment {
         dp = (DatePicker)myView.findViewById(R.id.dpFechaPeriodoClase);
         dp.updateDate(c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
 
-        builder.setPositiveButton("Registrar", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Seleccionar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 GregorianCalendar calendarBeg=new GregorianCalendar(dp.getYear(),dp.getMonth(),dp.getDayOfMonth());
                 Date fecha=calendarBeg.getTime();
                 Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
                 if(newCal != null) {
-                    registrar(newCal);
+                    //registrar(newCal);
                     mostrarDia(newCal);
                     dialog.dismiss();
                 }else{
-                    Snackbar.make(null, "Este día no está registrdo en el calendario académico", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(tlAsistencias, "Este día no está registrdo en el calendario académico", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         });
 
-        builder.setNeutralButton("Borrar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                GregorianCalendar calendarBeg=new GregorianCalendar(dp.getYear(),dp.getMonth(),dp.getDayOfMonth());
-                Date fecha=calendarBeg.getTime();
-                Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
-                if(newCal != null) {
-                    dao.borrarAsistencias(clase, fecha);
-                    mostrarDia(newCal);
-                    dialog.dismiss();
-                }
-            }
-        });
+        //builder.setNeutralButton("Cancelar", new DialogInterface.OnClickListener() {
+          //  public void onClick(DialogInterface dialog, int id) {
+                //GregorianCalendar calendarBeg=new GregorianCalendar(dp.getYear(),dp.getMonth(),dp.getDayOfMonth());
+                //Date fecha=calendarBeg.getTime();
+                //Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
+                //if(newCal != null) {
+                    //dao.borrarAsistencias(clase, fecha);
+                  //  mostrarDia(newCal);
+                    //dialog.dismiss();
+                //}
+            //}
+        //});
 
-        builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
+        builder.setNegativeButton("Cancelar",new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dialog, int id){
                 dialog.dismiss();
             }
@@ -192,7 +195,7 @@ public class FragmentAsistancias extends Fragment {
         alert.show();
     }
 
-    private void registrar(Calendario calendario){
+    /*private void registrar(Calendario calendario){
         if(calendario != null) {
             if(calendario.getEstado().equals(Calendario.ESTADO_ACTIVO)){
 
@@ -222,16 +225,92 @@ public class FragmentAsistancias extends Fragment {
         }else{
             Snackbar.make(tlAsistencias, "Este día no está registrdo en el calendario académico", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
+    }*/
+
+    private void createTh(boolean marcar){
+        TableRow row = new TableRow(getContext());
+        row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
+        row.setBackgroundColor(getResources().getColor(R.color.backgroundTh));
+
+        TextView tv1 = new TextView(getContext());
+        tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        tv1.setGravity(Gravity.CENTER);
+        tv1.setTextSize(18);
+        tv1.setPadding(5, 5, 5, 5);
+        tv1.setBackgroundResource(R.drawable.cell_shape_head);
+        tv1.setText("N°");
+        row.addView(tv1);
+
+        TextView tv2 = new TextView(getContext());
+        tv2.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
+        tv2.setGravity(Gravity.CENTER);
+        tv2.setTextSize(18);
+        tv2.setPadding(5, 5, 5, 5);
+        tv2.setBackgroundResource(R.drawable.cell_shape_head);
+        tv2.setText("NOMBRES");
+        row.addView(tv2);
+
+        final CheckBox chk = new CheckBox(getContext());
+        chk.setChecked(marcar);
+        row.addView(chk);
+
+        chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
+                if(asistencias != null && cancelarMarcar == false) {
+                    new AlertDialog.Builder(getContext())
+                            .setCancelable(false)
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .setTitle(b ? "Marcar todo" :  "Desmarcar todo")
+                            .setMessage(b ? "¿Desea marcar a todos los estudiantes como presentes?" : "¿Desea marcar a todos los estudiantes como ausentes?")
+                            .setPositiveButton(b ? "Marcar" : "Desmarcar", new DialogInterface.OnClickListener()
+                            {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                for (Asistencia as : asistencias) {
+                                    as.setEstado(b ? "P" :  "F");
+                                    dao.update(as);
+                                }
+                                mostrarDia(calendario);
+                                }
+                            })
+                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    cancelarMarcar = true;
+                                    chk.setChecked(!chk.isChecked());
+                                }
+                            })
+                            .show();
+                }
+
+                if(cancelarMarcar){
+                    cancelarMarcar = false;
+                }
+            }
+        });
+
+        tlAsistencias.addView(row);
     }
 
     private void mostrarDia(Calendario calendario){
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         this.fecha = calendario.getFecha();
+        this.calendario = calendario;
 
-        ((MainClase)getActivity()).getSupportActionBar().setTitle("Asistencias (" + sd.format(fecha)+ " - " + calendario.getEstado() + ")");
+        ((MainClase)getActivity()).getSupportActionBar().setTitle(sd.format(fecha)+ " - " + calendario.getEstado());
 
         tlAsistencias.removeAllViews();
         asistencias = dao.getAsistencias(clase, fecha);
+
+        int marcadas = 0;
+        for(Asistencia a: asistencias){
+            if(a.getEstado().equals("P")){
+                marcadas += 1;
+            }
+        }
+
+        createTh(marcadas == asistencias.size() && asistencias.size() > 0);
 
         int i = 0;
         for(Estudiante c : estudiantes){
@@ -263,48 +342,33 @@ public class FragmentAsistancias extends Fragment {
             tv1.setText(c.getNombresCompletos());
             row.addView(tv1);
 
+            if(calendario.getEstado().equals(Calendario.ESTADO_ACTIVO)){
+                if (asi == null) {
+                    asi = new Asistencia(0, fecha, c.getClase(), c, calendario, periodo);
+                    asi.setEstado("F");
+                    dao.add(asi);
+                }
+            }
+
             if(asi!=null) {
-
-                RadioButton rb1 = new RadioButton(getContext());
-                rb1.setText("P");
-                //row.addView(rb1);
-
-                RadioButton rb2 = new RadioButton(getContext());
-                rb2.setText("F");
-                //row.addView(rb2);
-
-
-                RadioButton rb3 = new RadioButton(getContext());
-                rb3.setText("J");
-                //row.addView(rb3);
-
-                RadioGroup rg = new RadioGroup(getContext());
-                rg.setTag(asi);
-                rg.setOrientation(LinearLayout.HORIZONTAL);
-                rg.addView(rb1);
-                rg.addView(rb2);
-                rg.addView(rb3);
-
-                if (asi.getEstado().equals("P")) {
-                    rg.check(rb1.getId());
-                } else if (asi.getEstado().equals("F")) {
-                    rg.check(rb2.getId());
-                } else {
-                    rg.check(rb3.getId());
+                CheckBox chk = new CheckBox(getContext());
+                chk.setTag(asi);
+                if(asi.getEstado().equals("P")){
+                    chk.setChecked(true);
+                }else{
+                    chk.setChecked(false);
                 }
 
-                rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
-                    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                        RadioButton rb = (RadioButton) radioGroup.findViewById(i);
-                        Asistencia as = (Asistencia) radioGroup.getTag();
-                        as.setEstado(rb.getText().toString());
+                    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                        Asistencia as = (Asistencia) compoundButton.getTag();
+                        as.setEstado(b ? "P" :  "F");
                         dao.update(as);
                     }
                 });
 
-
-                row.addView(rg);
+                row.addView(chk);
             }
 
             tlAsistencias.addView(row);
@@ -314,10 +378,6 @@ public class FragmentAsistancias extends Fragment {
     }
 
     private void next(){
-        //Calendar c = GregorianCalendar.getInstance();
-        //c.setTime(fecha);
-        //c.add(Calendar.DAY_OF_MONTH, 1);
-
         Calendario newcal = daoCalendario.getNext(clase.getPeriodo(), fecha);
 
         if(newcal != null) {
@@ -326,10 +386,6 @@ public class FragmentAsistancias extends Fragment {
     }
 
     private void prev(){
-        //Calendar c = GregorianCalendar.getInstance();
-        //c.setTime(fecha);
-        //c.add(Calendar.DAY_OF_MONTH, -1);
-
         Calendario newcal = daoCalendario.getPrevius(clase.getPeriodo(), fecha);
         if(newcal != null) {
             mostrarDia(newcal);

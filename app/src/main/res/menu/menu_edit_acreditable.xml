@@ -15,10 +15,12 @@
         android:title="Borrar"
         app:showAsAction="ifRoom" />
 
+    <!--
     <item
         android:id="@+id/action_back"
         android:orderInCategory="102"
         android:title="Atras"
         android:icon="@android:drawable/ic_menu_revert"
         app:showAsAction="ifRoom" />
+    -->
 </menu>

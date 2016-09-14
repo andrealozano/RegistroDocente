@@ -20,7 +20,6 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,13 +41,13 @@
             android:parentActivityName=".activity.Clases" />
         <activity
             android:name=".activity.Acreditables"
-            android:label="Acreditables" />
+            android:label="Acreditables" android:parentActivityName=".activity.Periodos" />
         <activity
             android:name=".activity.EditAcreditable"
-            android:label="Editar Acreditable" />
+            android:label="Editar Acreditable" android:parentActivityName=".activity.Acreditables" />
         <activity
             android:name=".activity.Calendarios"
-            android:label="Calendario" />
+            android:label="Calendario" android:parentActivityName=".activity.Periodos"/>
         <activity
             android:name=".activity.MainClase"
             android:label="@string/title_activity_main_notas"

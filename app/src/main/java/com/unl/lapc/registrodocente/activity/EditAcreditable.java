@@ -90,8 +90,13 @@ public class EditAcreditable extends AppCompatActivity {
             return true;
         }
 
-        if (id == R.id.action_back) {
+        /*if (id == R.id.action_back) {
             atras();
+            return true;
+        }*/
+
+        if (id == android.R.id.home) {
+            onBackPressed();
             return true;
         }
 
@@ -118,15 +123,19 @@ public class EditAcreditable extends AppCompatActivity {
                 dao.update(acreditable);
             }
 
-            atras();
+            onBackPressed();
         }
     }
 
-    public void atras(){
+    @Override
+    public void onBackPressed(){
         Intent intent = new Intent(this, Acreditables.class);
         intent.putExtra("periodo", periodo);
         startActivity(intent);
+        finish();
     }
+
+
 
     public void eliminar(){
         if(acreditable.getId() > 0){
@@ -139,7 +148,7 @@ public class EditAcreditable extends AppCompatActivity {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dao.delete(acreditable);
-                            atras();
+                            onBackPressed();
                         }
                     })
                     .setNegativeButton("Cancelar", null)
