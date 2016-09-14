@@ -347,6 +347,8 @@ public class FragmentAsistancias extends Fragment {
                     asi = new Asistencia(0, fecha, c.getClase(), c, calendario, periodo);
                     asi.setEstado("F");
                     dao.add(asi);
+
+                    asistencias.add(asi);
                 }
             }
 
