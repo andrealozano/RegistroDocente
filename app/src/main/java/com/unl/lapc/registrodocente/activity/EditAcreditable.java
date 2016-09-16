@@ -104,26 +104,30 @@ public class EditAcreditable extends AppCompatActivity {
     }
 
     public void guardar(){
-        acreditable.setNombre(txtNombre.getText().toString());
-        acreditable.setAlias(txtAlias.getText().toString());
-        acreditable.setNumero(Utils.toInt(txtNumero.getText().toString()));
-        acreditable.setEquivalencia(Utils.toDouble(txtEquivalencia.getText().toString()));
+        if(!dao.existenNotas(periodo)) {
+            acreditable.setNombre(txtNombre.getText().toString());
+            acreditable.setAlias(txtAlias.getText().toString());
+            acreditable.setNumero(Utils.toInt(txtNumero.getText().toString()));
+            acreditable.setEquivalencia(Utils.toDouble(txtEquivalencia.getText().toString()));
 
-        int rbTipo = rgTipo.getCheckedRadioButtonId();
-        if(rbTipo == R.id.rbParcial){
-            acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_PARCIAL);
-        }else{
-            acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
-        }
-
-        if(validate()) {
-            if (acreditable.getId() == 0) {
-                dao.add(acreditable);
+            int rbTipo = rgTipo.getCheckedRadioButtonId();
+            if (rbTipo == R.id.rbParcial) {
+                acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_PARCIAL);
             } else {
-                dao.update(acreditable);
+                acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
             }
 
-            onBackPressed();
+            if (validate()) {
+                if (acreditable.getId() == 0) {
+                    dao.add(acreditable);
+                } else {
+                    dao.update(acreditable);
+                }
+
+                onBackPressed();
+            }
+        }else{
+            Snackbar.make(txtNombre, "No se puede guardar, porque ya ha ingresado notas.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }
     }
 
@@ -139,20 +143,23 @@ public class EditAcreditable extends AppCompatActivity {
 
     public void eliminar(){
         if(acreditable.getId() > 0){
-            new AlertDialog.Builder(this)
-                    .setIcon(android.R.drawable.ic_dialog_alert)
-                    .setTitle("Remover acreditable")
-                    .setMessage("¿Desea remover este acreditable?")
-                    .setPositiveButton("Remover", new DialogInterface.OnClickListener()
-                    {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dao.delete(acreditable);
-                            onBackPressed();
-                        }
-                    })
-                    .setNegativeButton("Cancelar", null)
-                    .show();
+            if(!dao.existenNotas(periodo)) {
+                new AlertDialog.Builder(this)
+                        .setIcon(android.R.drawable.ic_dialog_alert)
+                        .setTitle("Remover acreditable")
+                        .setMessage("¿Desea remover este acreditable?")
+                        .setPositiveButton("Remover", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dao.delete(acreditable);
+                                onBackPressed();
+                            }
+                        })
+                        .setNegativeButton("Cancelar", null)
+                        .show();
+            }else{
+                Snackbar.make(txtNombre, "No se puede remover, porque ya ha ingresado notas.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            }
         }else{
             Snackbar.make(getCurrentFocus(), "No se puede eliminar porque aún no ha guardado", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }

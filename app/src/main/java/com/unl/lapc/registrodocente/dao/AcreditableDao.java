@@ -49,6 +49,19 @@ public class AcreditableDao extends DBHandler {
         return null;
     }
 
+    public boolean existenNotas(Periodo periodo) {
+
+        String selectQuery = "SELECT count(id) FROM registroitem where nota > 0 and periodo_id = " + periodo.getId();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0) > 0;
+        }
+
+        return false;
+    }
+
     public void add(Acreditable acreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
 

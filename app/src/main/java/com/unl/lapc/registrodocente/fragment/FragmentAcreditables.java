@@ -317,10 +317,27 @@ public class FragmentAcreditables extends Fragment {
 
         final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
 
-
-
         builder.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                //NO usar en este caso. Se cierra automaticamnete
+            }
+        });
+
+        builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dialog, int id){
+                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                dialog.dismiss();
+            }
+        });
+
+        final AlertDialog alert=builder.create();
+        alert.show();
+
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
                 if(txtNota.getText().toString().length() > 0) {
                     double nota = Utils.toDouble(txtNota.getText().toString());
                     //validar ramgo
@@ -337,25 +354,17 @@ public class FragmentAcreditables extends Fragment {
                         tvPm.setText("" + resumen.getNotaPromedio());
                         tvEq.setText("" + resumen.getNotaFinal());
                         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        dialog.dismiss();
+                        alert.dismiss();
                     }else{
-                        Snackbar.make(myView, "La nota no debe sobrepasar de " + periodo.getEscala(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        //Snackbar.make(txtNota, "La nota no debe sobrepasar de " + periodo.getEscala(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        txtNota.setError("La nota no debe sobrepasar de " + periodo.getEscala());
                     }
                 }else{
-                    Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    //Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    txtNota.setError("Ingrese la nota");
                 }
             }
         });
-
-        builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id){
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                dialog.dismiss();
-            }
-        });
-
-        AlertDialog alert=builder.create();
-        alert.show();
 
         txtNota.requestFocus();
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);

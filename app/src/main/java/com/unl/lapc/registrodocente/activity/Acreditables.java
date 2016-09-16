@@ -1,6 +1,7 @@
 package com.unl.lapc.registrodocente.activity;
 
 import android.content.Intent;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -80,6 +81,11 @@ public class Acreditables extends AppCompatActivity {
     }
 
     private void editAction(Acreditable acreditable){
+        if(dao.existenNotas(periodo) && acreditable.getId() == 0) {
+            Snackbar.make(mLeadsList, "No se puede agregar acreditables, porque ya ha ingresado notas.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+            return;
+        }
+
         Intent intent = new Intent(this, EditAcreditable.class);
         intent.putExtra("periodo", periodo);
         intent.putExtra("acreditable", acreditable);
