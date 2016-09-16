@@ -325,17 +325,22 @@ public class FragmentAcreditables extends Fragment {
                     double nota = Utils.toDouble(txtNota.getText().toString());
                     //validar ramgo
 
-                    registro.setNotaFinal(nota);
-                    resumen.calcularPromedio(acreditable, periodo);
+                    if(nota <= periodo.getEscala()) {
 
-                    Estudiante estudiante = new Estudiante(resumen.getEstudianteId());
-                    acreditableDao.updateNota(resumen, registro, periodo, clase, estudiante, acreditable, quimestre, parcial);
+                        registro.setNotaFinal(nota);
+                        resumen.calcularPromedio(acreditable, periodo);
 
-                    tvNota.setText(""+nota);
-                    tvPm.setText(""+resumen.getNotaPromedio());
-                    tvEq.setText(""+resumen.getNotaFinal());
-                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                    dialog.dismiss();
+                        Estudiante estudiante = new Estudiante(resumen.getEstudianteId());
+                        acreditableDao.updateNota(resumen, registro, periodo, clase, estudiante, acreditable, quimestre, parcial);
+
+                        tvNota.setText("" + nota);
+                        tvPm.setText("" + resumen.getNotaPromedio());
+                        tvEq.setText("" + resumen.getNotaFinal());
+                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                        dialog.dismiss();
+                    }else{
+                        Snackbar.make(myView, "La nota no debe sobrepasar de " + periodo.getEscala(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
                 }else{
                     Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
