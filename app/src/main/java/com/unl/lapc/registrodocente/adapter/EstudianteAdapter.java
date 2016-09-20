@@ -15,9 +15,9 @@ import java.util.List;
 /**
  * Created by Usuario on 11/07/2016.
  */
-public class ClaseEstudianteAdapter extends ArrayAdapter<Estudiante> {
+public class EstudianteAdapter extends ArrayAdapter<Estudiante> {
 
-    public ClaseEstudianteAdapter(Context context, List<Estudiante> objects) {
+    public EstudianteAdapter(Context context, List<Estudiante> objects) {
         super(context, 0, objects);
     }
 

@@ -19,8 +19,6 @@ import java.util.List;
  */
 public class AsistenciaDao extends DBHandler {
 
-    public static final String TABLE_NAME = "asistencia";
-
     public AsistenciaDao(Context context){
         super(context);
     }
@@ -37,7 +35,7 @@ public class AsistenciaDao extends DBHandler {
         values.put("calendario_id", asistencia.getCalendario().getId());
         values.put("periodo_id", asistencia.getPeriodo().getId());
 
-        long id = db.insert(TABLE_NAME, null, values);
+        long id = db.insert("asistencia", null, values);
         asistencia.setId((int)id);
 
         this.calcularPorcentaje(db, asistencia.getEstudiante());
@@ -50,7 +48,7 @@ public class AsistenciaDao extends DBHandler {
         ContentValues values = new ContentValues();
         values.put("estado", asistencia.getEstado());
 
-        int up = db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(asistencia.getId())});
+        int up = db.update("asistencia", values, "id = ?", new String[]{String.valueOf(asistencia.getId())});
 
         this.calcularPorcentaje(db, asistencia.getEstudiante());
 
@@ -71,7 +69,7 @@ public class AsistenciaDao extends DBHandler {
 
     public Asistencia get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[] { "id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query("asistencia", new String[] { "id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -141,10 +139,10 @@ public class AsistenciaDao extends DBHandler {
         return shopList;
     }
 
-    public void borrarAsistencias(Clase clase, Date fecha) {
+    /*public void borrarAsistencias(Clase clase, Date fecha) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("asistencia", "clase_id = ? and fecha=date(?)", new String[] { String.valueOf(clase.getId()), toShortDate(fecha) });
         db.close();
-    }
+    }*/
 
 }

@@ -26,7 +26,7 @@ public class EditAcreditable extends AppCompatActivity {
     private Periodo periodo = null;
     private Acreditable acreditable = null;
 
-    private AcreditableDao dao = null;
+    private AcreditableDao acreditableDao = null;
 
     private EditText txtNombre;
     private EditText txtAlias;
@@ -50,12 +50,12 @@ public class EditAcreditable extends AppCompatActivity {
         periodo = bundle.getParcelable("periodo");
         acreditable = bundle.getParcelable("acreditable");
 
-        setValue();
+        fijarValores();
 
-        dao = new AcreditableDao(this);
+        acreditableDao = new AcreditableDao(this);
     }
 
-    private void setValue() {
+    private void fijarValores() {
         Calendar c = GregorianCalendar.getInstance();
 
         txtNombre.setText(acreditable.getNombre());
@@ -103,8 +103,8 @@ public class EditAcreditable extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void guardar(){
-        if(!dao.existenNotas(periodo)) {
+    private void guardar(){
+        if(!acreditableDao.existenNotas(periodo)) {
             acreditable.setNombre(txtNombre.getText().toString());
             acreditable.setAlias(txtAlias.getText().toString());
             acreditable.setNumero(Utils.toInt(txtNumero.getText().toString()));
@@ -117,11 +117,11 @@ public class EditAcreditable extends AppCompatActivity {
                 acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
             }
 
-            if (validate()) {
+            if (validar()) {
                 if (acreditable.getId() == 0) {
-                    dao.add(acreditable);
+                    acreditableDao.add(acreditable);
                 } else {
-                    dao.update(acreditable);
+                    acreditableDao.update(acreditable);
                 }
 
                 onBackPressed();
@@ -143,7 +143,7 @@ public class EditAcreditable extends AppCompatActivity {
 
     public void eliminar(){
         if(acreditable.getId() > 0){
-            if(!dao.existenNotas(periodo)) {
+            if(!acreditableDao.existenNotas(periodo)) {
                 new AlertDialog.Builder(this)
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .setTitle("Remover acreditable")
@@ -151,7 +151,7 @@ public class EditAcreditable extends AppCompatActivity {
                         .setPositiveButton("Remover", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dao.delete(acreditable);
+                                acreditableDao.delete(acreditable);
                                 onBackPressed();
                             }
                         })
@@ -166,7 +166,7 @@ public class EditAcreditable extends AppCompatActivity {
     }
 
 
-    private boolean validate() {
+    private boolean validar() {
         String nombre = acreditable.getNombre();
 
         boolean v = true;
@@ -175,7 +175,7 @@ public class EditAcreditable extends AppCompatActivity {
             txtNombre.setError("Ingrese un nombre");
             v = false;
         }else{
-            /*boolean e = dao.existe(periodo);
+            /*boolean e = acreditableDao.existe(periodo);
             if(e){
                 txtNombre.setError("Nombre duplicado");
                 v = false;

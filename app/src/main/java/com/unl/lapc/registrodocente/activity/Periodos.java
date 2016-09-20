@@ -14,13 +14,12 @@ import android.widget.ListView;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.PeriodosAdapter;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
-import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
 public class Periodos extends AppCompatActivity {
 
-    private ListView lvPeriodos;
-    private PeriodoDao dao;
+    private ListView listView;
+    private PeriodoDao periodoDao;
     private PeriodosAdapter periodosAdapter;
 
     /**
@@ -33,27 +32,27 @@ public class Periodos extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_periodos);
 
-        lvPeriodos = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
 
-        dao = new PeriodoDao(getApplicationContext());
+        periodoDao = new PeriodoDao(getApplicationContext());
 
         // Inicializar el adaptador con la fuente de datos.
-         periodosAdapter = new PeriodosAdapter(getApplicationContext(), dao.getAll());
+         periodosAdapter = new PeriodosAdapter(getApplicationContext(), periodoDao.getAll());
 
         //Relacionando la lista con el adaptador
-        lvPeriodos.setAdapter( periodosAdapter);
+        listView.setAdapter( periodosAdapter);
 
-        lvPeriodos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Periodo per = (Periodo) lvPeriodos.getItemAtPosition(i);
+                Periodo per = (Periodo) listView.getItemAtPosition(i);
                 if (per != null) {
                     editAction(per);
                 }
             }
         });
 
-        registerForContextMenu(lvPeriodos);
+        registerForContextMenu(listView);
 
     }
 

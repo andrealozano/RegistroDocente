@@ -113,7 +113,7 @@ public class FragmentResumenNotasParcial extends Fragment {
         tlResumenNotas.addView(row);
     }
 
-    public void cargarTr(){
+    private void cargarTr(){
         lista = estudianteDao.getResumenParcial(periodo, clase, parcial.getQuimestre(), parcial.getNumero());
 
         for(int i= 0; i < lista.size(); i++){

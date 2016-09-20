@@ -19,7 +19,7 @@ import android.widget.ListView;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.activity.EditEstudiante;
-import com.unl.lapc.registrodocente.adapter.ClaseEstudianteAdapter;
+import com.unl.lapc.registrodocente.adapter.EstudianteAdapter;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
@@ -34,14 +34,14 @@ public class FragmentEstudiantes extends Fragment {
 
     static final int PICK_DESTINO_REPORTE_REQUEST = 1;
 
-    private ListView mLeadsList;
-    private ClaseDao dao;
-    private EstudianteDao daoEstudiante;
+    private ListView listView;
+    private ClaseDao claseDao;
+    private EstudianteDao estudianteDao;
 
     private Clase clase;
     private Periodo periodo;
 
-    private ClaseEstudianteAdapter mLeadsAdapter;
+    private EstudianteAdapter mLeadsAdapter;
 
     private File emailFile = null;
 
@@ -53,25 +53,25 @@ public class FragmentEstudiantes extends Fragment {
         View view = inflater.inflate(R.layout.fragment_main_estudiantes, container, false);
         setHasOptionsMenu(true);
 
-        mLeadsList = (ListView)view.findViewById(R.id.listView);
+        listView = (ListView)view.findViewById(R.id.listView);
 
-        dao = new ClaseDao(getContext());
-        daoEstudiante = new EstudianteDao(getContext());
+        claseDao = new ClaseDao(getContext());
+        estudianteDao = new EstudianteDao(getContext());
 
         Bundle bundle = getArguments();
         clase = bundle.getParcelable("clase");
         periodo = bundle.getParcelable("periodo");
 
         if(clase.getId() > 0){
-            clase = dao.getClase(clase.getId());
+            clase = claseDao.get(clase.getId());
         }
 
-        mLeadsAdapter = new ClaseEstudianteAdapter(getContext(), daoEstudiante.getEstudiantes(clase));
-        mLeadsList.setAdapter(mLeadsAdapter);
-        mLeadsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mLeadsAdapter = new EstudianteAdapter(getContext(), estudianteDao.getEstudiantes(clase));
+        listView.setAdapter(mLeadsAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Estudiante cls = (Estudiante) mLeadsList.getItemAtPosition(i);
+                Estudiante cls = (Estudiante) listView.getItemAtPosition(i);
                 if(cls!=null) {
                     editEstudiante(cls);
                 }
@@ -126,7 +126,7 @@ public class FragmentEstudiantes extends Fragment {
     private void reporteEstudiantes(){
         new AlertDialog.Builder(getContext()).setTitle("Reporte estudiates").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                List<Estudiante> lista = daoEstudiante.getEstudiantes(clase);
+                List<Estudiante> lista = estudianteDao.getEstudiantes(clase);
                 StringBuilder sb= new StringBuilder();
                 Utils.writeCsvLine(sb, "N","CEDULA", "NOMBRES", "APELLIDOS");
                 for (int i = 0; i < lista.size(); i++){

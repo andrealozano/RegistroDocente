@@ -17,12 +17,6 @@ import java.util.List;
  */
 public class ClaseDao extends DBHandler {
 
-    public static final String TABLE_NAME = "clase";
-    public static final String ID = "id";
-    public static final String NOMBRE = "nombre";
-    public static final String ACTIVA = "activa";
-    public static final String PERIODO_ID = "periodo_id";
-
     public ClaseDao(Context context){
         super(context);
     }
@@ -31,11 +25,11 @@ public class ClaseDao extends DBHandler {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(NOMBRE, clase.getNombre());
-        values.put(ACTIVA, clase.isActiva() ? 1 : 0);
-        values.put(PERIODO_ID, clase.getPeriodo().getId());
+        values.put("nombre", clase.getNombre());
+        values.put("activa", clase.isActiva() ? 1 : 0);
+        values.put("periodo_id", clase.getPeriodo().getId());
 
-        db.insert(TABLE_NAME, null, values);
+        db.insert("clase", null, values);
         db.close();
     }
 
@@ -43,7 +37,7 @@ public class ClaseDao extends DBHandler {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("clase_id", cls.getClase().getEstudianteId());
+        values.put("clase_id", cls.get().getEstudianteId());
         values.put("estudiante_id", cls.getEstudiante().getEstudianteId());
         values.put("orden", cls.getOrden());
 
@@ -61,17 +55,17 @@ public class ClaseDao extends DBHandler {
     public int update(Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
-        values.put(NOMBRE, clase.getNombre());
-        values.put(ACTIVA, clase.isActiva() ? 1 : 0);
-        values.put(PERIODO_ID, clase.getPeriodo().getId());
+        values.put("nombre", clase.getNombre());
+        values.put("activa", clase.isActiva() ? 1 : 0);
+        values.put("periodo_id", clase.getPeriodo().getId());
 
 
-        return db.update(TABLE_NAME, values, ID + " = ?", new String[]{String.valueOf(clase.getId())});
+        return db.update("clase", values, "id = ?", new String[]{String.valueOf(clase.getId())});
     }
 
-    public Clase getClase(int id) {
+    public Clase get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[] { ID, NOMBRE, ACTIVA, PERIODO_ID}, ID + "=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query("clase", new String[] { "id", "nombre", "activa", "periodo_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 
@@ -156,7 +150,7 @@ public class ClaseDao extends DBHandler {
     }
 
     public boolean existe(Clase per){
-        String selectQuery = "SELECT count(*) FROM " + TABLE_NAME + " where lower(trim(" + NOMBRE + ")) =? and " + ID +" <> ?";
+        String selectQuery = "SELECT count(*) FROM clase where lower(trim(nombre)) =? and id <> ?";
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(selectQuery, new  String[]{per.getNombre().toLowerCase(), ""+per.getId()});

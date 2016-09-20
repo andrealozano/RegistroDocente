@@ -16,9 +16,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.DatePicker;
-import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TableRow.LayoutParams;
@@ -48,10 +45,10 @@ public class FragmentAsistancias extends Fragment {
     private Periodo periodo;
 
     //private ListView mLeadsList;
-    private AsistenciaDao dao;
-    private ClaseDao daoClase;
-    private EstudianteDao daoEstudiante;
-    private CalendarioDao daoCalendario;
+    private AsistenciaDao asistenciaDao;
+    private ClaseDao claseDao;
+    private EstudianteDao estudianteDao;
+    private CalendarioDao calendarioDao;
 
     //private RegistroAsistenciaAdapter mLeadsAdapter;
     private Date fecha = new Date();
@@ -70,25 +67,25 @@ public class FragmentAsistancias extends Fragment {
         View view = inflater.inflate(R.layout.fragment_asistencias, container, false);
         setHasOptionsMenu(true);
 
-        dao = new AsistenciaDao(getContext());
-        daoClase = new ClaseDao(getContext());
-        daoEstudiante = new EstudianteDao(getContext());
-        daoCalendario = new CalendarioDao(getContext());
+        asistenciaDao = new AsistenciaDao(getContext());
+        claseDao = new ClaseDao(getContext());
+        estudianteDao = new EstudianteDao(getContext());
+        calendarioDao = new CalendarioDao(getContext());
 
         Bundle bundle = getArguments();
         clase = bundle.getParcelable("clase");
         periodo = bundle.getParcelable("periodo");
 
         //mLeadsList = (ListView) findViewById(R.id.listViewAsistencias);
-        //mLeadsAdapter = new RegistroAsistenciaAdapter(getApplicationContext(), dao.getEstudiantes(clase));
+        //mLeadsAdapter = new RegistroAsistenciaAdapter(getApplicationContext(), asistenciaDao.getEstudiantes(clase));
         //mLeadsList.setAdapter(mLeadsAdapter);
-        estudiantes = daoEstudiante.getEstudiantes(clase);
+        estudiantes = estudianteDao.getEstudiantes(clase);
 
         /*FloatingActionButton btnAsiToday = (FloatingActionButton) view.findViewById(R.id.btnAsiToday);
         btnAsiToday.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
+                Calendario newCal = calendarioDao.get(clase.getPeriodo(), fecha);
                 registrar(newCal);
             }
         });*/
@@ -111,7 +108,7 @@ public class FragmentAsistancias extends Fragment {
 
         tlAsistencias = (TableLayout) view.findViewById(R.id.tlAsistencias);
 
-        calendario = daoCalendario.getLast(clase.getPeriodo(), new Date());
+        calendario = calendarioDao.getLast(clase.getPeriodo(), new Date());
         if (calendario != null) {
             mostrarDia(calendario);
         } else {
@@ -161,7 +158,7 @@ public class FragmentAsistancias extends Fragment {
             public void onClick(DialogInterface dialog, int id) {
                 GregorianCalendar calendarBeg=new GregorianCalendar(dp.getYear(),dp.getMonth(),dp.getDayOfMonth());
                 Date fecha=calendarBeg.getTime();
-                Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
+                Calendario newCal = calendarioDao.get(clase.getPeriodo(), fecha);
                 if(newCal != null) {
                     //registrar(newCal);
                     mostrarDia(newCal);
@@ -176,9 +173,9 @@ public class FragmentAsistancias extends Fragment {
           //  public void onClick(DialogInterface dialog, int id) {
                 //GregorianCalendar calendarBeg=new GregorianCalendar(dp.getYear(),dp.getMonth(),dp.getDayOfMonth());
                 //Date fecha=calendarBeg.getTime();
-                //Calendario newCal = daoCalendario.get(clase.getPeriodo(), fecha);
+                //Calendario newCal = calendarioDao.get(clase.getPeriodo(), fecha);
                 //if(newCal != null) {
-                    //dao.borrarAsistencias(clase, fecha);
+                    //asistenciaDao.borrarAsistencias(clase, fecha);
                   //  mostrarDia(newCal);
                     //dialog.dismiss();
                 //}
@@ -199,7 +196,7 @@ public class FragmentAsistancias extends Fragment {
         if(calendario != null) {
             if(calendario.getEstado().equals(Calendario.ESTADO_ACTIVO)){
 
-                asistencias = dao.getAsistencias(clase, fecha);
+                asistencias = asistenciaDao.getAsistencias(clase, fecha);
                 boolean any = asistencias.size() > 0;
 
                 for(Estudiante c : estudiantes) {
@@ -212,9 +209,9 @@ public class FragmentAsistancias extends Fragment {
                     }
 
                     if (asi == null) {
-                        asi = new Asistencia(0, fecha, c.getClase(), c, calendario, periodo);
+                        asi = new Asistencia(0, fecha, c.get(), c, calendario, periodo);
                         asi.setEstado(any ? "F" : "P");
-                        dao.add(asi);
+                        asistenciaDao.add(asi);
                     }
                 }
 
@@ -269,7 +266,7 @@ public class FragmentAsistancias extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                 for (Asistencia as : asistencias) {
                                     as.setEstado(b ? "P" :  "F");
-                                    dao.update(as);
+                                    asistenciaDao.update(as);
                                 }
                                 mostrarDia(calendario);
                                 }
@@ -301,7 +298,7 @@ public class FragmentAsistancias extends Fragment {
         ((MainClase)getActivity()).getSupportActionBar().setTitle(sd.format(fecha)+ " - " + calendario.getEstado());
 
         tlAsistencias.removeAllViews();
-        asistencias = dao.getAsistencias(clase, fecha);
+        asistencias = asistenciaDao.getAsistencias(clase, fecha);
 
         int marcadas = 0;
         for(Asistencia a: asistencias){
@@ -346,7 +343,7 @@ public class FragmentAsistancias extends Fragment {
                 if (asi == null) {
                     asi = new Asistencia(0, fecha, c.getClase(), c, calendario, periodo);
                     asi.setEstado("F");
-                    dao.add(asi);
+                    asistenciaDao.add(asi);
 
                     asistencias.add(asi);
                 }
@@ -366,7 +363,7 @@ public class FragmentAsistancias extends Fragment {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         Asistencia as = (Asistencia) compoundButton.getTag();
                         as.setEstado(b ? "P" :  "F");
-                        dao.update(as);
+                        asistenciaDao.update(as);
                     }
                 });
 
@@ -380,7 +377,7 @@ public class FragmentAsistancias extends Fragment {
     }
 
     private void next(){
-        Calendario newcal = daoCalendario.getNext(clase.getPeriodo(), fecha);
+        Calendario newcal = calendarioDao.getNext(clase.getPeriodo(), fecha);
 
         if(newcal != null) {
             mostrarDia(newcal);
@@ -388,7 +385,7 @@ public class FragmentAsistancias extends Fragment {
     }
 
     private void prev(){
-        Calendario newcal = daoCalendario.getPrevius(clase.getPeriodo(), fecha);
+        Calendario newcal = calendarioDao.getPrevius(clase.getPeriodo(), fecha);
         if(newcal != null) {
             mostrarDia(newcal);
         }

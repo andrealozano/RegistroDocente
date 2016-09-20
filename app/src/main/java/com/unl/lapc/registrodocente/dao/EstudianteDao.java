@@ -24,8 +24,6 @@ import java.util.List;
  */
 public class EstudianteDao extends DBHandler {
 
-    public static final String TABLE_NAME = "estudiante";
-
     public EstudianteDao(Context context){
         super(context);
     }
@@ -47,7 +45,7 @@ public class EstudianteDao extends DBHandler {
         values.put("clase_id", est.getClase().getId());
         values.put("periodo_id", est.getPeriodo().getId());
 
-        long id = db.insert(TABLE_NAME, null, values);
+        long id = db.insert("estudiante", null, values);
         est.setId((int)id);
 
         ordernarApellidos(db, est.getClase());
@@ -71,7 +69,7 @@ public class EstudianteDao extends DBHandler {
         values.put("clase_id", est.getClase().getId());
         values.put("periodo_id", est.getPeriodo().getId());
 
-        int u = db.update(TABLE_NAME, values, "id = ?", new String[]{String.valueOf(est.getId())});
+        int u = db.update("estudiante", values, "id = ?", new String[]{String.valueOf(est.getId())});
 
         ordernarApellidos(db, est.getClase());
 
@@ -80,7 +78,7 @@ public class EstudianteDao extends DBHandler {
 
     public Estudiante get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query(TABLE_NAME, new String[] { "id", "cedula", "nombres", "apellidos", "email", "celular", "sexo", "orden", "notaFinal", "porcentajeAsistencias", "estado", "clase_id", "periodo_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
+        Cursor cursor = db.query("estudiante", new String[] { "id", "cedula", "nombres", "apellidos", "email", "celular", "sexo", "orden", "notaFinal", "porcentajeAsistencias", "estado", "clase_id", "periodo_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
         if (cursor != null)
             cursor.moveToFirst();
 

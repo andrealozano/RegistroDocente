@@ -17,28 +17,28 @@ import com.unl.lapc.registrodocente.modelo.Clase;
 
 public class Clases extends AppCompatActivity {
 
-    private ListView mLeadsList;
-    private ClaseDao dao;
+    private ListView listView;
+    private ClaseDao claseDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_clases);
 
-        mLeadsList = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.listView);
 
-        dao = new ClaseDao(getApplicationContext());
+        claseDao = new ClaseDao(getApplicationContext());
 
         // Inicializar el adaptador con la fuente de datos.
-        ClasesAdapter mLeadsAdapter = new ClasesAdapter(getApplicationContext(), dao.getAll());
+        ClasesAdapter mLeadsAdapter = new ClasesAdapter(getApplicationContext(), claseDao.getAll());
 
         //Relacionando la lista con el adaptador
-        mLeadsList.setAdapter(mLeadsAdapter);
+        listView.setAdapter(mLeadsAdapter);
 
-        mLeadsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Clase cls = (Clase) mLeadsList.getItemAtPosition(i);
+                Clase cls = (Clase) listView.getItemAtPosition(i);
                 if(cls != null){
                     editAction(cls);
                 }

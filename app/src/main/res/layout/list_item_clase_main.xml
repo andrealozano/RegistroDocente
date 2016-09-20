@@ -7,11 +7,11 @@
 
     <TextView
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="52dp"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
         android:id="@+id/txtNombre"
-        android:textColor="@color/accent_material_light"
+        android:textColor="@color/colorListItemPrimary"
         android:textSize="@dimen/abc_alert_dialog_button_bar_height" />
 
     <TextView
@@ -20,5 +20,5 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="0 Estudiantes"
         android:id="@+id/txtDesc"
-        android:textColor="@color/accent_material_dark" />
+        android:textColor="@color/colorListItemSubtitle" />
 </LinearLayout>

@@ -42,8 +42,6 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
     private PeriodoDao periodoDao;
     private ClaseDao claseDao;
     private AcreditableDao daoAcreditable;
-    //private QuimestreDao quimestreDao;
-    //private ParcialDao parcialDao;
     private EstudianteDao estudianteDao;
 
     private Clase clase;
@@ -135,11 +133,11 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
-    private void mostrarMenu(boolean b){
+    /*private void mostrarMenu(boolean b){
         for(MenuItem mi: menuItems.keySet()){
             mi.setVisible(b);
         }
-    }
+    }*/
 
     private void cargarEstudiantes(){
         FragmentEstudiantes fragment = new FragmentEstudiantes();

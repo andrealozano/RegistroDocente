@@ -28,7 +28,7 @@ import java.util.GregorianCalendar;
 public class Calendarios extends AppCompatActivity {
 
     private Periodo periodo;
-    private CalendarioDao dao;
+    private CalendarioDao calendarioDao;
     private Date inicio;
     private Date fin;
     private Date fecha;
@@ -53,11 +53,11 @@ public class Calendarios extends AppCompatActivity {
             }
         });
 
-        dao = new CalendarioDao(this);
+        calendarioDao = new CalendarioDao(this);
 
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
-        //dao.registrar(periodo);
+        //calendarioDao.registrar(periodo);
 
         inicio = periodo.getInicio();
         fin = periodo.getFin();
@@ -148,7 +148,7 @@ public class Calendarios extends AppCompatActivity {
     }
 
     /*private void registrar(){
-        dao.registrar(periodo);
+        calendarioDao.registrar(periodo);
         mostrarMes(periodo.getInicio());
     }*/
 
@@ -163,7 +163,7 @@ public class Calendarios extends AppCompatActivity {
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         Date f = calendar.getTime();
 
-        adapter = new CalendarioAdapter(this, dao.getAll(periodo, i, f));
+        adapter = new CalendarioAdapter(this, calendarioDao.getAll(periodo, i, f));
         listView.setAdapter(adapter);
     }
 
@@ -193,7 +193,7 @@ public class Calendarios extends AppCompatActivity {
                 }else{
                     m.setEstado(Calendario.ESTADO_FERIADO);
                 }
-                dao.update(m);
+                calendarioDao.update(m);
                 adapter.notifyDataSetChanged();
                 dialog.dismiss();
             }

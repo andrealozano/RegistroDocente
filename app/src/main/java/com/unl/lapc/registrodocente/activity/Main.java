@@ -1,6 +1,5 @@
 package com.unl.lapc.registrodocente.activity;
 
-import android.accounts.AccountManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +17,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethod;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -42,7 +40,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
 
     private ListView listViewClases;
-    private ClaseDao dao;
+    private ClaseDao claseDao;
     private File backupDB;
     //private String login;
 
@@ -61,7 +59,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        CustomInit();
+        customInit();
 
         if(Main.login == null) {
             Intent intent = new Intent(this, LoginActivity.class);
@@ -77,11 +75,11 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         outState.putString("login", login);
     }*/
 
-    private void CustomInit(){
+    private void customInit(){
         listViewClases = (ListView) findViewById(R.id.listView);
-        dao = new ClaseDao(getApplicationContext());
+        claseDao = new ClaseDao(getApplicationContext());
 
-        ClasesMainAdapter mLeadsAdapter = new ClasesMainAdapter(getApplicationContext(), dao.getMainClases());
+        ClasesMainAdapter mLeadsAdapter = new ClasesMainAdapter(getApplicationContext(), claseDao.getMainClases());
         listViewClases.setAdapter(mLeadsAdapter);
 
         listViewClases.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -154,7 +152,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
 
         if (id == R.id.action_backup) {
-            backupdDatabase();
+            backupDatabase();
         }
 
         /*
@@ -177,7 +175,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
-    public void backupdDatabase(){
+    private void backupDatabase(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Respaldar base de datos")
                 .setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
@@ -189,7 +187,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                                 Snackbar.make(listViewClases, "Respaldo realizado correctamente: " + backupDB.getAbsolutePath(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
                             }
                         }else{
-                            backupdDatabaseToEmail();
+                            backupDatabaseToEmail();
                         }
                     }
                 });
@@ -228,7 +226,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return null;
     }
 
-    private void backupdDatabaseToEmail(){
+    private void backupDatabaseToEmail(){
         backupDB = backupdDatabaseToFile();
         if(backupDB != null) {
             //Envia al correo
@@ -255,7 +253,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if(requestCode == AUTENTICATION_REQUEST) {
             if (resultCode == RESULT_OK) {
-                CustomInit();
+                customInit();
             }else{
                 finish();
             }

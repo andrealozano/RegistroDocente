@@ -40,7 +40,7 @@ public class PeriodoDao extends DBHandler {
         db.close();
     }
 
-    public int update(Periodo periodo) {
+    public void update(Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -55,7 +55,7 @@ public class PeriodoDao extends DBHandler {
         values.put("porcentajeAsistencias", periodo.getPorcentajeAsistencias());
         values.put("notaMinima", periodo.getNotaMinima());
 
-        return db.update("periodo", values, "id = ?", new String[]{String.valueOf(periodo.getId())});
+        db.update("periodo", values, "id = ?", new String[]{String.valueOf(periodo.getId())});
     }
 
     public Periodo get(int id) {

@@ -26,22 +26,22 @@ import java.util.List;
 public class EditClase extends AppCompatActivity {
 
     private Clase clase = null;
-    private ClaseDao dao = null;
-    private PeriodoDao daoPeriodo = null;
+    private ClaseDao claseDao = null;
+    private PeriodoDao periodoDao = null;
 
     private EditText txtNombreEditClase=null;
     private Spinner cmbPeriodos;
     private CheckBox chkActivaClase;
 
-    private ArrayAdapter cmbPeriodosAdapter = null;
+    private ArrayAdapter periodosAdapter = null;
     private int selectedIndexPeriodo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_clase);
 
-        dao = new ClaseDao(getApplicationContext());
-        daoPeriodo = new PeriodoDao(getApplicationContext());
+        claseDao = new ClaseDao(getApplicationContext());
+        periodoDao = new PeriodoDao(getApplicationContext());
 
         txtNombreEditClase= (EditText)findViewById(R.id.txtNombreEditClase);
         cmbPeriodos = (Spinner)findViewById(R.id.spPeriodos);
@@ -50,22 +50,22 @@ public class EditClase extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         clase = bundle.getParcelable("clase");
         if(clase.getId() > 0){
-            clase = dao.getClase(clase.getId());
+            clase = claseDao.get(clase.getId());
         }
 
-        List<Periodo> periodos = daoPeriodo.getAll();
+        List<Periodo> periodos = periodoDao.getAll();
 
-        cmbPeriodosAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, periodos);
-        cmbPeriodosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cmbPeriodos.setAdapter(cmbPeriodosAdapter);
+        periodosAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, periodos);
+        periodosAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cmbPeriodos.setAdapter(periodosAdapter);
 
         selectedIndexPeriodo = periodos.indexOf(clase.getPeriodo());
 
-        setValue();
+        fijarValores();
     }
 
 
-    private void setValue() {
+    private void fijarValores() {
         if (clase != null) {
             txtNombreEditClase.setText(clase.getNombre());
             cmbPeriodos.setSelection(selectedIndexPeriodo);
@@ -112,19 +112,19 @@ public class EditClase extends AppCompatActivity {
         clase.setPeriodo(per);
         clase.setActiva(chkActivaClase.isChecked());
 
-        if(validate()) {
+        if(validar()) {
 
             if (clase.getId() == 0) {
-                dao.add(clase);
+                claseDao.add(clase);
             } else {
-                dao.update(clase);
+                claseDao.update(clase);
             }
 
             onBackPressed();
         }
     }
 
-    public void eliminar(){
+    private void eliminar(){
         if(clase.getId() > 0){
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -134,7 +134,7 @@ public class EditClase extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dao.delete(clase);
+                            claseDao.delete(clase);
 
                             onBackPressed();
                         }
@@ -147,7 +147,7 @@ public class EditClase extends AppCompatActivity {
         }
     }
 
-    private boolean validate() {
+    private boolean validar() {
         String nombre = clase.getNombre();
 
         boolean v = true;
@@ -156,7 +156,7 @@ public class EditClase extends AppCompatActivity {
             txtNombreEditClase.setError("Ingrese un nombre");
             v = false;
         }else{
-            /*boolean e = dao.existe(clase);
+            /*boolean e = claseDao.existe(clase);
             if(e){
                 txtNombreEditClase.setError("Nombre duplicado");
                 v = false;

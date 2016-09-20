@@ -15,7 +15,7 @@ public class Acreditable implements Parcelable{
     private String nombre="";
     private String alias="";
     private String tipo= TIPO_ACREDITABLE_PARCIAL;
-    private double equivalencia=0;
+    private double equivalencia=2;
     private int numero=0;
 
     private Periodo periodo;

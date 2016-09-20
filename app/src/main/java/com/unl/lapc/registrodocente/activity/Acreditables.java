@@ -18,8 +18,8 @@ import com.unl.lapc.registrodocente.modelo.Periodo;
 
 public class Acreditables extends AppCompatActivity {
 
-    private ListView mLeadsList;
-    private AcreditableDao dao;
+    private ListView listView;
+    private AcreditableDao acreditableDao;
     private Periodo periodo;
 
     @Override
@@ -30,19 +30,19 @@ public class Acreditables extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
 
-        mLeadsList = (ListView) findViewById(R.id.listView);
-        dao = new AcreditableDao(this);
+        listView = (ListView) findViewById(R.id.listView);
+        acreditableDao = new AcreditableDao(this);
 
         // Inicializar el adaptador con la fuente de datos.
-        AcreditableAdapter mLeadsAdapter = new AcreditableAdapter(this, dao.getAll(periodo));
+        AcreditableAdapter mLeadsAdapter = new AcreditableAdapter(this, acreditableDao.getAll(periodo));
 
         //Relacionando la lista con el adaptador
-        mLeadsList.setAdapter(mLeadsAdapter);
+        listView.setAdapter(mLeadsAdapter);
 
-        mLeadsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Acreditable m = (Acreditable) mLeadsList.getItemAtPosition(i);
+                Acreditable m = (Acreditable) listView.getItemAtPosition(i);
                 if(m != null){
                     editAction(m);
                 }
@@ -81,8 +81,8 @@ public class Acreditables extends AppCompatActivity {
     }
 
     private void editAction(Acreditable acreditable){
-        if(dao.existenNotas(periodo) && acreditable.getId() == 0) {
-            Snackbar.make(mLeadsList, "No se puede agregar acreditables, porque ya ha ingresado notas.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        if(acreditableDao.existenNotas(periodo) && acreditable.getId() == 0) {
+            Snackbar.make(listView, "No se puede agregar acreditables, porque ya ha ingresado notas.", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             return;
         }
 

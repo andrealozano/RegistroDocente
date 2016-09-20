@@ -83,13 +83,13 @@ public class EditPeriodo extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
 
-        setValue();
+        fijarValores();
 
         dao = new PeriodoDao(this);
         calendarioDao = new CalendarioDao(this);
     }
 
-    private void setValue() {
+    private void fijarValores() {
         if (periodo != null) {
             //Calendar c = GregorianCalendar.getInstance();
 
@@ -136,12 +136,12 @@ public class EditPeriodo extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
-            guardarPeriodo();
+            guardar();
             return true;
         }
 
         if (id == R.id.action_delete) {
-            eliminarPeriodo();
+            eliminar();
             return true;
         }
 
@@ -169,7 +169,7 @@ public class EditPeriodo extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void guardarPeriodo(){
+    private void guardar(){
         periodo.setNombre(txtNombre.getText().toString());
         periodo.setEscala(Utils.toDouble(txtEscala.getText().toString()));
         //periodo.setInicio(Utils.toDate(dpInicio));
@@ -182,7 +182,7 @@ public class EditPeriodo extends AppCompatActivity {
         periodo.setPorcentajeAsistencias(Utils.toDouble(txtPorcentajeAsis.getText().toString()));
         periodo.setNotaMinima(Utils.toDouble(txtNotaMinima.getText().toString()));
 
-        if(validate()) {
+        if(validar()) {
             if (periodo.getId() == 0) {
                 dao.add(periodo);
             } else {
@@ -196,7 +196,7 @@ public class EditPeriodo extends AppCompatActivity {
         }
     }
 
-    public void eliminarPeriodo(){
+    private void eliminar(){
         if(periodo.getId() > 0){
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
@@ -228,7 +228,7 @@ public class EditPeriodo extends AppCompatActivity {
         return matcher.matches();
     }*/
 
-    private boolean validate() {
+    private boolean validar() {
         String nombre = periodo.getNombre();
 
         boolean v = true;

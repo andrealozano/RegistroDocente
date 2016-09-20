@@ -12,7 +12,6 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 
 import com.unl.lapc.registrodocente.R;
-import com.unl.lapc.registrodocente.fragment.FragmentEstudiantes;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
@@ -21,8 +20,8 @@ import com.unl.lapc.registrodocente.modelo.Periodo;
 
 public class EditEstudiante extends AppCompatActivity {
 
-    private EstudianteDao dao;
-    private ClaseDao daoClase;
+    private EstudianteDao estudianteDao;
+    private ClaseDao claseDao;
 
     private Clase clase;
     private Periodo periodo;
@@ -42,8 +41,8 @@ public class EditEstudiante extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_estudiante);
 
-        dao = new EstudianteDao(getApplicationContext());
-        daoClase = new ClaseDao(getApplicationContext());
+        estudianteDao = new EstudianteDao(getApplicationContext());
+        claseDao = new ClaseDao(getApplicationContext());
 
         txtCodigo = (EditText)findViewById(R.id.txtCodigo);
         txtNombres = (EditText)findViewById(R.id.txtNombres);
@@ -61,10 +60,10 @@ public class EditEstudiante extends AppCompatActivity {
 
         if(estudiante.getId() > 0){
             //Recarga porque solo vienen datos generales
-            estudiante = dao.get(estudiante.getId());
+            estudiante = estudianteDao.get(estudiante.getId());
         }
 
-        setValue();
+        fijarValores();
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -78,17 +77,17 @@ public class EditEstudiante extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_save) {
-            guardarEstudiante();
+            guardar();
             return true;
         }
 
         if (id == R.id.action_delete) {
-            removerEstudiante();
+            eliminar();
             return true;
         }
 
         if (id == R.id.action_back) {
-            cancelarEdicion();
+            cancelar();
             return true;
         }
 
@@ -96,7 +95,7 @@ public class EditEstudiante extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void guardarEstudiante(){
+    private void guardar(){
 
         estudiante.setCedula(txtCodigo.getText().toString());
         estudiante.setNombres(txtNombres.getText().toString());
@@ -112,20 +111,20 @@ public class EditEstudiante extends AppCompatActivity {
             estudiante.setSexo("Mujer");
         }
 
-        if(validate()) {
+        if(validar()) {
 
             if (estudiante.getId() == 0) {
-                dao.add(estudiante);
+                estudianteDao.add(estudiante);
             } else {
-                dao.update(estudiante);
+                estudianteDao.update(estudiante);
             }
         }
 
-        cancelarEdicion();
+        cancelar();
 
     }
 
-    public boolean validate(){
+    private boolean validar(){
         boolean b = true;
 
         if(estudiante.getNombres().trim().length() < 1){
@@ -139,7 +138,7 @@ public class EditEstudiante extends AppCompatActivity {
         return  b;
     }
 
-    public void removerEstudiante(){
+    private void eliminar(){
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .setTitle("Remover estudiante")
@@ -148,15 +147,15 @@ public class EditEstudiante extends AppCompatActivity {
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dao.delete(estudiante);
-                        cancelarEdicion();
+                        estudianteDao.delete(estudiante);
+                        cancelar();
                     }
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
     }
 
-    private void setValue() {
+    private void fijarValores() {
         if (clase != null) {
             txtCodigo.setText(estudiante.getCedula());
             txtNombres.setText(estudiante.getNombres());
@@ -181,9 +180,10 @@ public class EditEstudiante extends AppCompatActivity {
         super.onBackPressed();
     }*/
 
-    public void cancelarEdicion() {
+    public void cancelar() {
         Intent mIntent = new Intent(this, MainClase.class);
         mIntent.putExtra("clase", clase);
         startActivity(mIntent);
+        finish();
     }
 }

@@ -102,7 +102,7 @@ public class FragmentResumenNotas extends Fragment {
         tlResumenNotas.addView(row);
     }
 
-    public void cargarTr(){
+    private void cargarTr(){
         Bundle args = getArguments();
         this.clase = args.getParcelable("clase");
         this.periodo = args.getParcelable("periodo");
