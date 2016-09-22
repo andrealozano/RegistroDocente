@@ -141,6 +141,11 @@ public class FragmentResumenNotas extends Fragment {
             tv3.setPadding(5, 5, 5, 5);
             tv3.setBackgroundResource(R.drawable.cell_shape);
             tv3.setText(e.getEstado());
+            if(e.getEstado().equals(Estudiante.ESTADO_APROBADO)){
+                tv3.setTextColor(getResources().getColor(R.color.colorPrimary));
+            }else if(e.getEstado().equals(Estudiante.ESTADO_REPROBADO)){
+                tv3.setTextColor(getResources().getColor(R.color.colorAccent));
+            }
             row.addView(tv3);
 
             TextView tv4 = new TextView(getContext());

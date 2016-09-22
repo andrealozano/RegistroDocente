@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
 
@@ -27,6 +28,7 @@ public class LoginActivity extends AppCompatActivity {
     // UI references.
     private EditText mEmailView;
     private EditText mPasswordView;
+    private TextView mMensaje;
     private SharedPreferences sharedPref;
 
     @Override
@@ -38,10 +40,13 @@ public class LoginActivity extends AppCompatActivity {
         // Set up the login form.
         mEmailView = (EditText) findViewById(R.id.email);
         mPasswordView = (EditText) findViewById(R.id.password);
+        mMensaje = (TextView)findViewById(R.id.mensaje);
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
 
         String userDb = sharedPref.getString(SettingsActivity.KEY_PREF_SERGURIDAD_USUARIO, "");
         if(TextUtils.isEmpty(userDb)){
+            mMensaje.setText("Aún no se ha registrado un usuario, por favor ingrese un nombre de usuario y una contraseña.");
             mEmailSignInButton.setText("REGISTRAR");
             Snackbar.make(mEmailSignInButton, "Por favor registre un usuario para prosegir", Snackbar.LENGTH_LONG).setAction("Action", null).show();
         }else{

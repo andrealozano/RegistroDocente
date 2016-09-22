@@ -9,6 +9,7 @@ import com.unl.lapc.registrodocente.modelo.Asistencia;
 import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class AsistenciaDao extends DBHandler {
         super(context);
     }
 
-    public void add(Asistencia asistencia) {
+    public void add(Asistencia asistencia, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -38,24 +39,24 @@ public class AsistenciaDao extends DBHandler {
         long id = db.insert("asistencia", null, values);
         asistencia.setId((int)id);
 
-        this.calcularPorcentaje(db, asistencia.getEstudiante());
+        this.calcularPorcentaje(db, asistencia.getEstudiante(), periodo);
 
         db.close();
     }
 
-    public int update(Asistencia asistencia) {
+    public int update(Asistencia asistencia, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("estado", asistencia.getEstado());
 
         int up = db.update("asistencia", values, "id = ?", new String[]{String.valueOf(asistencia.getId())});
 
-        this.calcularPorcentaje(db, asistencia.getEstudiante());
+        this.calcularPorcentaje(db, asistencia.getEstudiante(), periodo);
 
         return  up;
     }
 
-    private void calcularPorcentaje(SQLiteDatabase db, Estudiante estudiante){
+    private void calcularPorcentaje(SQLiteDatabase db, Estudiante estudiante, Periodo periodo){
         db.execSQL(
                 String.format(
                 "update estudiante set porcentajeAsistencias = round(" +
@@ -65,6 +66,21 @@ public class AsistenciaDao extends DBHandler {
                         estudiante.getId(), Calendario.ESTADO_ACTIVO, estudiante.getId()
                 )
         );
+
+        //Actualiza estado estudiante
+        String s3 = String.format("update estudiante set estado = (case " +
+                        "when notaFinal >= %s and porcentajeAsistencias >= %s then  '%s' " +
+                        "when notaFinal = 0 and porcentajeAsistencias = 0 then  '%s' " +
+                        "when notaFinal < %s or porcentajeAsistencias < %s then  '%s' " +
+                        "else '%s' end) " +
+                        "where id = %d",
+                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Estudiante.ESTADO_APROBADO,
+                Estudiante.ESTADO_REGISTRADO,
+                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Estudiante.ESTADO_REPROBADO,
+                Estudiante.ESTADO_REGISTRADO,
+                estudiante.getId()
+        );
+        db.execSQL(s3);
     }
 
     public Asistencia get(int id) {

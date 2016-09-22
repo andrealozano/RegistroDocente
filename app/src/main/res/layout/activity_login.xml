@@ -24,8 +24,14 @@
             android:orientation="vertical">
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:id="@+id/mensaje"
+                android:textColor="@color/colorAccent" />
 
-                <EditText
+            <EditText
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

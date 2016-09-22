@@ -266,7 +266,7 @@ public class FragmentAsistancias extends Fragment {
                                 public void onClick(DialogInterface dialog, int which) {
                                 for (Asistencia as : asistencias) {
                                     as.setEstado(b ? "P" :  "F");
-                                    asistenciaDao.update(as);
+                                    asistenciaDao.update(as, periodo);
                                 }
                                 mostrarDia(calendario);
                                 }
@@ -343,7 +343,7 @@ public class FragmentAsistancias extends Fragment {
                 if (asi == null) {
                     asi = new Asistencia(0, fecha, c.getClase(), c, calendario, periodo);
                     asi.setEstado("F");
-                    asistenciaDao.add(asi);
+                    asistenciaDao.add(asi, periodo);
 
                     asistencias.add(asi);
                 }
@@ -363,7 +363,7 @@ public class FragmentAsistancias extends Fragment {
                     public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                         Asistencia as = (Asistencia) compoundButton.getTag();
                         as.setEstado(b ? "P" :  "F");
-                        asistenciaDao.update(as);
+                        asistenciaDao.update(as, periodo);
                     }
                 });
 

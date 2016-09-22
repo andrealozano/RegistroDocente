@@ -197,7 +197,7 @@ public class AcreditableDao extends DBHandler {
                 periodo.getParciales(),
                 periodo.getEquivalenciaParciales() / periodo.getEscala(),
                 estudiante.getId(), quimestre,
-                estudiante.getId(), quimestre);
+        estudiante.getId(), quimestre);
         db.execSQL(s1);
 
         //Actualiza nota final quimestre
@@ -214,6 +214,21 @@ public class AcreditableDao extends DBHandler {
                 estudiante.getId()
         );
         db.execSQL(s2);
+
+        //Actualiza estado estudiante
+        String s3 = String.format("update estudiante set estado = (case " +
+                "when notaFinal >= %s and porcentajeAsistencias >= %s then  '%s' " +
+                "when notaFinal = 0 and porcentajeAsistencias = 0 then  '%s' " +
+                "when notaFinal < %s or porcentajeAsistencias < %s then  '%s' " +
+                "else '%s' end) " +
+                "where id = %d",
+                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Estudiante.ESTADO_APROBADO,
+                Estudiante.ESTADO_REGISTRADO,
+                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Estudiante.ESTADO_REPROBADO,
+                Estudiante.ESTADO_REGISTRADO,
+                estudiante.getId()
+        );
+        db.execSQL(s3);
 
         return up;
     }
