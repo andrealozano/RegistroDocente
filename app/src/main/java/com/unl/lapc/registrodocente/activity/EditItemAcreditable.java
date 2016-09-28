@@ -10,10 +10,13 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.AcreditableDao;
+import com.unl.lapc.registrodocente.dao.CalendarioDao;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
+import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.ItemAcreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
@@ -29,7 +32,8 @@ public class EditItemAcreditable extends AppCompatActivity {
     private Acreditable acreditable = null;
     private ItemAcreditable itemAcreditable;
 
-    private AcreditableDao dao = null;
+    private AcreditableDao acreditableDao = null;
+    private CalendarioDao calendarioDao;
 
     private EditText txtAlias;
     private EditText txtNombre;
@@ -44,7 +48,8 @@ public class EditItemAcreditable extends AppCompatActivity {
     }
 
     public void customInit(){
-        dao = new AcreditableDao(this);
+        acreditableDao = new AcreditableDao(this);
+        calendarioDao = new CalendarioDao(this);
 
         Bundle bundle = getIntent().getExtras();
         clase = bundle.getParcelable("clase");
@@ -99,9 +104,9 @@ public class EditItemAcreditable extends AppCompatActivity {
 
         if(validate()) {
             if (itemAcreditable.getId() == 0) {
-                dao.addItem(itemAcreditable);
+                acreditableDao.addItem(itemAcreditable);
             } else {
-                dao.updateItem(itemAcreditable);
+                acreditableDao.updateItem(itemAcreditable);
             }
 
             atras();
@@ -126,7 +131,7 @@ public class EditItemAcreditable extends AppCompatActivity {
                     {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            dao.deleteItem(itemAcreditable);
+                            acreditableDao.deleteItem(itemAcreditable);
                             atras();
                         }
                     })
@@ -146,6 +151,18 @@ public class EditItemAcreditable extends AppCompatActivity {
 
         if(itemAcreditable.getAlias().trim().length() < 1){
             txtAlias.setError("Ingrese un alias"); b = false;
+        }
+
+        //Validar fecha
+        Calendario c = calendarioDao.get(periodo, itemAcreditable.getFecha());
+        if(c!= null){
+            if(c.getEstado().equals(Calendario.ESTADO_FERIADO)){
+                Toast.makeText(this, "Seleccione un día laborable (No feriado)", Toast.LENGTH_LONG).show();
+                b = false;
+            }
+        }else{
+            Toast.makeText(this, "Seleccione un día laborable", Toast.LENGTH_LONG).show();
+            b = false;
         }
 
         return  b;
