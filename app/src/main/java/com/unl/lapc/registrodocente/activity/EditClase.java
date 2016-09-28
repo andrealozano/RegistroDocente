@@ -129,7 +129,7 @@ public class EditClase extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Remover clase")
-                    .setMessage("¿Desea remover esta clase?")
+                    .setMessage("¿Desea remover este  curso?")
                     .setPositiveButton("Remover", new DialogInterface.OnClickListener()
                     {
                         @Override

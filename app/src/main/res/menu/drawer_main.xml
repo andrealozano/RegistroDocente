@@ -9,7 +9,7 @@
         <item
             android:id="@+id/action_clases"
             android:icon="@drawable/ic_menu_clase"
-            android:title="Clases" />
+            android:title="Cursos" />
 
         <item
             android:id="@+id/action_backup"

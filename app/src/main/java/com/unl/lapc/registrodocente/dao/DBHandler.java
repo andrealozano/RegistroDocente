@@ -131,7 +131,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert("acreditable", null, ca1);
 
         //
-        db.execSQL("insert into clase (nombre, activa, periodo_id) values ('Clase 1', 1, 1)");
+        db.execSQL("insert into clase (nombre, activa, periodo_id) values ('Curso 1', 1, 1)");
         db.execSQL("insert into estudiante (cedula, nombres, apellidos, sexo, orden, estado, clase_id, periodo_id) values ('0000000000','Jhon', 'Doe', 'Hombre', 1, 'Registrado', 1, 1)");
     }
 

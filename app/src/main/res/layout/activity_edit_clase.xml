@@ -9,23 +9,43 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activity.EditClase">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Nombre del curso"
+        android:id="@+id/tvNombre"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
     <EditText
         android:id="@+id/txtNombreEditClase"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:layout_below="@+id/tvNombre"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:hint="Nombre de la clase"
-        android:singleLine="true" >
+        android:layout_alignParentStart="true">
 
         <requestFocus />
     </EditText>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Periodo académico"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/txtNombreEditClase"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spPeriodos"
-        android:layout_below="@+id/txtNombreEditClase"
+        android:layout_below="@+id/textView2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

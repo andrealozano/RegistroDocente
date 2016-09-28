@@ -10,7 +10,7 @@ public class Clase implements Parcelable{
 
     private int id;
     private String nombre;
-    private boolean activa;
+    private boolean activa = true;
     private Periodo periodo;
 
     //No persistibles

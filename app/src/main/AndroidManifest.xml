@@ -33,11 +33,11 @@
             android:parentActivityName=".activity.Periodos" />
         <activity
             android:name=".activity.Clases"
-            android:label="Clases"
+            android:label="Cursos"
             android:parentActivityName=".activity.Main" />
         <activity
             android:name=".activity.EditClase"
-            android:label="Clases"
+            android:label="Cursos"
             android:parentActivityName=".activity.Clases" />
         <activity
             android:name=".activity.Acreditables"
