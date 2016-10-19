@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Clase de entidad que representa la asistencia de un estudiante para un día en especial.
  */
 public class Asistencia implements Parcelable{
 

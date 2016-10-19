@@ -56,6 +56,11 @@ public class FragmentResumenNotasParcial extends Fragment {
         // Required empty public constructor
     }
 
+
+    /**
+     * Otiene los acreditables que corresponden al parcial.
+     * @return
+     */
     public List<Acreditable> getAcreditables() {
         if(acreditables == null) {
             acreditables = acreditableDao.getAcreditablesParcial(periodo, Acreditable.TIPO_ACREDITABLE_PARCIAL);
@@ -64,6 +69,9 @@ public class FragmentResumenNotasParcial extends Fragment {
         return acreditables;
     }
 
+    /**
+     * Carga la cabecera de la tabla.
+     */
     private void cargarTh(){
         TableRow row = new TableRow(getContext());
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -113,6 +121,9 @@ public class FragmentResumenNotasParcial extends Fragment {
         tlResumenNotas.addView(row);
     }
 
+    /**
+     * Carga el cuerpo de la tablas (Filas)
+     */
     private void cargarTr(){
         lista = estudianteDao.getResumenParcial(periodo, clase, parcial.getQuimestre(), parcial.getNumero());
 
@@ -220,6 +231,9 @@ public class FragmentResumenNotasParcial extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Genera el reporte de notas.
+     */
     private void reporteNotas(){
         new AlertDialog.Builder(getContext()).setTitle("Reporte notas parcial").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

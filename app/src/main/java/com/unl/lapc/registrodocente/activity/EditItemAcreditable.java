@@ -25,6 +25,9 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Actividad para agregar o editar items de un acreditable, es decir si tengo el acreditable "Lecciones" aquí puedo crear el item "Leccion1", "Leccion2", etc.
+ */
 public class EditItemAcreditable extends AppCompatActivity {
 
     private Clase clase;
@@ -47,6 +50,9 @@ public class EditItemAcreditable extends AppCompatActivity {
         customInit();
     }
 
+    /**
+     * Inicializa los daos, atributos y mustra los datos del item
+     */
     public void customInit(){
         acreditableDao = new AcreditableDao(this);
         calendarioDao = new CalendarioDao(this);
@@ -97,6 +103,9 @@ public class EditItemAcreditable extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Guarda el item
+     */
     public void guardar(){
         itemAcreditable.setNombre(txtNombre.getText().toString());
         itemAcreditable.setAlias(txtAlias.getText().toString());
@@ -113,6 +122,9 @@ public class EditItemAcreditable extends AppCompatActivity {
         }
     }
 
+    /**
+     * Retorna a la actividad anterior
+     */
     public void atras(){
         /*Intent intent = new Intent(this, MainClase.class);
         intent.putExtra("periodo", periodo);
@@ -121,6 +133,9 @@ public class EditItemAcreditable extends AppCompatActivity {
         onBackPressed();
     }
 
+    /**
+     * Elimina el item
+     */
     public void eliminar(){
         if(itemAcreditable.getId() > 0){
             new AlertDialog.Builder(this)
@@ -142,6 +157,10 @@ public class EditItemAcreditable extends AppCompatActivity {
         }
     }
 
+    /**
+     * Valida los datos del item antes de guardar
+     * @return
+     */
     public boolean validate(){
         boolean b = true;
 

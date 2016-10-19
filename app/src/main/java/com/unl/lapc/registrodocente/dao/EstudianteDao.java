@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Usuario on 15/07/2016.
+ * Clase de acceso a datos para estudiantes.
  */
 public class EstudianteDao extends DBHandler {
 
@@ -28,6 +28,10 @@ public class EstudianteDao extends DBHandler {
         super(context);
     }
 
+    /**
+     * Inserta un estudiante
+     * @param est
+     */
     public void add(Estudiante est) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -53,6 +57,11 @@ public class EstudianteDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualia un estudiante
+     * @param est
+     * @return
+     */
     public int update(Estudiante est) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -76,6 +85,11 @@ public class EstudianteDao extends DBHandler {
         return u;
     }
 
+    /**
+     * Obtiene un estudiante por su id.
+     * @param id
+     * @return
+     */
     public Estudiante get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("estudiante", new String[] { "id", "cedula", "nombres", "apellidos", "email", "celular", "sexo", "orden", "notaFinal", "porcentajeAsistencias", "estado", "clase_id", "periodo_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
@@ -87,6 +101,10 @@ public class EstudianteDao extends DBHandler {
         return contact;
     }
 
+    /**
+     * Borra un estudiante.
+     * @param estudiante
+     */
     public void delete(Estudiante estudiante) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("asistencia", "estudiante_id = ?", new String[] { String.valueOf(estudiante.getId()) });
@@ -132,6 +150,11 @@ public class EstudianteDao extends DBHandler {
         return cursor.getInt(0) > 0;
     }*/
 
+    /**
+     * Ordena los estudiantes de una clase por apellido.
+     * @param db
+     * @param cls
+     */
     public void ordernarApellidos(SQLiteDatabase db, Clase cls) {
         //SQLiteDatabase db = this.getWritableDatabase();
 
@@ -158,6 +181,11 @@ public class EstudianteDao extends DBHandler {
         //db.close();
     }
 
+    /**
+     * Inicializa las notas de todos los estudiantes de una clase para que no se queden registros faltantes.
+     * @param cls
+     * @param periodo
+     */
     public void initNotas(Clase cls, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -185,6 +213,11 @@ public class EstudianteDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Obtiene el lsitado de estudiantes de una clase.
+     * @param clase
+     * @return
+     */
     public List<Estudiante> getEstudiantes(Clase clase) {
         List<Estudiante> shopList = new ArrayList<>();
 
@@ -211,7 +244,13 @@ public class EstudianteDao extends DBHandler {
         return shopList;
     }
 
-
+    /**
+     * Obtiene un resumen quimestral de notas.
+     * @param periodo
+     * @param clase
+     * @param quimestre
+     * @return
+     */
     public List<ResumenQuimestre> getResumenQuimestre(Periodo periodo, Clase clase, int quimestre) {
         List<ResumenQuimestre> list = new ArrayList<>();
 
@@ -250,6 +289,14 @@ public class EstudianteDao extends DBHandler {
         return list;
     }
 
+    /**
+     * Obtiene un resumen parcial de notas.
+     * @param periodo
+     * @param clase
+     * @param quimestre
+     * @param parcial
+     * @return
+     */
     public List<ResumenParcial> getResumenParcial(Periodo periodo, Clase clase, int quimestre, int parcial) {
         List<ResumenParcial> list = new ArrayList<>();
 
@@ -288,6 +335,15 @@ public class EstudianteDao extends DBHandler {
         return list;
     }
 
+    /**
+     * Obtiene un resumen de notas de un acreditable
+     * @param periodo
+     * @param clase
+     * @param acreditable
+     * @param quimestre
+     * @param parcial
+     * @return
+     */
     public List<ResumenAcreditable> getResumenAcreditable(Periodo periodo, Clase clase, Acreditable acreditable, int quimestre, int parcial) {
         List<ResumenAcreditable> list = new ArrayList<>();
 
@@ -329,6 +385,12 @@ public class EstudianteDao extends DBHandler {
         return list;
     }
 
+    /**
+     * Obtiene el resumen general de notas.
+     * @param periodo
+     * @param clase
+     * @return
+     */
     public List<ResumenGeneral> getResumenGeneral(Periodo periodo, Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
 

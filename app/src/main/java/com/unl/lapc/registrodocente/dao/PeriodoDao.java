@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Usuario on 15/07/2016.
+ * Clase de acceso a datos para periodos.
  */
 public class PeriodoDao extends DBHandler {
 
@@ -19,6 +19,10 @@ public class PeriodoDao extends DBHandler {
         super(context);
     }
 
+    /**
+     * Inserta el periodo
+     * @param periodo
+     */
     public void add(Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -40,6 +44,10 @@ public class PeriodoDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualiza el periodo
+     * @param periodo
+     */
     public void update(Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -58,6 +66,11 @@ public class PeriodoDao extends DBHandler {
         db.update("periodo", values, "id = ?", new String[]{String.valueOf(periodo.getId())});
     }
 
+    /**
+     * Obtiene el periodo por id
+     * @param id
+     * @return
+     */
     public Periodo get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("periodo", new String[] { "id", "nombre", "inicio", "fin", "escala", "quimestres", "parciales", "equivalenciaParciales", "equivalenciaExamenes", "porcentajeAsistencias", "notaMinima"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
@@ -69,6 +82,10 @@ public class PeriodoDao extends DBHandler {
         return per;
     }
 
+    /**
+     * Borra el periodo y todas sus dependencias (Cursos, estudiantes, notas, etc.).
+     * @param periodo
+     */
     public void delete(Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("asistencia", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
@@ -88,6 +105,10 @@ public class PeriodoDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Obtiene todos los periodos.
+     * @return
+     */
     public List<Periodo> getAll() {
         List<Periodo> lista = new ArrayList<>();
 
@@ -105,6 +126,11 @@ public class PeriodoDao extends DBHandler {
         return lista;
     }
 
+    /**
+     * Verifica si existe un periodo con el mismo nombre.
+     * @param per
+     * @return
+     */
     public boolean existe(Periodo per){
         String selectQuery = "SELECT count(*) FROM periodo where lower(trim(nombre)) =? and id <> ?";
         SQLiteDatabase db = this.getWritableDatabase();

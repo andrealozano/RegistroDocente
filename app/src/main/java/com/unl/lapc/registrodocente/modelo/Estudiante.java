@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Clase de entidad que representa un estudiante dentro de una clase.
  */
 public class Estudiante implements Parcelable{
 

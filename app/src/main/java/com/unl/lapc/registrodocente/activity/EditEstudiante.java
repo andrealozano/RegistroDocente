@@ -18,6 +18,9 @@ import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
+/**
+ * Actividad para editar los datos de un estudiante
+ */
 public class EditEstudiante extends AppCompatActivity {
 
     private EstudianteDao estudianteDao;
@@ -95,6 +98,9 @@ public class EditEstudiante extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Guarda el estudiante en edición
+     */
     private void guardar(){
 
         estudiante.setCedula(txtCodigo.getText().toString());
@@ -124,6 +130,10 @@ public class EditEstudiante extends AppCompatActivity {
 
     }
 
+    /**
+     * Valida los datos ingresados antes de guardar
+     * @return
+     */
     private boolean validar(){
         boolean b = true;
 
@@ -138,6 +148,9 @@ public class EditEstudiante extends AppCompatActivity {
         return  b;
     }
 
+    /**
+     * Método para eliminar un estudiante del curso
+     */
     private void eliminar(){
         new AlertDialog.Builder(this)
                 .setIcon(android.R.drawable.ic_dialog_alert)
@@ -155,6 +168,9 @@ public class EditEstudiante extends AppCompatActivity {
                 .show();
     }
 
+    /**
+     * Muestra los datos del estudiante en la vista
+     */
     private void fijarValores() {
         if (clase != null) {
             txtCodigo.setText(estudiante.getCedula());
@@ -180,6 +196,9 @@ public class EditEstudiante extends AppCompatActivity {
         super.onBackPressed();
     }*/
 
+    /**
+     * Retorna a la actividad MainClase
+     */
     public void cancelar() {
         Intent mIntent = new Intent(this, MainClase.class);
         mIntent.putExtra("clase", clase);

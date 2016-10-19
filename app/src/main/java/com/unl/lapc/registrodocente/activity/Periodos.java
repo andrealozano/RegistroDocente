@@ -16,6 +16,10 @@ import com.unl.lapc.registrodocente.adapter.PeriodosAdapter;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
+
+/**
+ * Actividad para gestionar los periodos académicos
+ */
 public class Periodos extends AppCompatActivity {
 
     private ListView listView;
@@ -132,6 +136,10 @@ public class Periodos extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Método para editar un periodo. Muestra la actividad EditPeriodo
+     * @param per
+     */
     private void editAction(Periodo per) {
         Intent intent = new Intent(this, EditPeriodo.class);
         intent.putExtra("periodo", per);

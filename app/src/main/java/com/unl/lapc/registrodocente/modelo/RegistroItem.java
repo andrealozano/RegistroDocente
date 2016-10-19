@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
- * Created by Usuario on 26/07/2016.
+ * Clase de entidad que representa la nota de un estudiante para un item acreditable (Ejm: Leccion 1, nota 8.5).
  */
 public class RegistroItem implements Parcelable {
 

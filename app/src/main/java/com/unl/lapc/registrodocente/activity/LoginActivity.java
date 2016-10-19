@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.unl.lapc.registrodocente.R;
 
 /**
- * A login screen that offers login via email/password.
+ * Pantalla para registrarse o autenticarse.
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -62,9 +62,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Attempts to sign in or register the account specified by the login form.
-     * If there are form errors (invalid email, missing fields, etc.), the
-     * errors are presented and no actual login attempt is made.
+     * Autentica el usuario o registra en caso de ser necesario.
+     * Si hay errores muestra los mismos en los campos correspondientes.
      */
     private void login() {
         /*if (mAuthTask) {
@@ -94,7 +93,7 @@ public class LoginActivity extends AppCompatActivity {
             mEmailView.setError(getString(R.string.error_field_required));
             focusView = mEmailView;
             cancel = true;
-        } else if (!isEmailValid(email)) {
+        } else if (!isUserValid(email)) {
             mEmailView.setError(getString(R.string.error_invalid_email));
             focusView = mEmailView;
             cancel = true;
@@ -138,12 +137,22 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private boolean isEmailValid(String email) {
+    /**
+     * Valida el nombre de usuario
+     * @param nombre
+     * @return
+     */
+    private boolean isUserValid(String nombre) {
         //TODO: Replace this with your own logic
         //return email.contains("@");
-        return email.length() >= 5;
+        return nombre.length() >= 5;
     }
 
+    /**
+     * Valida la clave
+     * @param password
+     * @return
+     */
     private boolean isPasswordValid(String password) {
         //TODO: Replace this with your own logic
         return password.length() >= 5;

@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Clase de entidad que representa un acreditable (Lecciones, Trabajos Individuales, Trabajos Grupales, etc.)
  */
 public class Acreditable implements Parcelable{
 

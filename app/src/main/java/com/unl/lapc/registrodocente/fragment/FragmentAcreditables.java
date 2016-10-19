@@ -40,9 +40,7 @@ import java.io.File;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
+ * Fragmento para mostrar los items acreditable de un acreditable.
  */
 public class FragmentAcreditables extends Fragment {
 
@@ -94,6 +92,9 @@ public class FragmentAcreditables extends Fragment {
         return  view;
     }
 
+    /**
+     * Inicializa componentes
+     */
     private void customInit(){
         tlResumenNotas.removeAllViews();
         this.itemsAcreditables = acreditableDao.getItemsAcreditables(acreditable, quimestre, parcial);
@@ -145,6 +146,10 @@ public class FragmentAcreditables extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Edición de un item acreditable (Ejm: Leccion 1)
+     * @param itemAcreditable
+     */
     private void editItem(ItemAcreditable itemAcreditable){
         Intent mIntent = new Intent(getContext(), EditItemAcreditable.class);
         mIntent.putExtra("clase", clase);
@@ -155,6 +160,9 @@ public class FragmentAcreditables extends Fragment {
         startActivity(mIntent);
     }
 
+    /**
+     * Crea la cabecera de la tabla
+     */
     private void cargarTh(){
         TableRow row = new TableRow(getContext());
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -222,6 +230,9 @@ public class FragmentAcreditables extends Fragment {
         tlResumenNotas.addView(row);
     }
 
+    /**
+     * Crea las filas de la tabla
+     */
     public void cargarTr(){
         lista = estudianteDao.getResumenAcreditable(periodo, clase, acreditable, quimestre, parcial);
 
@@ -298,6 +309,15 @@ public class FragmentAcreditables extends Fragment {
         }
     }
 
+    /**
+     * Muestra un diálogo para ingresar la nota de un item acreditable para un estudiante.
+     * @param tvNota
+     * @param tvPm
+     * @param tvEq
+     * @param resumen
+     * @param itemAcreditable
+     * @param registro
+     */
     private void showDialogNota(final TextView tvNota, final TextView tvPm, final TextView tvEq, final ResumenAcreditable resumen, ItemAcreditable itemAcreditable, final ResumenParcialAcreditable registro){
         final View myView = View.inflate(getContext(), R.layout.content_dlg_nota, null);
 
@@ -370,6 +390,9 @@ public class FragmentAcreditables extends Fragment {
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
     }
 
+    /**
+     * Genera el reporte de notas para este acreditable.
+     */
     private void reporteNotas(){
         new AlertDialog.Builder(getContext()).setTitle("Reporte notas " + acreditable.getNombre()).setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

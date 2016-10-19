@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by Usuario on 15/07/2016.
+ * Clase de acceso a datos para asistencias.
  */
 public class AsistenciaDao extends DBHandler {
 
@@ -24,6 +24,11 @@ public class AsistenciaDao extends DBHandler {
         super(context);
     }
 
+    /**
+     * Inserta una asistencia de un estudiante
+     * @param asistencia
+     * @param periodo
+     */
     public void add(Asistencia asistencia, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -44,6 +49,12 @@ public class AsistenciaDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualia la asistencia de un estudiante
+     * @param asistencia
+     * @param periodo
+     * @return
+     */
     public int update(Asistencia asistencia, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -56,6 +67,12 @@ public class AsistenciaDao extends DBHandler {
         return  up;
     }
 
+    /**
+     * Calcula el porcentaje de asistencias de un estudiante
+     * @param db
+     * @param estudiante
+     * @param periodo
+     */
     private void calcularPorcentaje(SQLiteDatabase db, Estudiante estudiante, Periodo periodo){
         db.execSQL(
                 String.format(
@@ -83,6 +100,11 @@ public class AsistenciaDao extends DBHandler {
         db.execSQL(s3);
     }
 
+    /**
+     * Obtiene la asistencia por su id
+     * @param id
+     * @return
+     */
     public Asistencia get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("asistencia", new String[] { "id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
@@ -124,6 +146,12 @@ public class AsistenciaDao extends DBHandler {
         return cursor.getInt(0) > 0;
     }*/
 
+    /**
+     * Obtiene las asistencias de un curso para el día indicado.
+     * @param clase
+     * @param fecha
+     * @return
+     */
     public List<Asistencia> getAsistencias(Clase clase, Date fecha) {
         List<Asistencia> shopList = new ArrayList<>();
 

@@ -1,7 +1,7 @@
 package com.unl.lapc.registrodocente.modelo;
 
 /**
- * Created by Usuario on 26/07/2016.
+ * Clase de entidad que representa el promedio y nota final de un estudiante para un acreditable, quimestre y periodo.
  */
 public class RegistroAcreditable {
 

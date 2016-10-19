@@ -39,6 +39,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+/**
+ * Fragmento para mostrar las asistencias de los estudiantes por día.
+ */
 public class FragmentAsistancias extends Fragment {
 
     private Clase clase;
@@ -140,6 +143,9 @@ public class FragmentAsistancias extends Fragment {
 
     DatePicker dp;
 
+    /**
+     * Muestra el díalogo para seleccionar el día.
+     */
     private void showDialogToday(){
         View myView = View.inflate(getContext(), R.layout.content_dlg_periodo_clase, null);
 
@@ -224,6 +230,10 @@ public class FragmentAsistancias extends Fragment {
         }
     }*/
 
+    /**
+     * Crea la cabecera de la tabla.
+     * @param marcar
+     */
     private void createTh(boolean marcar){
         TableRow row = new TableRow(getContext());
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -290,6 +300,10 @@ public class FragmentAsistancias extends Fragment {
         tlAsistencias.addView(row);
     }
 
+    /**
+     * Muestra las asistencias del día calendario.
+     * @param calendario
+     */
     private void mostrarDia(Calendario calendario){
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         this.fecha = calendario.getFecha();
@@ -376,6 +390,9 @@ public class FragmentAsistancias extends Fragment {
         //Snackbar.make(this.getCurrentFocus(), "Fecha seleccionada: " , Snackbar.LENGTH_LONG).setAction("Action", null).show();
     }
 
+    /**
+     * Muestra el día siguiente
+     */
     private void next(){
         Calendario newcal = calendarioDao.getNext(clase.getPeriodo(), fecha);
 
@@ -384,6 +401,9 @@ public class FragmentAsistancias extends Fragment {
         }
     }
 
+    /**
+     * Muestra el día anterior
+     */
     private void prev(){
         Calendario newcal = calendarioDao.getPrevius(clase.getPeriodo(), fecha);
         if(newcal != null) {

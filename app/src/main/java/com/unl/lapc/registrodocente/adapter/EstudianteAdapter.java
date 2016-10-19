@@ -13,7 +13,8 @@ import com.unl.lapc.registrodocente.modelo.Estudiante;
 import java.util.List;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar los estudiantes en una lista.
+ * Muestra nombres y orden.
  */
 public class EstudianteAdapter extends ArrayAdapter<Estudiante> {
 

@@ -3,7 +3,7 @@ package com.unl.lapc.registrodocente.dto;
 import java.util.HashMap;
 
 /**
- * Created by Usuario on 20/08/2016.
+ * Modelo de presentación que representa el resumen general de notas para un estudiante.
  */
 public class ResumenGeneral {
 

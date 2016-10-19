@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Clase de entidad que representa un día laborable o feriado de un periodo académico.
  */
 public class Calendario implements Parcelable{
 

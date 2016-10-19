@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar los días laborables y feriados en una lista.
  */
 public class CalendarioAdapter extends ArrayAdapter<Calendario> {
 

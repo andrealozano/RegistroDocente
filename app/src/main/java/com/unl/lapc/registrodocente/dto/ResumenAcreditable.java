@@ -7,7 +7,7 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.util.HashMap;
 
 /**
- * Created by Usuario on 20/08/2016.
+ * Modelo de presentación que representa el resumen de notas de un acreditable y un estudiante.
  */
 public class ResumenAcreditable {
 
@@ -87,6 +87,12 @@ public class ResumenAcreditable {
         this.acreditables = acreditables;
     }
 
+    /**
+     * Calcula el promedio de un acreditable tomando en cuenta todos sus items acreditables.
+     * Esto es para un estudiante en específico.
+     * @param acreditable
+     * @param periodo
+     */
     public void calcularPromedio(Acreditable acreditable, Periodo periodo){
 
         //Calculo del promedio

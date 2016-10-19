@@ -14,7 +14,7 @@ import com.unl.lapc.registrodocente.modelo.Estudiante;
 import java.util.List;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar las asistencias de un día en una lista.
  */
 public class RegistroAsistenciaAdapter extends ArrayAdapter<Estudiante> {
 

@@ -33,6 +33,9 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Fragmento para mostrar el resumen de notas de un quimestre.
+ */
 public class FragmentResumenNotasQuimestre extends Fragment {
 
     static final int PICK_DESTINO_REPORTE_REQUEST = 1;
@@ -56,6 +59,10 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         // Required empty public constructor
     }
 
+    /**
+     * Obtiene el listado de acreditables correspondientes al quimestre (Examenes quimestrales)
+     * @return
+     */
     public List<Acreditable> getAcreditables() {
         if(acreditables == null) {
             acreditables = acreditableDao.getAcreditablesParcial(periodo, Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
@@ -64,6 +71,9 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         return acreditables;
     }
 
+    /**
+     * Carga la cabecera de la tabla
+     */
     private void cargarTh(){
         TableRow row = new TableRow(getContext());
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -131,6 +141,9 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         tlResumenNotas.addView(row);
     }
 
+    /**
+     * Carga el cuerpo de la tabla.
+     */
     public void cargarTr(){
         lista = estudianteDao.getResumenQuimestre(periodo, clase, quimestre.getNumero());
 
@@ -253,7 +266,9 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-
+    /**
+     * Genera el reporte de notas.
+     */
     private void reporteNotas(){
         new AlertDialog.Builder(getContext()).setTitle("Reporte notas quimestral").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

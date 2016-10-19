@@ -10,10 +10,15 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 /**
- * Created by Usuario on 29/07/2016.
+ * Clase de utilidad para hacer operacioes comunes de conversión, formato, escritura, etc.
  */
 public class Utils {
 
+    /**
+     * Convierte una cadena double
+     * @param s la cadena
+     * @return
+     */
     public static double toDouble(String s){
         try{
             return  Double.parseDouble(s);
@@ -22,6 +27,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Convierte una cadena a entero
+     * @param s la cadena
+     * @return
+     */
     public static int toInt(String s){
         try{
             return  Integer.parseInt(s);
@@ -30,22 +40,43 @@ public class Utils {
         }
     }
 
+    /**
+     * Extrae la fecha de un componente android DatePicker
+     * @param dp el componente
+     * @return
+     */
     public static Date toDate(DatePicker dp){
         GregorianCalendar calendarBeg=new GregorianCalendar(dp.getYear(),dp.getMonth(),dp.getDayOfMonth());
         Date fecha=calendarBeg.getTime();
         return  fecha;
     };
 
+    /**
+     * Convierte una fecha a cadena en formato yyyy-MM-dd
+     * @param date la fecha
+     * @return
+     */
     public static String toShortDateString(Date date){
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         return  sd.format(date);
     }
 
+    /**
+     * Convierte una fecha a cadena en formato MMMM yyyy (Ejm: Enero 2016)
+     * @param date la fecha
+     * @return
+     */
     public static String toYearMonthNameString(Date date){
         SimpleDateFormat sd = new SimpleDateFormat("MMMM yyyy");
         return  sd.format(date);
     }
 
+    /**
+     * Redondea un valor al número de decimales indicado
+     * @param value el valor a redondear
+     * @param places el número de decimales
+     * @return
+     */
     public static double round(double value, int places) {
         if (places < 0) throw new IllegalArgumentException();
 
@@ -55,11 +86,22 @@ public class Utils {
         return (double) tmp / factor;
     }
 
+    /**
+     * Genera una cadena con la fecha actual del sistema en formato yyyy-MM-dd-HH-mm.
+     * Usada para reportes.
+     * @return
+     */
     public static String currentReportDate(){
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm");
         return  dateFormat.format(new Date());
     }
 
+    /**
+     * Escribe el listado de parámetros en formato csv.
+     * No agrega saldo de línea.
+     * @param sb
+     * @param prm
+     */
     public static void writeCsv(StringBuilder sb, Object... prm){
         for(int i=0; i < prm.length; i++){
             Object p = prm[i];
@@ -72,6 +114,12 @@ public class Utils {
         }
     }
 
+    /**
+     * Escribe el listado de parámetros en formato csv.
+     * Agrega salto de línea al final.
+     * @param sb
+     * @param prm
+     */
     public static void writeCsvLine(StringBuilder sb, Object... prm){
         for(int i=0; i < prm.length; i++){
             Object p = prm[i];
@@ -84,6 +132,11 @@ public class Utils {
         }
     }
 
+    /**
+     * Obtiene el directorio correspondiente a la tarjeta eterna de memoria.
+     * @param folder
+     * @return
+     */
     public static File getExternalStorageDirectory(String folder){
         File sd = Environment.getExternalStorageDirectory();
         if(sd.canWrite()) {
@@ -96,6 +149,12 @@ public class Utils {
         return null;
     }
 
+    /**
+     * Obtiene el la subcarpeta correspondiente a la tarjeta eterna de memoria.
+     * @param folder
+     * @param fileName
+     * @return
+     */
     public static File getExternalStorageFile(String folder, String fileName){
         File file = getExternalStorageDirectory(folder);
         if(file != null){
@@ -105,6 +164,11 @@ public class Utils {
         return  null;
     }
 
+    /**
+     * Escribe la cadena dentro del fichero indicado.
+     * @param sb
+     * @param file
+     */
     public static void writeToFile(StringBuilder sb, File file){
         FileWriter writer = null;
         try{

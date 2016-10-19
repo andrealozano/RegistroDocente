@@ -30,6 +30,9 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Fragmento para gestionar los estudiantes de un curso.
+ */
 public class FragmentEstudiantes extends Fragment {
 
     static final int PICK_DESTINO_REPORTE_REQUEST = 1;
@@ -94,6 +97,10 @@ public class FragmentEstudiantes extends Fragment {
         return view;
     }
 
+    /**
+     * Muestra la actividad para editar un estudiante.
+     * @param estudiante
+     */
     private void editEstudiante(Estudiante estudiante){
         Intent intent = new Intent(getContext(), EditEstudiante.class);
 
@@ -123,6 +130,9 @@ public class FragmentEstudiantes extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Genera el reporte de estudiantes para esté curso.
+     */
     private void reporteEstudiantes(){
         new AlertDialog.Builder(getContext()).setTitle("Reporte estudiates").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

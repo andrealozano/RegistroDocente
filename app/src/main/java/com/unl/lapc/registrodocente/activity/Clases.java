@@ -15,6 +15,9 @@ import com.unl.lapc.registrodocente.adapter.ClasesAdapter;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 
+/**
+ * Actividad para mostrar el listado de clases activas
+ */
 public class Clases extends AppCompatActivity {
 
     private ListView listView;
@@ -64,6 +67,10 @@ public class Clases extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Lanza la actividad EditClase
+     * @param cls
+     */
     private void editAction(Clase cls){
         Intent intent = new Intent(this, EditClase.class);
         intent.putExtra("clase", cls);

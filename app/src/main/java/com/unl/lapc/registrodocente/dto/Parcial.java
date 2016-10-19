@@ -6,7 +6,7 @@ import android.os.Parcelable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
 /**
- * Created by Usuario on 18/08/2016.
+ * Modelo de presentación que representa a un parcial.
  */
 public class Parcial implements Parcelable {
 

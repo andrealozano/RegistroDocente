@@ -6,7 +6,8 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
- * Created by Usuario on 26/07/2016.
+ * Clase de entidad que representa un item acreditable.
+ * Si el acreditable es "Lecciones" sus items pueden ser: "Leccion 1", "Leccion 2", etc.
  */
 public class ItemAcreditable implements Parcelable {
 

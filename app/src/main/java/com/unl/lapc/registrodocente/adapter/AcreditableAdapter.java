@@ -13,7 +13,7 @@ import com.unl.lapc.registrodocente.modelo.Acreditable;
 import java.util.List;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar los acreditables en una lista.
  */
 public class AcreditableAdapter extends ArrayAdapter<Acreditable> {
     public AcreditableAdapter(Context context, List<Acreditable> objects) {

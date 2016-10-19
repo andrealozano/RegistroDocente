@@ -1,7 +1,7 @@
 package com.unl.lapc.registrodocente.dto;
 
 /**
- * Created by Usuario on 20/08/2016.
+ * Modelo de presentación que representa el resumen de un acreditable dentro de un parcial.
  */
 public class ResumenParcialAcreditable {
 

@@ -23,6 +23,9 @@ import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.List;
 
+/**
+ * Actividad para editar los datos de una clase
+ */
 public class EditClase extends AppCompatActivity {
 
     private Clase clase = null;
@@ -65,6 +68,9 @@ public class EditClase extends AppCompatActivity {
     }
 
 
+    /**
+     * Inicializa los campos de la vista con los datos de la clase
+     */
     private void fijarValores() {
         if (clase != null) {
             txtNombreEditClase.setText(clase.getNombre());
@@ -75,6 +81,9 @@ public class EditClase extends AppCompatActivity {
         }
     }
 
+    /**
+     * Regresa a la actividad Clases
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, Clases.class);
@@ -105,6 +114,9 @@ public class EditClase extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Método invocado para guardar la clase
+     */
     public void guardar(){
         Periodo per = (Periodo)cmbPeriodos.getSelectedItem();
 
@@ -124,6 +136,9 @@ public class EditClase extends AppCompatActivity {
         }
     }
 
+    /**
+     * Elimina la clase de la base de datos
+     */
     private void eliminar(){
         if(clase.getId() > 0){
             new AlertDialog.Builder(this)
@@ -147,6 +162,10 @@ public class EditClase extends AppCompatActivity {
         }
     }
 
+    /**
+     * Valida los datos de la clase antes de guardar
+     * @return true si todos los datos son correctos
+     */
     private boolean validar() {
         String nombre = clase.getNombre();
 

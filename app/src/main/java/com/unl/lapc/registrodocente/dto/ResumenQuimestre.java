@@ -6,7 +6,7 @@ import java.util.Dictionary;
 import java.util.HashMap;
 
 /**
- * Created by Usuario on 20/08/2016.
+ * Modelo de presentación que representa el resumen de un quimestre para un estudiante.
  */
 public class ResumenQuimestre {
 

@@ -21,6 +21,9 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+/**
+ * Actividad para editar un acreditable del periodo seleccionado
+ */
 public class EditAcreditable extends AppCompatActivity {
 
     private Periodo periodo = null;
@@ -55,6 +58,9 @@ public class EditAcreditable extends AppCompatActivity {
         acreditableDao = new AcreditableDao(this);
     }
 
+    /**
+     * Muestra los datos del acreditable en la vista
+     */
     private void fijarValores() {
         Calendar c = GregorianCalendar.getInstance();
 
@@ -103,6 +109,9 @@ public class EditAcreditable extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Guarda el acreditable en edición
+     */
     private void guardar(){
         if(!acreditableDao.existenNotas(periodo)) {
             acreditable.setNombre(txtNombre.getText().toString());
@@ -131,6 +140,9 @@ public class EditAcreditable extends AppCompatActivity {
         }
     }
 
+    /**
+     * Regresa a la actividad Acreditables
+     */
     @Override
     public void onBackPressed(){
         Intent intent = new Intent(this, Acreditables.class);
@@ -139,8 +151,9 @@ public class EditAcreditable extends AppCompatActivity {
         finish();
     }
 
-
-
+    /**
+     * Método invocado para eliminar un acreditable
+     */
     public void eliminar(){
         if(acreditable.getId() > 0){
             if(!acreditableDao.existenNotas(periodo)) {
@@ -166,6 +179,10 @@ public class EditAcreditable extends AppCompatActivity {
     }
 
 
+    /**
+     * Valida los datos del acreditable antes de guardarlo
+     * @return
+     */
     private boolean validar() {
         String nombre = acreditable.getNombre();
 

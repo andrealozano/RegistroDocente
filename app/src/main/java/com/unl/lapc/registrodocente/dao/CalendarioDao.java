@@ -16,7 +16,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
- * Created by Usuario on 15/07/2016.
+ * Clase de acceso a datos para días laborables y feriados.
  */
 public class CalendarioDao extends DBHandler {
 
@@ -24,6 +24,10 @@ public class CalendarioDao extends DBHandler {
         super(context);
     }
 
+    /**
+     * Inserta el día en la base de datos
+     * @param calendario
+     */
     public void add(Calendario calendario) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -37,6 +41,11 @@ public class CalendarioDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualiza el día calendario en la base de datos.
+     * @param calendario
+     * @return
+     */
     public int update(Calendario calendario) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -53,12 +62,23 @@ public class CalendarioDao extends DBHandler {
         return db.update("calendario", values, "id = ?", new String[]{String.valueOf(calendario.getId())});
     }
 
+    /**
+     * Borra el día calendario de la base de datos.
+     * @param calendario
+     */
     public void delete(Calendario calendario) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("calendario", "id = ?", new String[] { String.valueOf(calendario.getId()) });
         db.close();
     }
 
+    /**
+     * Obtiene todos los días calendario de un periodo según las fechas indicadas.
+     * @param periodo
+     * @param inicio
+     * @param fin
+     * @return
+     */
     public List<Calendario> getAll(Periodo periodo, Date inicio, Date fin) {
         List<Calendario> lista = new ArrayList<>();
 
@@ -81,6 +101,11 @@ public class CalendarioDao extends DBHandler {
         return lista;
     }
 
+    /**
+     * Registra automáticamente todos los días laborables de un periodo académico según la fecha de inicio y fin.
+     * Elimina los días que queden fuera del periodo en caso de hacer cambios.
+     * @param periodo
+     */
     public void registrar(Periodo periodo) {
         GregorianCalendar c = (GregorianCalendar)GregorianCalendar.getInstance();
         c.setTime(periodo.getFin());
@@ -116,6 +141,12 @@ public class CalendarioDao extends DBHandler {
 
     }
 
+    /**
+     * Obtiene el día calendario por periodo y fecha.
+     * @param periodo
+     * @param fecha
+     * @return
+     */
     public Calendario get(Periodo periodo, Date fecha) {
 
 
@@ -139,6 +170,12 @@ public class CalendarioDao extends DBHandler {
         return null;
     }
 
+    /**
+     * Obtiene el último día menor o igual a la fecha
+     * @param periodo
+     * @param fecha
+     * @return
+     */
     public Calendario getLast(Periodo periodo, Date fecha) {
 
 
@@ -162,6 +199,12 @@ public class CalendarioDao extends DBHandler {
         return null;
     }
 
+    /**
+     * Obtiene el día anteior a la fecha indicada
+     * @param periodo
+     * @param fecha
+     * @return
+     */
     public Calendario getPrevius(Periodo periodo, Date fecha) {
 
 
@@ -185,6 +228,12 @@ public class CalendarioDao extends DBHandler {
         return null;
     }
 
+    /**
+     * Obtiene el día siguiente a la fecha indicada
+     * @param periodo
+     * @param fecha
+     * @return
+     */
     public Calendario getNext(Periodo periodo, Date fecha) {
 
 

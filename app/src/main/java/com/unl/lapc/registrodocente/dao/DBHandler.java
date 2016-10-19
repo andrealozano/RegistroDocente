@@ -14,6 +14,11 @@ import com.unl.lapc.registrodocente.modelo.Acreditable;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+/**
+ * Manejador de la base de datos.
+ * Se encarga de crear la base de datos, y dar soporte a las diferentes versiones.
+ * También inicializa la base con datos por defecto en caso de que sea la primera vez q se acceda a la aplicación.
+ */
 public class DBHandler extends SQLiteOpenHelper {
 
     // Database Version
@@ -24,11 +29,21 @@ public class DBHandler extends SQLiteOpenHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    /**
+     * Formate una fecha a yyyy-MM-dd
+     * @param date
+     * @return
+     */
     public String toShortDate(Date date){
         SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
         return  sd.format(date);
     }
 
+    /**
+     * Convierte un string en formato yyyy-MM-dd a una fecha
+     * @param sdate
+     * @return
+     */
     public Date toDate(String sdate){
         try{
             SimpleDateFormat sd = new SimpleDateFormat("yyyy-MM-dd");
@@ -38,6 +53,11 @@ public class DBHandler extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Cuando se crea la base de datos.
+     * Sentencias para crear las tablas e inicialiar la base con datos por defecto.
+     * @param db
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PA = "CREATE TABLE periodo(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, escala REAL, quimestres INTEGER, parciales INTEGER, equivalenciaParciales REAL, equivalenciaExamenes REAL, porcentajeAsistencias REAL, notaMinima REAL)";
@@ -75,6 +95,10 @@ public class DBHandler extends SQLiteOpenHelper {
         this.initData(db);
     }
 
+    /**
+     * Inicializa la base con un periodo, acreditables, un curso, un estudiante, etc; como datos de ejemplo.
+     * @param db
+     */
     private void initData(SQLiteDatabase db){
         SimpleDateFormat sf = new SimpleDateFormat("yyyy");
         String syear = sf.format(new Date());

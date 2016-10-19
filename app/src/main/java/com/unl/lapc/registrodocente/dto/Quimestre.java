@@ -4,7 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by Usuario on 18/08/2016.
+ * Modelo de presentación que representa a un quimestre.
  */
 public class Quimestre implements Parcelable{
 

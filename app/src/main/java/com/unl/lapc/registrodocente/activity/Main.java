@@ -31,6 +31,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.channels.FileChannel;
 
+
+/**
+ * Actividad principal para mostrar las clases activas y el menú con las opciones para administrar los periodos, cursos y respaldos.
+ * Esta actividad se lanza al arrancar la aplicación. Además verifica si el usuario no está autenticado para mostrar la pantalla de login.
+ */
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     static final int AUTENTICATION_REQUEST = 1;
@@ -75,9 +80,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         outState.putString("login", login);
     }*/
 
+    /**
+     * Inicializa componentes, daos, etc.
+     */
     private void customInit(){
         listViewClases = (ListView) findViewById(R.id.listView);
-        claseDao = new ClaseDao(getApplicationContext());
+        claseDao = new ClaseDao(this);
 
         ClasesMainAdapter mLeadsAdapter = new ClasesMainAdapter(getApplicationContext(), claseDao.getMainClases());
         listViewClases.setAdapter(mLeadsAdapter);
@@ -93,6 +101,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         });
     }
 
+    /**
+     * Muestra la actividad MainClase donde se despliega todo los necesario para gestionar el curso (Estudiantes, notas, asistencias, etc.)
+     * @param cls El curso
+     */
     private void show(Clase cls){
         Intent intent = new Intent(this, MainClase.class);
         intent.putExtra("clase", cls);
@@ -175,6 +187,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return true;
     }
 
+    /**
+     * Respalda la base de datos según el destino
+     */
     private void backupDatabase(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Respaldar base de datos")
@@ -194,6 +209,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         builder.create().show();
     }
 
+    /**
+     * Respalda la base de datos en un directorio de la tarjeta de memoria
+     * @return
+     */
     private File backupdDatabaseToFile(){
         try {
 
@@ -226,6 +245,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         return null;
     }
 
+    /**
+     * Respalda la base de datos y la envía por correo o a la nube.
+     */
     private void backupDatabaseToEmail(){
         backupDB = backupdDatabaseToFile();
         if(backupDB != null) {
@@ -240,6 +262,12 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    /**
+     * Procesa el resultado al lanzar las subactividades de autenticación y respaldo
+     * @param requestCode Código de petición
+     * @param resultCode Codigo de respuesta
+     * @param data La actividad
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

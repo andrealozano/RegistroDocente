@@ -16,6 +16,9 @@ import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
+/**
+ * Actvidad para administrar los acreditables de un periodo académico.
+ */
 public class Acreditables extends AppCompatActivity {
 
     private ListView listView;
@@ -56,6 +59,11 @@ public class Acreditables extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    /**
+     * Al seleccionar un item del menú
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -73,6 +81,9 @@ public class Acreditables extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Al presionar el botón atras del dispositivo, retorna la actividad Periodos
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, Periodos.class);
@@ -80,6 +91,10 @@ public class Acreditables extends AppCompatActivity {
         finish();
     }
 
+    /**
+     * Accion para editar un acreditable. Lanza la actividad EditAcreditable
+     * @param acreditable
+     */
     private void editAction(Acreditable acreditable){
         if(acreditableDao.existenNotas(periodo) && acreditable.getId() == 0) {
             Snackbar.make(listView, "No se puede agregar acreditables, porque ya ha ingresado notas.", Snackbar.LENGTH_LONG).setAction("Action", null).show();

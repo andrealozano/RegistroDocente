@@ -13,9 +13,10 @@ import com.unl.lapc.registrodocente.modelo.Clase;
 import java.util.List;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar los cursos en una lista.
+ * Muestra el nombre y número de estudiantes.
  */
-public class ClasesMainAdapter extends ArrayAdapter<Clase> {
+public class ClasesMainAdapter extends  ArrayAdapter<Clase> {
     public ClasesMainAdapter(Context context, List<Clase> objects) {
         super(context, 0, objects);
     }

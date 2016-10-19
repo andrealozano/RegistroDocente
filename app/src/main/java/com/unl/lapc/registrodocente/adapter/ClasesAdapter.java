@@ -13,7 +13,8 @@ import com.unl.lapc.registrodocente.modelo.Clase;
 import java.util.List;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar los cursos en una lista.
+ * Muestra el nombre, periodo y si está activa o inactiva.
  */
 public class ClasesAdapter extends ArrayAdapter<Clase> {
     public ClasesAdapter(Context context, List<Clase> objects) {

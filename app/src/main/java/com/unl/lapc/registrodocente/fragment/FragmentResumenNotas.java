@@ -31,6 +31,9 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.io.File;
 import java.util.List;
 
+/**
+ * Fragmento para mostrar el resumen de notas de un parcial.
+ */
 public class FragmentResumenNotas extends Fragment {
 
     static final int PICK_DESTINO_REPORTE_REQUEST = 1;

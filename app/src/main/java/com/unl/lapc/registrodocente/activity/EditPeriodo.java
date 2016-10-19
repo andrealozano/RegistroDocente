@@ -24,6 +24,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Actividad para editar un periodo académico
+ */
 public class EditPeriodo extends AppCompatActivity {
 
     private Periodo periodo = null;
@@ -89,6 +92,9 @@ public class EditPeriodo extends AppCompatActivity {
         calendarioDao = new CalendarioDao(this);
     }
 
+    /**
+     * Muestra los datos del periodo en la vista
+     */
     private void fijarValores() {
         if (periodo != null) {
             //Calendar c = GregorianCalendar.getInstance();
@@ -114,6 +120,9 @@ public class EditPeriodo extends AppCompatActivity {
         }
     }
 
+    /**
+     * Regresa a la actividad padre "Periodos"
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, Periodos.class);
@@ -169,6 +178,9 @@ public class EditPeriodo extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Guarda el periodo
+     */
     private void guardar(){
         periodo.setNombre(txtNombre.getText().toString());
         periodo.setEscala(Utils.toDouble(txtEscala.getText().toString()));
@@ -196,6 +208,9 @@ public class EditPeriodo extends AppCompatActivity {
         }
     }
 
+    /**
+     * Elimina el periodo
+     */
     private void eliminar(){
         if(periodo.getId() > 0){
             new AlertDialog.Builder(this)
@@ -228,6 +243,10 @@ public class EditPeriodo extends AppCompatActivity {
         return matcher.matches();
     }*/
 
+    /**
+     * Valida el periodo antes de guardar
+     * @return
+     */
     private boolean validar() {
         String nombre = periodo.getNombre();
 
@@ -247,6 +266,11 @@ public class EditPeriodo extends AppCompatActivity {
         return v;
     }
 
+    /**
+     * Muestra un diálogo para seleccionar la fecha de inicio y fin del periodo
+     * @param tipo Tipo de fecha (Inicio o Fin)
+     * @param txt TextView para mostrar la fecha luego de seleccionarla
+     */
     private void showDialogFecha(final String tipo, final TextView txt){
         final View myView = View.inflate(this, R.layout.content_dlg_fecha, null);
 

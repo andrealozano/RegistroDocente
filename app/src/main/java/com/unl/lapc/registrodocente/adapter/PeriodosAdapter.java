@@ -14,7 +14,8 @@ import com.unl.lapc.registrodocente.util.Utils;
 import java.util.List;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Adaptador para mostrar los periodos en una lista.
+ * Muestra el nombre y fechas.
  */
 public class PeriodosAdapter extends ArrayAdapter<Periodo> {
 

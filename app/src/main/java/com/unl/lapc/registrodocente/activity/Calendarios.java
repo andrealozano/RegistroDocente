@@ -25,6 +25,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+/**
+ * Actividad para gestionar los dias laborables y feriados de un periodo académico.
+ */
 public class Calendarios extends AppCompatActivity {
 
     private Periodo periodo;
@@ -83,6 +86,9 @@ public class Calendarios extends AppCompatActivity {
         mostrarMes(fecha);
     }
 
+    /**
+     * Regresa a la actividad Periodos
+     */
     @Override
     public void onBackPressed() {
         Intent intent = new Intent(this, Periodos.class);
@@ -114,6 +120,9 @@ public class Calendarios extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Muestra el siguiente mes de dias labolables y feriados del periodo seleccionado
+     */
     private void next(){
         Calendar c = GregorianCalendar.getInstance();
         c.setTime(periodo.getFin());
@@ -129,6 +138,9 @@ public class Calendarios extends AppCompatActivity {
         }
     }
 
+    /**
+     * Muestra el mes anterior de dias labolables y feriados del periodo seleccionado
+     */
     private void prev(){
         Calendar c = GregorianCalendar.getInstance();
         c.setTime(periodo.getInicio());
@@ -152,6 +164,10 @@ public class Calendarios extends AppCompatActivity {
         mostrarMes(periodo.getInicio());
     }*/
 
+    /**
+     * Muestra el mes de dias labolables y feriados del periodo seleccionado
+     * @param fecha
+     */
     private void mostrarMes(Date fecha){
         calendar.setTime(fecha);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -167,6 +183,10 @@ public class Calendarios extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    /**
+     * Muestra el dialogo para configurar un día como feriado o activo
+     * @param m El calendario o día
+     */
     private void showDialogCalendario(final Calendario m){
         View myView = View.inflate(this, R.layout.content_dlg_calendario, null);
 

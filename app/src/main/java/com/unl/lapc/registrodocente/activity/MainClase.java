@@ -37,6 +37,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Actividad para gestionar todo lo concerniente a un curso, como el listado de estudiantes, registro de asistencias, ingreso de notas, reportes, etc.
+ */
 public class MainClase extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private PeriodoDao periodoDao;
@@ -107,6 +110,10 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         }
     }
 
+    /**
+     * Carga el menú de quimestres y parciales programáticamente, según sea la configuración del periodo académico al que pertenece el curso.
+     * @param menu
+     */
     private void cargarMenu(Menu menu){
         //List<Quimestre> quimestres = quimestreDao.getAll(clase.getPeriodo());
 
@@ -139,6 +146,10 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         }
     }*/
 
+    /**
+     * Muestra el listado de estudiantes.
+     * Carga el fragmento FragmentEstudiantes.
+     */
     private void cargarEstudiantes(){
         FragmentEstudiantes fragment = new FragmentEstudiantes();
 
@@ -155,6 +166,10 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         //mostrarMenu(false);
     }
 
+    /**
+     * Muestra el listado de asistencias por día.
+     * Carga el fragmento FragmentAsistancias.
+     */
     private void cargarAsistencias(){
         FragmentAsistancias fragment = new FragmentAsistancias();
 
@@ -170,6 +185,10 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         //mostrarMenu(false);
     }
 
+    /**
+     * Muestra el listado de notas finales de los estudiantes.
+     * Carga el fragmento FragmentResumenNotas.
+     */
     private void cargarResumenNotas(){
         FragmentResumenNotas fragment = new FragmentResumenNotas();
 
@@ -183,6 +202,11 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         //mostrarMenu(true);
     }
 
+    /**
+     * Muestra el listado de notas del quimestre seleccionado.
+     * Carga el fragmento FragmentResumenNotasQuimestre.
+     * @param quimestre
+     */
     private void cargarResumenNotasQuimestre(Quimestre quimestre){
         FragmentResumenNotasQuimestre fragment = new FragmentResumenNotasQuimestre();
 
@@ -196,6 +220,11 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         getSupportActionBar().setTitle("Quimestre " + quimestre.getNumero());
     }
 
+    /**
+     * Muestra el listado de notas del parcial seleccionado.
+     * Carga el fragmento FragmentResumenNotasParcial.
+     * @param parcial
+     */
     private void cargarResumenNotasParcial(Parcial parcial){
         FragmentResumenNotasParcial fragment = new FragmentResumenNotasParcial();
 
@@ -209,6 +238,12 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         getSupportActionBar().setTitle("Parcial " + parcial.getNumero() + " (Q"+parcial.getQuimestre()+")");
     }
 
+    /**
+     * Muestra el listado de items acreditable del acreditable indicado, según corresponda al quimestre y parcial.
+     * @param acreditable
+     * @param quimestre
+     * @param parcial
+     */
     public void cargarAcreditable(Acreditable acreditable, int quimestre, int parcial){
         FragmentAcreditables fragment = new FragmentAcreditables();
 

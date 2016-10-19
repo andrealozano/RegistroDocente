@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Usuario on 15/07/2016.
+ * Clase de acceso a datos para cursos.
  */
 public class ClaseDao extends DBHandler {
 
@@ -21,6 +21,10 @@ public class ClaseDao extends DBHandler {
         super(context);
     }
 
+    /**
+     * Inserta un curso en la base de datos.
+     * @param clase
+     */
     public void add(Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -50,8 +54,11 @@ public class ClaseDao extends DBHandler {
         db.close();
     }*/
 
-
-
+    /**
+     * Actualiza un curso en la base de datos.
+     * @param clase
+     * @return
+     */
     public int update(Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -63,6 +70,11 @@ public class ClaseDao extends DBHandler {
         return db.update("clase", values, "id = ?", new String[]{String.valueOf(clase.getId())});
     }
 
+    /**
+     * Obtiene un curso por su id.
+     * @param id
+     * @return
+     */
     public Clase get(int id) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.query("clase", new String[] { "id", "nombre", "activa", "periodo_id"}, "id=?", new String[] { String.valueOf(id) }, null, null, null, null);
@@ -84,6 +96,10 @@ public class ClaseDao extends DBHandler {
         return contact;
     }
 
+    /**
+     * Borra un curso.
+     * @param clase
+     */
     public void delete(Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("asistencia", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
@@ -97,6 +113,10 @@ public class ClaseDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Obtiene todos los cursos.
+     * @return
+     */
     public List<Clase> getAll() {
         List<Clase> shopList = new ArrayList<>();
 
@@ -121,8 +141,10 @@ public class ClaseDao extends DBHandler {
         return shopList;
     }
 
-
-
+    /**
+     * Obtiene el listado de cursos para mostrar en la pantalla inicial.
+     * @return
+     */
     public List<Clase> getMainClases() {
         List<Clase> shopList = new ArrayList<>();
 
@@ -149,6 +171,11 @@ public class ClaseDao extends DBHandler {
         return shopList;
     }
 
+    /**
+     * Verifica si ya existe un curso con el mismo nombre
+     * @param per
+     * @return
+     */
     public boolean existe(Clase per){
         String selectQuery = "SELECT count(*) FROM clase where lower(trim(nombre)) =? and id <> ?";
         SQLiteDatabase db = this.getWritableDatabase();

@@ -20,12 +20,21 @@ import java.util.List;
 /**
  * Created by Usuario on 15/07/2016.
  */
+
+/**
+ * Clase de acceso a datos para acreditables.
+ */
 public class AcreditableDao extends DBHandler {
 
     public AcreditableDao(Context context){
         super(context);
     }
 
+    /**
+     * Obtiene un acreditable por id
+     * @param id
+     * @return
+     */
     public Acreditable get(int id) {
 
         String selectQuery = "SELECT id, nombre, alias, tipo, equivalencia, numero, periodo_id FROM acreditable where id = " + id;
@@ -49,6 +58,11 @@ public class AcreditableDao extends DBHandler {
         return null;
     }
 
+    /**
+     * Verifica si existen notas ingresadas para el periodo indicado.
+     * @param periodo
+     * @return
+     */
     public boolean existenNotas(Periodo periodo) {
 
         String selectQuery = "SELECT count(id) FROM registroitem where nota > 0 and periodo_id = " + periodo.getId();
@@ -62,6 +76,10 @@ public class AcreditableDao extends DBHandler {
         return false;
     }
 
+    /**
+     * Inserta un acreditable en la base de datos.
+     * @param acreditable
+     */
     public void add(Acreditable acreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -77,6 +95,11 @@ public class AcreditableDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualiza un acreditable
+     * @param acreditable
+     * @return
+     */
     public int update(Acreditable acreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -90,6 +113,10 @@ public class AcreditableDao extends DBHandler {
         return db.update("acreditable", values, "id = ?", new String[]{String.valueOf(acreditable.getId())});
     }
 
+    /**
+     * Borra un acreditable
+     * @param acreditable
+     */
     public void delete(Acreditable acreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("registroitem", "acreditable_id = ?", new String[] { String.valueOf(acreditable.getId()) });
@@ -99,6 +126,10 @@ public class AcreditableDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Agrega un item acreditable
+     * @param itemAcreditable
+     */
     public void addItem(ItemAcreditable itemAcreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -120,6 +151,10 @@ public class AcreditableDao extends DBHandler {
         initNotasItem(id);
     }
 
+    /**
+     * Inicializa las notas (registroitem) de un item acreditable
+     * @param id
+     */
     private void initNotasItem(int id){
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("insert into registroitem (periodo_id, clase_id, estudiante_id, acreditable_id, itemacreditable_id, nota) " +
@@ -128,6 +163,11 @@ public class AcreditableDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualiza un item acreditable
+     * @param itemAcreditable
+     * @return
+     */
     public int updateItem(ItemAcreditable itemAcreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -149,6 +189,10 @@ public class AcreditableDao extends DBHandler {
         return  u;
     }
 
+    /**
+     * Borra un item acreditable
+     * @param itemAcreditable
+     */
     public void deleteItem(ItemAcreditable itemAcreditable) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete("registroitem", "itemacreditable_id = ?", new String[] { String.valueOf(itemAcreditable.getId()) });
@@ -156,6 +200,21 @@ public class AcreditableDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Actualiza la nota (registroitem) de un item acreditable para un estudiante en específico (Ejm: Leccion 1).
+     * Calcula el promedio del registro acreditable (Ejm: Lecciones), calcula la nota del parcial, calcula la nota del quimestre, calcula la nota final y actualiza el estado del estudiante.
+     *
+     *
+     * @param resumen
+     * @param registro
+     * @param periodo
+     * @param clase
+     * @param estudiante
+     * @param acreditable
+     * @param quimestre
+     * @param parcial
+     * @return
+     */
     public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro, Periodo periodo, Clase clase, Estudiante estudiante, Acreditable acreditable, int quimestre, int parcial) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -233,6 +292,11 @@ public class AcreditableDao extends DBHandler {
         return up;
     }
 
+    /**
+     * Obtiene los acreditables de un periodo.
+     * @param periodo
+     * @return
+     */
     public List<Acreditable> getAll(Periodo periodo) {
         List<Acreditable> lista = new ArrayList<>();
 
@@ -259,6 +323,12 @@ public class AcreditableDao extends DBHandler {
         return lista;
     }
 
+    /**
+     * Obtiene los acreditables de un periodo por tipo
+     * @param periodo
+     * @param tipo Quimestral o parcial
+     * @return
+     */
     public List<Acreditable> getAcreditablesParcial(Periodo periodo, String tipo) {
         List<Acreditable> lista = new ArrayList<>();
 
@@ -285,6 +355,13 @@ public class AcreditableDao extends DBHandler {
         return lista;
     }
 
+    /**
+     * Obtiene los items acreditables de un acreditable
+     * @param acreditable
+     * @param quimestre
+     * @param parcial
+     * @return
+     */
     public List<ItemAcreditable> getItemsAcreditables(Acreditable acreditable, int quimestre, int parcial) {
         List<ItemAcreditable> lista = new ArrayList<>();
 

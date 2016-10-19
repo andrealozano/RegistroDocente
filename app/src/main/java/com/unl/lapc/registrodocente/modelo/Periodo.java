@@ -6,7 +6,8 @@ import android.os.Parcelable;
 import java.util.Date;
 
 /**
- * Created by Usuario on 11/07/2016.
+ * Clase de entidad que representa un periodo académico.
+ * Cada periodo académico puede tener diferentes configuraciones, cursos, estudiantes, etc.
  */
 public class Periodo implements Parcelable{
 
