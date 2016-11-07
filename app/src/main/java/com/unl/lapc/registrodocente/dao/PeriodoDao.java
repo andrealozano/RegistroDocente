@@ -2,13 +2,17 @@ package com.unl.lapc.registrodocente.dao;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.IntentSender;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Clase de acceso a datos para periodos.
@@ -139,6 +143,26 @@ public class PeriodoDao extends DBHandler {
         cursor.moveToFirst();
 
         return cursor.getInt(0) > 0;
+    }
+
+    /**
+     * Estadisticas del periodo
+     * @param per
+     * @return
+     */
+    public Map<String, Integer> estatisticas(Periodo per){
+        String selectQuery = "SELECT sum(case when estado ='Registrado' then 1 else 0 end) registrados, sum(case when estado ='Aprobado' then 1 else 0 end) aprobados, sum(case when estado ='Reprobado' then 1 else 0 end) reprobados FROM estudiante where periodo_id = ?";
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{""+per.getId()});
+        cursor.moveToFirst();
+
+        Map<String, Integer> r = new Hashtable<>();
+
+        r.put("Registrados", cursor.getInt(0));
+        r.put("Aprobados", cursor.getInt(1));
+        r.put("Reprobados", cursor.getInt(2));
+
+        return r;
     }
 
 }
