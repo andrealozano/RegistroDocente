@@ -157,7 +157,7 @@ public class FragmentResumenNotas extends Fragment {
             tv4.setTextSize(18);
             tv4.setPadding(5, 5, 5, 5);
             tv4.setBackgroundResource(R.drawable.cell_shape);
-            tv4.setText("" + e.getNotaFinal());
+            tv4.setText(Utils.toString2(e.getNotaFinal()));
             if(e.getNotaFinal() < periodo.getNotaMinima()){
                 tv4.setTextColor(getResources().getColor(R.color.colorAccent));
             }
@@ -169,7 +169,7 @@ public class FragmentResumenNotas extends Fragment {
             tv5.setTextSize(18);
             tv5.setPadding(5, 5, 5, 5);
             tv5.setBackgroundResource(R.drawable.cell_shape);
-            tv5.setText("" + e.getPorcentajeAsistencias() + " %");
+            tv5.setText(Utils.toString2(e.getPorcentajeAsistencias()) + " %");
             if(e.getPorcentajeAsistencias() < periodo.getPorcentajeAsistencias()){
                 tv5.setTextColor(getResources().getColor(R.color.colorAccent));
             }

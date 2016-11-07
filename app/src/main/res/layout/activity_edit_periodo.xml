@@ -204,7 +204,7 @@
             android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="date"
+            android:text="Fin"
             android:id="@+id/textView16"
             />
 

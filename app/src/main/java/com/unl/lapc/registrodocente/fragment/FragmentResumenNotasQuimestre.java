@@ -178,7 +178,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
                 tv4.setTextSize(18);
                 tv4.setPadding(5, 5, 5, 5);
                 tv4.setBackgroundResource(R.drawable.cell_shape);
-                tv4.setText("" + e.getParciales().get(j+1));
+                tv4.setText(Utils.toString2(e.getParciales().get(j+1)));
                 row.addView(tv4);
             }
 
@@ -188,7 +188,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv4.setTextSize(18);
             tv4.setPadding(5, 5, 5, 5);
             tv4.setBackgroundResource(R.drawable.cell_shape_total);
-            tv4.setText("" + e.getNotaParciales());
+            tv4.setText(Utils.toString2(e.getNotaParciales()));
             row.addView(tv4);
 
             TextView tv5 = new TextView(getContext());
@@ -197,7 +197,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv5.setTextSize(18);
             tv5.setPadding(5, 5, 5, 5);
             tv5.setBackgroundResource(R.drawable.cell_shape_total);
-            tv5.setText("" + e.getNotaExamenes());
+            tv5.setText(Utils.toString2(e.getNotaExamenes()));
             row.addView(tv5);
 
             TextView tv6 = new TextView(getContext());
@@ -206,7 +206,7 @@ public class FragmentResumenNotasQuimestre extends Fragment {
             tv6.setTextSize(18);
             tv6.setPadding(5, 5, 5, 5);
             tv6.setBackgroundResource(R.drawable.cell_shape_total);
-            tv6.setText("" + e.getNotaFinal());
+            tv6.setText(Utils.toString2(e.getNotaFinal()));
             row.addView(tv6);
 
             tlResumenNotas.addView(row);

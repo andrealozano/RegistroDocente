@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
 /**
  * Clase de utilidad para hacer operacioes comunes de conversión, formato, escritura, etc.
@@ -84,6 +85,15 @@ public class Utils {
         value = value * factor;
         long tmp = Math.round(value);
         return (double) tmp / factor;
+    }
+
+    /**
+     * Formato de un double a 2 decimales
+     * @param value
+     * @return
+     */
+    public static String toString2(double value) {
+        return String.format(new Locale("es_EC"), "%.2f", value);
     }
 
     /**

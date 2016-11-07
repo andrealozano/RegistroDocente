@@ -158,7 +158,7 @@ public class FragmentResumenNotasParcial extends Fragment {
                 tv4.setTextSize(18);
                 tv4.setPadding(5, 5, 5, 5);
                 tv4.setBackgroundResource(R.drawable.cell_shape);
-                tv4.setText("" + e.getAcreditables().get(acreditables.get(j).getId()).getNotaFinal());
+                tv4.setText(Utils.toString2(e.getAcreditables().get(acreditables.get(j).getId()).getNotaFinal()));
                 row.addView(tv4);
             }
 
@@ -170,7 +170,7 @@ public class FragmentResumenNotasParcial extends Fragment {
             tv6.setTextSize(18);
             tv6.setPadding(5, 5, 5, 5);
             tv6.setBackgroundResource(R.drawable.cell_shape);
-            tv6.setText("" + e.getNotaFinal());
+            tv6.setText(Utils.toString2(e.getNotaFinal()));
             row.addView(tv6);
 
             tlResumenNotas.addView(row);

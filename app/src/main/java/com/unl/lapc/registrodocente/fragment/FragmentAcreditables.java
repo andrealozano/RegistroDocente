@@ -274,7 +274,7 @@ public class FragmentAcreditables extends Fragment {
                 tvNot.setTextSize(18);
                 tvNot.setPadding(5, 5, 5, 5);
                 tvNot.setBackgroundResource(R.drawable.cell_shape);
-                tvNot.setText("" + registro.getNotaFinal());
+                tvNot.setText(Utils.toString2(registro.getNotaFinal()));
                 tvNot.setClickable(true);
                 tvNot.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -294,7 +294,7 @@ public class FragmentAcreditables extends Fragment {
             tvPm.setTextSize(18);
             tvPm.setPadding(5, 5, 5, 5);
             tvPm.setBackgroundResource(R.drawable.cell_shape_total);
-            tvPm.setText("" + e.getNotaPromedio());
+            tvPm.setText(Utils.toString2(e.getNotaPromedio()));
             row.addView(tvPm);
 
             tvEq.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -302,7 +302,7 @@ public class FragmentAcreditables extends Fragment {
             tvEq.setTextSize(18);
             tvEq.setPadding(5, 5, 5, 5);
             tvEq.setBackgroundResource(R.drawable.cell_shape_total);
-            tvEq.setText("" + e.getNotaFinal());
+            tvEq.setText(Utils.toString2(e.getNotaFinal()));
             row.addView(tvEq);
 
             tlResumenNotas.addView(row);
