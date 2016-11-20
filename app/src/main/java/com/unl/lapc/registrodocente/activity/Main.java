@@ -163,6 +163,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             return true;
         }
 
+        if (id == R.id.action_salir) {
+            android.os.Process.killProcess(android.os.Process.myPid());
+        }
+
         if (id == R.id.action_backup) {
             backupDatabase();
         }

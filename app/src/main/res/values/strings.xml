@@ -7,13 +7,19 @@
     <string name="action_clases">Clases</string>
 
     <!-- Strings related to login -->
-    <string name="prompt_email">Usuario</string>
+    <string name="prompt_usuario">Usuario</string>
+    <string name="prompt_email">Email</string>
     <string name="prompt_password">Clave</string>
-    <string name="action_sign_in">Iniciar o registrar</string>
-    <string name="action_sign_in_short">Iniciar</string>
+    <string name="prompt_password_new">Nueva clave</string>
+    <string name="prompt_password_confirm">Confirmar clave</string>
+    <string name="action_sign_in">Iniciar</string>
+    <string name="action_registrar">Registrar</string>
+    <string name="action_recuperar">Recuperar</string>
 
-    <string name="error_invalid_email">Usuario no válido</string>
-    <string name="error_invalid_password">Clave muy corta</string>
+    <string name="error_invalid_user">Usuario no válido</string>
+    <string name="error_invalid_email">Email no válido</string>
+    <string name="error_invalid_password">Contraseña muy corta</string>
+    <string name="error_invalid_confirm_password">La contraseña no coincide</string>
     <string name="error_incorrect_password">Credenciales incorrectas</string>
     <string name="error_field_required">Entrada requerida</string>
 

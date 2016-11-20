@@ -30,7 +30,10 @@ import java.util.List;
 public class SettingsActivity extends AppCompatPreferenceActivity {
 
     public static  final String KEY_PREF_SERGURIDAD_USUARIO = "pref_seguridad_usuario";
+    public static  final String KEY_PREF_SERGURIDAD_EMAIL = "pref_seguridad_email";
     public static  final String KEY_PREF_SERGURIDAD_CLAVE = "pref_seguridad_clave";
+    //public static  final String KEY_PREF_SERGURIDAD_CLAVE_REC = "pref_seguridad_clave_recuperar";
+    //public static  final String KEY_PREF_SERGURIDAD_FECHA_REC = "pref_seguridad_fecha_recuperar";
 
     /**
      * A preference value change listener that updates the preference's summary

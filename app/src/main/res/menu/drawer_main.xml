@@ -15,6 +15,11 @@
             android:id="@+id/action_backup"
             android:icon="@android:drawable/ic_menu_agenda"
             android:title="Backup" />
+
+        <item
+            android:id="@+id/action_salir"
+            android:icon="@android:drawable/ic_lock_lock"
+            android:title="Salir" />
     </group>
 
 </menu>
