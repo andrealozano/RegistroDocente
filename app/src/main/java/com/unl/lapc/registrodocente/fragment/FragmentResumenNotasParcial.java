@@ -24,10 +24,8 @@ import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.Parcial;
 import com.unl.lapc.registrodocente.dto.ResumenParcial;
-import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
-import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -254,12 +252,13 @@ public class FragmentResumenNotasParcial extends Fragment {
                     Utils.writeCsvLine(sb, e.getNotaFinal());
                 }
 
+                Utils.checkReportPermisions(getActivity());
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("NotasParcial_%d_Quimestre_%d_%s_%s.csv", parcial.getNumero(), parcial.getQuimestre(), clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
+                }else if(emailFile != null){
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);

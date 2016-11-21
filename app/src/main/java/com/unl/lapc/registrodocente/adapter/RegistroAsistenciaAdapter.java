@@ -46,7 +46,7 @@ public class RegistroAsistenciaAdapter extends ArrayAdapter<Estudiante> {
 
 
         name.setText(lead.getNombresCompletos());
-        cod.setText(""+lead.getOrden()+". ");
+        cod.setText(""+(position+1)+". ");
 
 
         return convertView;

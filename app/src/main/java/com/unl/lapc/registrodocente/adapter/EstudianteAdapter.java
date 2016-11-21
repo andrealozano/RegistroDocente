@@ -46,7 +46,7 @@ public class EstudianteAdapter extends ArrayAdapter<Estudiante> {
         // Setup.
         //Glide.with(getContext()).load(lead.getImage()).into(avatar);
         name.setText(lead.getNombresCompletos());
-        cod.setText(""+lead.getOrden()+ ". ");
+        cod.setText(""+ (position+1) + ". ");
 
         return convertView;
     }

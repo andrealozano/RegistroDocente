@@ -70,6 +70,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             Intent intent = new Intent(this, LoginActivity.class);
             startActivityForResult(intent, AUTENTICATION_REQUEST);
         }
+
     }
 
     /*
@@ -100,6 +101,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
         });
     }
+
 
     /**
      * Muestra la actividad MainClase donde se despliega todo los necesario para gestionar el curso (Estudiantes, notas, asistencias, etc.)
@@ -225,6 +227,8 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             String packageName  = "com.unl.lapc.registrodocente";
             String sourceDBName = "registro_docente.db";
             String backupDBPath = "registro_docente_" + Utils.currentReportDate() + ".db";
+
+            Utils.checkReportPermisions(this);
             File backupDB = Utils.getExternalStorageFile("backup", backupDBPath);
 
             if (backupDB != null) {

@@ -22,9 +22,8 @@ import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.ResumenGeneral;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
-import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
-import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Matricula;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -42,7 +41,7 @@ public class FragmentResumenNotas extends Fragment {
     private Clase clase;
     private Periodo periodo;
     private TableLayout tlResumenNotas;
-    private List<Estudiante> lista;
+    private List<Matricula> lista;
     private File emailFile;
 
     public FragmentResumenNotas() {
@@ -111,10 +110,10 @@ public class FragmentResumenNotas extends Fragment {
         this.periodo = args.getParcelable("periodo");
 
         estudianteDao = new EstudianteDao(getContext());
-        lista = estudianteDao.getEstudiantes(clase);
+        lista = estudianteDao.getMatriculas(clase, periodo);
 
         for(int i= 0; i < lista.size(); i++){
-            Estudiante e = lista.get(i);
+            Matricula e = lista.get(i);
 
             TableRow row = new TableRow(getContext());
             row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
@@ -125,7 +124,7 @@ public class FragmentResumenNotas extends Fragment {
             tv1.setTextSize(18);
             tv1.setPadding(5, 5, 5, 5);
             tv1.setBackgroundResource(R.drawable.cell_shape);
-            tv1.setText(e.getOrden() + ". ");
+            tv1.setText((i+1) + ". ");
             row.addView(tv1);
 
             TextView tv2 = new TextView(getContext());
@@ -134,7 +133,7 @@ public class FragmentResumenNotas extends Fragment {
             tv2.setTextSize(18);
             tv2.setPadding(5, 5, 5, 5);
             tv2.setBackgroundResource(R.drawable.cell_shape);
-            tv2.setText(e.getNombresCompletos());
+            tv2.setText(e.getEstudiante().getNombresCompletos());
             row.addView(tv2);
 
             TextView tv3 = new TextView(getContext());
@@ -144,9 +143,9 @@ public class FragmentResumenNotas extends Fragment {
             tv3.setPadding(5, 5, 5, 5);
             tv3.setBackgroundResource(R.drawable.cell_shape);
             tv3.setText(e.getEstado());
-            if(e.getEstado().equals(Estudiante.ESTADO_APROBADO)){
+            if(e.getEstado().equals(Matricula.ESTADO_APROBADO)){
                 tv3.setTextColor(getResources().getColor(R.color.colorPrimary));
-            }else if(e.getEstado().equals(Estudiante.ESTADO_REPROBADO)){
+            }else if(e.getEstado().equals(Matricula.ESTADO_REPROBADO)){
                 tv3.setTextColor(getResources().getColor(R.color.colorAccent));
             }
             row.addView(tv3);
@@ -225,16 +224,17 @@ public class FragmentResumenNotas extends Fragment {
                 Utils.writeCsvLine(sb, "N","NOMBRES", "ESTADO", "NOTA", "ASISTENCIA (%)");
 
                 for (int i = 0; i < lista.size(); i++){
-                    Estudiante e = lista.get(i);
-                    Utils.writeCsvLine(sb, i + 1, e.getNombres(), e.getEstado(), e.getNotaFinal(), e.getPorcentajeAsistencias());
+                    Matricula e = lista.get(i);
+                    Utils.writeCsvLine(sb, i + 1, e.getEstudiante().getNombres(), e.getEstado(), e.getNotaFinal(), e.getPorcentajeAsistencias());
                 }
 
+                Utils.checkReportPermisions(getActivity());
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("ResumenNotas_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
+                }else if(emailFile != null){
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
@@ -296,12 +296,13 @@ public class FragmentResumenNotas extends Fragment {
                     Utils.writeCsvLine(sb, e.getNotaFinal());
                 }
 
+                Utils.checkReportPermisions(getActivity());
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("Notas_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
+                }else if(emailFile != null){
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);

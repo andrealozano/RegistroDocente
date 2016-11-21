@@ -1,13 +1,22 @@
 package com.unl.lapc.registrodocente.util;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
 import android.os.Environment;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.widget.DatePicker;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -92,8 +101,13 @@ public class Utils {
      * @param value
      * @return
      */
-    public static String toString2(double value) {
-        return String.format(new Locale("es_EC"), "%.2f", value);
+    public static String toString2(Double value) {
+        try{
+            return String.format(new Locale("es_EC"), "%.2f", value != null ? value : 0);
+        }catch (Exception e)
+        {
+            return  "0.00";
+        }
     }
 
     /**
@@ -148,6 +162,7 @@ public class Utils {
      * @return
      */
     public static File getExternalStorageDirectory(String folder){
+        //File sd = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         File sd = Environment.getExternalStorageDirectory();
         if(sd.canWrite()) {
             File sdapp = new File(sd.getAbsolutePath() + "/RegistroDocente/"+folder+"/");
@@ -155,6 +170,8 @@ public class Utils {
                 sdapp.mkdirs();
             }
             return  sdapp;
+        }else{
+            Log.e("ExternalSotorage", "No escribible external storage: " + sd.getAbsolutePath());
         }
         return null;
     }
@@ -172,6 +189,30 @@ public class Utils {
             return  fext;
         }
         return  null;
+    }
+
+    public static boolean checkReportPermisions(Activity activity){
+        int storage = ContextCompat.checkSelfPermission(activity, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        int contacts = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS);
+
+        List<String> listPermissionsNeeded = new ArrayList<>();
+
+        if (storage != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+
+        if (contacts != PackageManager.PERMISSION_GRANTED) {
+            listPermissionsNeeded.add(android.Manifest.permission.READ_CONTACTS);
+        }
+
+        if (!listPermissionsNeeded.isEmpty())
+        {
+            //REQUEST_ID_MULTIPLE_PERMISSIONS
+            ActivityCompat.requestPermissions(activity, listPermissionsNeeded.toArray(new String[listPermissionsNeeded.size()]), 100);
+            return false;
+        }
+
+        return true;
     }
 
     /**

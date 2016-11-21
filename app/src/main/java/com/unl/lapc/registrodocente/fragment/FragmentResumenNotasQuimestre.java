@@ -26,7 +26,6 @@ import com.unl.lapc.registrodocente.dto.Quimestre;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
-import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -289,12 +288,13 @@ public class FragmentResumenNotasQuimestre extends Fragment {
                     Utils.writeCsvLine(sb, e.getNotaParciales(), e.getNotaExamenes(), e.getNotaFinal());
                 }
 
+                Utils.checkReportPermisions(getActivity());
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("NotasQuimeste_%d_%s_%s.csv", quimestre.getNumero(), clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
+                }else if(emailFile != null){
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);

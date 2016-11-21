@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,6 +18,7 @@ import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
+import com.unl.lapc.registrodocente.util.CedulaUtils;
 
 /**
  * Actividad para editar los datos de un estudiante
@@ -29,15 +31,14 @@ public class EditEstudiante extends AppCompatActivity {
     private Clase clase;
     private Periodo periodo;
     private Estudiante estudiante;
-    //private ClaseEstudiante claseEstudiante;
 
     private EditText txtCodigo;
     private EditText txtNombres;
     private EditText txtApellidos;
     private EditText txtEmail;
     private EditText txtTelefono;
-    //private EditText txtOrden;
     private RadioGroup rgSexo;
+    private String startType ="";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,7 @@ public class EditEstudiante extends AppCompatActivity {
         clase = bundle.getParcelable("clase");
         estudiante = bundle.getParcelable("estudiante");
         periodo =  bundle.getParcelable("periodo");
+        startType = bundle.getString("startType");
 
         if(estudiante.getId() > 0){
             //Recarga porque solo vienen datos generales
@@ -90,7 +92,7 @@ public class EditEstudiante extends AppCompatActivity {
         }
 
         if (id == R.id.action_back) {
-            cancelar();
+            cancelar(false);
             return true;
         }
 
@@ -108,8 +110,7 @@ public class EditEstudiante extends AppCompatActivity {
         estudiante.setApellidos(txtApellidos.getText().toString());
         estudiante.setEmail(txtEmail.getText().toString());
         estudiante.setCelular(txtTelefono.getText().toString());
-        estudiante.setClase(clase);
-        //estudiante.setOrden(Integer.parseInt(txtOrden.getText().toString()));
+
         int rbSexo = rgSexo.getCheckedRadioButtonId();
         if(rbSexo == R.id.rbHombre){
             estudiante.setSexo("Hombre");
@@ -120,13 +121,13 @@ public class EditEstudiante extends AppCompatActivity {
         if(validar()) {
 
             if (estudiante.getId() == 0) {
-                estudianteDao.add(estudiante);
+                estudianteDao.add(estudiante, clase, periodo);
             } else {
                 estudianteDao.update(estudiante);
             }
-        }
 
-        cancelar();
+            cancelar(true);
+        }
 
     }
 
@@ -145,6 +146,14 @@ public class EditEstudiante extends AppCompatActivity {
             txtApellidos.setError("Ingrese el apellido"); b = false;
         }
 
+        if(CedulaUtils.validar(estudiante.getCedula())){
+            if(estudianteDao.existeCedula(estudiante)){
+                txtCodigo.setError("Cédula ya registrada"); b = false;
+            }
+        }else{
+            txtCodigo.setError("Cédula incorrecta"); b = false;
+        }
+
         return  b;
     }
 
@@ -160,8 +169,8 @@ public class EditEstudiante extends AppCompatActivity {
                 {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        estudianteDao.delete(estudiante);
-                        cancelar();
+                        estudianteDao.delete(estudiante, clase);
+                        cancelar(false);
                     }
                 })
                 .setNegativeButton("Cancelar", null)
@@ -172,18 +181,15 @@ public class EditEstudiante extends AppCompatActivity {
      * Muestra los datos del estudiante en la vista
      */
     private void fijarValores() {
-        if (clase != null) {
-            txtCodigo.setText(estudiante.getCedula());
-            txtNombres.setText(estudiante.getNombres());
-            txtApellidos.setText(estudiante.getApellidos());
-            txtEmail.setText(estudiante.getEmail());
-            txtTelefono.setText(estudiante.getCelular());
-            if(estudiante.getSexo().equals("Hombre")){
-                rgSexo.check(R.id.rbHombre);
-            }else{
-                rgSexo.check(R.id.rbMujer);
-            }
-            //txtOrden.setText(""+estudiante.getOrden());
+        txtCodigo.setText(estudiante.getCedula());
+        txtNombres.setText(estudiante.getNombres());
+        txtApellidos.setText(estudiante.getApellidos());
+        txtEmail.setText(estudiante.getEmail());
+        txtTelefono.setText(estudiante.getCelular());
+        if(estudiante.getSexo().equals("Hombre")){
+            rgSexo.check(R.id.rbHombre);
+        }else{
+            rgSexo.check(R.id.rbMujer);
         }
     }
 
@@ -199,10 +205,17 @@ public class EditEstudiante extends AppCompatActivity {
     /**
      * Retorna a la actividad MainClase
      */
-    public void cancelar() {
-        Intent mIntent = new Intent(this, MainClase.class);
-        mIntent.putExtra("clase", clase);
-        startActivity(mIntent);
-        finish();
+    public void cancelar(boolean saved) {
+        if(TextUtils.isEmpty(startType)) {
+            Intent mIntent = new Intent(this, MainClase.class);
+            mIntent.putExtra("clase", clase);
+            startActivity(mIntent);
+            finish();
+        }else {
+            Intent i = new Intent();
+            i.putExtra("estudiante", estudiante);
+            setResult(saved ? RESULT_OK : RESULT_CANCELED, i);
+            finish();
+        }
     }
 }

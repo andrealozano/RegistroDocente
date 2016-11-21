@@ -66,7 +66,8 @@ public class DBHandler extends SQLiteOpenHelper {
         String CREATE_CL = "CREATE TABLE clase(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, activa BOOLEAN DEFAULT 1, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         //verificar
 
-        String CREATE_ES = "CREATE TABLE estudiante(id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT, apellidos TEXT, sexo TEXT, email TEXT, celular TEXT, orden INTEGER, notaFinal REAL, porcentajeAsistencias REAL, estado TEXT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
+        String CREATE_ES = "CREATE TABLE estudiante(id INTEGER PRIMARY KEY AUTOINCREMENT, cedula TEXT, nombres TEXT, apellidos TEXT, sexo TEXT, email TEXT, celular TEXT)";
+        String CREATE_CE = "CREATE TABLE matricula(id INTEGER PRIMARY KEY AUTOINCREMENT, notaFinal REAL, porcentajeAsistencias REAL, estado TEXT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id))";
         String CREATE_AS = "CREATE TABLE asistencia(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, calendario_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, fecha DATE, estado TEXT, FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id), FOREIGN KEY(calendario_id) REFERENCES calendario(id), FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
 
         String CREATE_NQ = "CREATE TABLE registroquimestral(id INTEGER PRIMARY KEY AUTOINCREMENT, periodo_id INTEGER NOT NULL, clase_id INTEGER NOT NULL, estudiante_id INTEGER NOT NULL, quimestre INTEGER, notaParciales REAL, notaExamenes REAL, notaFinal REAL, FOREIGN KEY(periodo_id) REFERENCES periodo(id), FOREIGN KEY(clase_id) REFERENCES clase(id), FOREIGN KEY(estudiante_id) REFERENCES estudiante(id))";
@@ -81,8 +82,8 @@ public class DBHandler extends SQLiteOpenHelper {
         db.execSQL(CREATE_CL);
         db.execSQL(CREATE_CR);
 
-        //Verificar
         db.execSQL(CREATE_ES);
+        db.execSQL(CREATE_CE);
         db.execSQL(CREATE_AS);
 
         db.execSQL(CREATE_NQ);
@@ -156,7 +157,8 @@ public class DBHandler extends SQLiteOpenHelper {
 
         //
         db.execSQL("insert into clase (nombre, activa, periodo_id) values ('Curso 1', 1, 1)");
-        db.execSQL("insert into estudiante (cedula, nombres, apellidos, sexo, orden, estado, clase_id, periodo_id) values ('0000000000','Jhon', 'Doe', 'Hombre', 1, 'Registrado', 1, 1)");
+        db.execSQL("insert into estudiante (cedula, nombres, apellidos, sexo) values ('0000000000','Jhon', 'Doe', 'Hombre')");
+        db.execSQL("insert into matricula (estado, estudiante_id, clase_id, periodo_id) values ('Registrado', 1, 1, 1)");
     }
 
     @Override

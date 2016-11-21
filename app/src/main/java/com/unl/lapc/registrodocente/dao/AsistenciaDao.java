@@ -9,6 +9,7 @@ import com.unl.lapc.registrodocente.modelo.Asistencia;
 import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
+import com.unl.lapc.registrodocente.modelo.Matricula;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.ArrayList;
@@ -44,7 +45,7 @@ public class AsistenciaDao extends DBHandler {
         long id = db.insert("asistencia", null, values);
         asistencia.setId((int)id);
 
-        this.calcularPorcentaje(db, asistencia.getEstudiante(), periodo);
+        this.calcularPorcentaje(db, asistencia.getClase(), asistencia.getEstudiante(), periodo);
 
         db.close();
     }
@@ -55,14 +56,14 @@ public class AsistenciaDao extends DBHandler {
      * @param periodo
      * @return
      */
-    public int update(Asistencia asistencia, Periodo periodo) {
+    public int update(Asistencia asistencia, Clase clase, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put("estado", asistencia.getEstado());
 
         int up = db.update("asistencia", values, "id = ?", new String[]{String.valueOf(asistencia.getId())});
 
-        this.calcularPorcentaje(db, asistencia.getEstudiante(), periodo);
+        this.calcularPorcentaje(db, clase, asistencia.getEstudiante(), periodo);
 
         return  up;
     }
@@ -73,29 +74,29 @@ public class AsistenciaDao extends DBHandler {
      * @param estudiante
      * @param periodo
      */
-    private void calcularPorcentaje(SQLiteDatabase db, Estudiante estudiante, Periodo periodo){
+    private void calcularPorcentaje(SQLiteDatabase db, Clase clase, Estudiante estudiante, Periodo periodo){
         db.execSQL(
                 String.format(
-                "update estudiante set porcentajeAsistencias = round(" +
+                "update matricula set porcentajeAsistencias = round(" +
                         "((select count(a.id) from asistencia a where a.estudiante_id = %d and a.estado = 'P') * 100) / " +
-                        "(select count(c.id) from calendario c where c.periodo_id = estudiante.periodo_id and c.estado = '%s'), 2) " +
-                        "where id = %d",
-                        estudiante.getId(), Calendario.ESTADO_ACTIVO, estudiante.getId()
+                        "(select count(c.id) from calendario c where c.periodo_id = matricula.periodo_id and c.estado = '%s'), 2) " +
+                        "where clase_id = %d and estudiante_id = %d",
+                        estudiante.getId(), Calendario.ESTADO_ACTIVO, clase.getId(), estudiante.getId()
                 )
         );
 
         //Actualiza estado estudiante
-        String s3 = String.format("update estudiante set estado = (case " +
+        String s3 = String.format("update matricula set estado = (case " +
                         "when notaFinal >= %s and porcentajeAsistencias >= %s then  '%s' " +
                         "when notaFinal = 0 and porcentajeAsistencias = 0 then  '%s' " +
                         "when notaFinal < %s or porcentajeAsistencias < %s then  '%s' " +
                         "else '%s' end) " +
-                        "where id = %d",
-                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Estudiante.ESTADO_APROBADO,
-                Estudiante.ESTADO_REGISTRADO,
-                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Estudiante.ESTADO_REPROBADO,
-                Estudiante.ESTADO_REGISTRADO,
-                estudiante.getId()
+                        "where clase_id = %d and estudiante_id = %d",
+                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Matricula.ESTADO_APROBADO,
+                Matricula.ESTADO_REGISTRADO,
+                periodo.getNotaMinima(), periodo.getPorcentajeAsistencias(), Matricula.ESTADO_REPROBADO,
+                Matricula.ESTADO_REGISTRADO,
+                clase.getId(), estudiante.getId()
         );
         db.execSQL(s3);
     }
@@ -155,7 +156,7 @@ public class AsistenciaDao extends DBHandler {
     public List<Asistencia> getAsistencias(Clase clase, Date fecha) {
         List<Asistencia> shopList = new ArrayList<>();
 
-        String selectQuery = "SELECT a.id, a.estado, a.estudiante_id, a.calendario_id, e.orden, e.nombres, e.apellidos FROM asistencia a, estudiante e where a.estudiante_id=e.id and a.clase_id = " + clase.getId() + " and a.fecha = date('" + toShortDate(fecha) + "')";
+        String selectQuery = "SELECT a.id, a.estado, a.estudiante_id, a.calendario_id, e.nombres, e.apellidos FROM asistencia a, estudiante e where a.estudiante_id=e.id and a.clase_id = " + clase.getId() + " and a.fecha = date('" + toShortDate(fecha) + "') order by e.apellidos, e.nombres";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -168,13 +169,12 @@ public class AsistenciaDao extends DBHandler {
                 a.setPeriodo(clase.getPeriodo());
 
                 Estudiante e = new Estudiante(cursor.getInt(2));
-                e.setClase(clase);
+                //e.setClase(clase);
                 a.setEstudiante(e);
                 a.setCalendario(new Calendario(cursor.getInt(3)));
-                e.setOrden(cursor.getInt(4));
 
-                e.setNombres(cursor.getString(5));
-                e.setApellidos(cursor.getString(6));
+                e.setNombres(cursor.getString(4));
+                e.setApellidos(cursor.getString(5));
 
                 shopList.add(a);
             } while (cursor.moveToNext());

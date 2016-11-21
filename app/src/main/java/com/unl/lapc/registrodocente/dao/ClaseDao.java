@@ -37,7 +37,7 @@ public class ClaseDao extends DBHandler {
         db.close();
     }
 
-    /*public void addEstudiante(ClaseEstudiante cls) {
+    /*public void addEstudiante(Matricula cls) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -148,7 +148,7 @@ public class ClaseDao extends DBHandler {
     public List<Clase> getMainClases() {
         List<Clase> shopList = new ArrayList<>();
 
-        String selectQuery = "SELECT c.id, c.nombre, c.activa, (select count(ce.id) from estudiante ce where ce.clase_id = c.id) as numeroEstudiantes, periodo_id FROM clase c WHERE c.activa = 1";
+        String selectQuery = "SELECT c.id, c.nombre, c.activa, (select count(m.id) from matricula m where m.clase_id = c.id) as numeroEstudiantes, periodo_id FROM clase c WHERE c.activa = 1";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 

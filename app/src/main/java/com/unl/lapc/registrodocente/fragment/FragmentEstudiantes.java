@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.activity.EstudianteList;
 import com.unl.lapc.registrodocente.activity.EditEstudiante;
 import com.unl.lapc.registrodocente.adapter.EstudianteAdapter;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
@@ -36,6 +37,7 @@ import java.util.List;
 public class FragmentEstudiantes extends Fragment {
 
     static final int PICK_DESTINO_REPORTE_REQUEST = 1;
+    static final int PICK_ESTUDIANTE_REQUEST = 2;
 
     private ListView listView;
     private ClaseDao claseDao;
@@ -89,7 +91,8 @@ public class FragmentEstudiantes extends Fragment {
             public void onClick(View view) {
                 /*Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();*/
-                editEstudiante(new Estudiante(clase, periodo));
+                //editEstudiante(new Estudiante());
+                addEstudiante();
 
             }
         });
@@ -109,6 +112,15 @@ public class FragmentEstudiantes extends Fragment {
         intent.putExtra("estudiante", estudiante);
 
         startActivity(intent);
+    }
+
+    private void addEstudiante(){
+        Intent intent = new Intent(getContext(), EstudianteList.class);
+
+        intent.putExtra("clase", clase);
+        intent.putExtra("periodo", periodo);
+
+        startActivityForResult(intent, PICK_ESTUDIANTE_REQUEST);
     }
 
     @Override
@@ -144,13 +156,13 @@ public class FragmentEstudiantes extends Fragment {
                     Utils.writeCsvLine(sb, i + 1, e.getCedula(), e.getNombres(), e.getApellidos());
                 }
 
+                Utils.checkReportPermisions(getActivity());
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("Estudiantes_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
-                    //Envia al correo
+                }else if(emailFile != null){
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Lista estudiantes");
@@ -169,6 +181,17 @@ public class FragmentEstudiantes extends Fragment {
             if (resultCode == Activity.RESULT_OK && emailFile != null) {
                 emailFile.delete();
                 emailFile = null;
+            }
+        }
+
+        if(requestCode == PICK_ESTUDIANTE_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                int[] ids = data.getExtras().getIntArray("estudiantes");
+                estudianteDao.add(ids, clase, periodo);
+
+                //Consulta nuevamente
+                mLeadsAdapter.clear();
+                mLeadsAdapter.addAll(estudianteDao.getEstudiantes(clase));
             }
         }
     }

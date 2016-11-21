@@ -16,7 +16,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:hint="Cédula"
-        android:singleLine="true">
+        android:singleLine="true"
+        android:inputType="number">
     <requestFocus />
     </EditText>
 

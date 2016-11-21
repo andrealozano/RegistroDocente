@@ -17,14 +17,10 @@ import android.widget.ListView;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.PeriodosAdapter;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
-import com.unl.lapc.registrodocente.modelo.Estudiante;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
 import java.io.File;
-import java.util.Dictionary;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 
@@ -186,12 +182,13 @@ public class Periodos extends AppCompatActivity {
                     Utils.writeCsvLine(sb, s, lista.get(s));
                 }
 
+                Utils.checkReportPermisions(Periodos.this);
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("Estadisticas_%s_%s.csv", p.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
+                }else if(emailFile != null){
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);

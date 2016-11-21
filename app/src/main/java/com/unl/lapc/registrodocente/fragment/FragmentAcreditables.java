@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -28,7 +27,6 @@ import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.ResumenAcreditable;
 import com.unl.lapc.registrodocente.dto.ResumenParcialAcreditable;
-import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Estudiante;
@@ -417,12 +415,14 @@ public class FragmentAcreditables extends Fragment {
                     Utils.writeCsvLine(sb, e.getNotaPromedio(), e.getNotaFinal());
                 }
 
+
+                Utils.checkReportPermisions(getActivity());
                 emailFile = Utils.getExternalStorageFile("reportes", String.format("%s_Q%d_P%d_%s_%s.csv", acreditable.getNombre(), quimestre, parcial, clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
                     emailFile = null;
-                }else{
+                }else if(emailFile != null){
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);

@@ -102,7 +102,7 @@ public class PeriodoDao extends DBHandler {
         db.delete("itemacreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
         db.delete("acreditable", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
 
-        db.delete("estudiante", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
+        db.delete("matricula", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
         db.delete("clase", "periodo_id = ?", new String[] { String.valueOf(periodo.getId()) });
         db.delete("periodo", "id = ?", new String[] { String.valueOf(periodo.getId()) });
 
@@ -151,7 +151,7 @@ public class PeriodoDao extends DBHandler {
      * @return
      */
     public Map<String, Integer> estatisticas(Periodo per){
-        String selectQuery = "SELECT sum(case when estado ='Registrado' then 1 else 0 end) registrados, sum(case when estado ='Aprobado' then 1 else 0 end) aprobados, sum(case when estado ='Reprobado' then 1 else 0 end) reprobados FROM estudiante where periodo_id = ?";
+        String selectQuery = "SELECT sum(case when estado ='Registrado' then 1 else 0 end) registrados, sum(case when estado ='Aprobado' then 1 else 0 end) aprobados, sum(case when estado ='Reprobado' then 1 else 0 end) reprobados FROM matricula where periodo_id = ?";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, new  String[]{""+per.getId()});
         cursor.moveToFirst();
