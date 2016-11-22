@@ -29,13 +29,9 @@ import java.util.Map;
  */
 public class Periodos extends AppCompatActivity {
 
-    static final int PICK_DESTINO_REPORTE_REQUEST = 1;
-
     private ListView listView;
     private PeriodoDao periodoDao;
     private PeriodosAdapter periodosAdapter;
-
-    private File emailFile = null;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -162,45 +158,10 @@ public class Periodos extends AppCompatActivity {
         startActivity(intent);
     }
 
-    /**
-     * Genera el reporte estadístico y lo envia a la memoria o al correo
-     * @param p
-     */
     private void estadisticas(final Periodo p){
-        //
-
-        new AlertDialog.Builder(this).setTitle("Estadísticas").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-
-                Map<String, Integer> lista = periodoDao.estatisticas(p);
-
-                StringBuilder sb= new StringBuilder();
-                Utils.writeCsvLine(sb, "ESTADISTICAS: " + p.getNombre());
-
-
-                for(String s : lista.keySet()){
-                    Utils.writeCsvLine(sb, s, lista.get(s));
-                }
-
-                Utils.checkReportPermisions(Periodos.this);
-                emailFile = Utils.getExternalStorageFile("reportes", String.format("Estadisticas_%s_%s.csv", p.getNombre(),  Utils.currentReportDate()));
-                Utils.writeToFile(sb, emailFile);
-
-                if (which == 0){
-                    emailFile = null;
-                }else if(emailFile != null){
-                    //Envia al correo
-                    Uri u1 = Uri.fromFile(emailFile);
-                    Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Estadísticas");
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Estadísticas: " + emailFile.getName());
-                    sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
-                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getApplicationContext()));
-                    sendIntent.setType("text/html");
-                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
-                }
-            }
-        }).create().show();
+        Intent intent = new Intent(this, PeriodoChart.class);
+        intent.putExtra("periodo", p);
+        startActivityForResult(intent, 1);
     }
 
 }
