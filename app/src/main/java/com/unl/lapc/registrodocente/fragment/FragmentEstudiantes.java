@@ -189,6 +189,7 @@ public class FragmentEstudiantes extends Fragment {
             if (resultCode == Activity.RESULT_OK) {
                 int[] ids = data.getExtras().getIntArray("estudiantes");
                 estudianteDao.add(ids, clase, periodo);
+                estudianteDao.initNotas(clase, periodo);
 
                 //Consulta nuevamente
                 mLeadsAdapter.clear();
