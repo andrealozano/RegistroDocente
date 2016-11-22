@@ -95,7 +95,7 @@ public class FragmentAcreditables extends Fragment {
      */
     private void customInit(){
         tlResumenNotas.removeAllViews();
-        this.itemsAcreditables = acreditableDao.getItemsAcreditables(acreditable, quimestre, parcial);
+        this.itemsAcreditables = acreditableDao.getItemsAcreditables(acreditable, clase, quimestre, parcial);
         cargarTh();
         cargarTr();
     }

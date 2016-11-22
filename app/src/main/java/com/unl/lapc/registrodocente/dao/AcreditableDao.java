@@ -160,7 +160,7 @@ public class AcreditableDao extends DBHandler {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("insert into registroitem (periodo_id, clase_id, estudiante_id, acreditable_id, itemacreditable_id, nota) " +
                 "select ia.periodo_id, ia.clase_id, m.estudiante_id, ia.acreditable_id, ia.id, 0 from itemacreditable ia, matricula m where m.clase_id = ia.clase_id and ia.id = " + id + " and " +
-                "not exists (select r.id from registroitem r where r.itemacreditable_id = " + id + " and r.estudiante_id = m.estudiante_id)");
+                "not exists (select r.id from registroitem r where r.itemacreditable_id = " + id + " and r.estudiante_id = m.estudiante_id and r.clase_id = m.clase_id)");
         db.close();
     }
 
@@ -365,10 +365,10 @@ public class AcreditableDao extends DBHandler {
      * @param parcial
      * @return
      */
-    public List<ItemAcreditable> getItemsAcreditables(Acreditable acreditable, int quimestre, int parcial) {
+    public List<ItemAcreditable> getItemsAcreditables(Acreditable acreditable, Clase clase, int quimestre, int parcial) {
         List<ItemAcreditable> lista = new ArrayList<>();
 
-        String selectQuery = "SELECT id, periodo_id, clase_id, acreditable_id, alias, nombre, fecha, quimestre, parcial FROM itemacreditable where acreditable_id = " + acreditable.getId() + " and quimestre = "+quimestre+" and parcial = "+parcial+" order by fecha asc, id asc";
+        String selectQuery = "SELECT id, periodo_id, clase_id, acreditable_id, alias, nombre, fecha, quimestre, parcial FROM itemacreditable where acreditable_id = " + acreditable.getId() + " and clase_id = "+clase.getId()+" and quimestre = "+quimestre+" and parcial = "+parcial+" order by fecha asc, id asc";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 

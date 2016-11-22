@@ -194,24 +194,24 @@ public class EstudianteDao extends DBHandler {
         SQLiteDatabase db = this.getWritableDatabase();
 
         for(int q = 1; q <= periodo.getQuimestres();q++){
-            String sqlrq = String.format("insert into registroquimestral (periodo_id, clase_id, estudiante_id, quimestre, notaParciales, notaExamenes, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, %d, 0, 0, 0 from matricula m where m.clase_id = %d and not exists (select n.id from registroquimestral n where n.estudiante_id = m.estudiante_id and n.quimestre = %d)", q, cls.getId(), q);
+            String sqlrq = String.format("insert into registroquimestral (periodo_id, clase_id, estudiante_id, quimestre, notaParciales, notaExamenes, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, %d, 0, 0, 0 from matricula m where m.clase_id = %d and not exists (select n.id from registroquimestral n where n.estudiante_id = m.estudiante_id and n.clase_id = m.clase_id and n.quimestre = %d)", q, cls.getId(), q);
             db.execSQL(sqlrq);
 
-            String sqlraq = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaPromedio, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, a.id, %d, 0, 0, 0 from matricula m, acreditable a where m.periodo_id=a.periodo_id and a.tipo='Quimestre' and  m.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = m.estudiante_id and b.tipo='Quimestre' and n.quimestre = %d)", q, cls.getId(), q);
+            String sqlraq = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaPromedio, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, a.id, %d, 0, 0, 0 from matricula m, acreditable a where m.periodo_id=a.periodo_id and a.tipo='Quimestre' and  m.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = m.estudiante_id and n.clase_id = m.clase_id and b.tipo='Quimestre' and n.quimestre = %d)", q, cls.getId(), q);
             db.execSQL(sqlraq);
 
             for(int p = 1; p <= periodo.getParciales();p++){
-                String sqlrp = String.format("insert into registroparcial (periodo_id, clase_id, estudiante_id, quimestre, parcial, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, %d, %d, 0 from matricula m where m.clase_id = %d and not exists (select n.id from registroparcial n where n.estudiante_id = m.estudiante_id and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
+                String sqlrp = String.format("insert into registroparcial (periodo_id, clase_id, estudiante_id, quimestre, parcial, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, %d, %d, 0 from matricula m where m.clase_id = %d and not exists (select n.id from registroparcial n where n.estudiante_id = m.estudiante_id and n.clase_id = m.clase_id and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
                 db.execSQL(sqlrp);
 
-                String sqlrap = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaPromedio, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, a.id, %d, %d, 0, 0 from matricula m, acreditable a where m.periodo_id=a.periodo_id and a.tipo='Parcial' and  m.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = m.estudiante_id and b.tipo='Parcial' and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
+                String sqlrap = String.format("insert into registroacreditable (periodo_id, clase_id, estudiante_id, acreditable_id, quimestre, parcial, notaPromedio, notaFinal) select m.periodo_id, m.clase_id, m.estudiante_id, a.id, %d, %d, 0, 0 from matricula m, acreditable a where m.periodo_id=a.periodo_id and a.tipo='Parcial' and  m.clase_id = %d and not exists (select n.id from registroacreditable n, acreditable b where n.acreditable_id = b.id and n.estudiante_id = m.estudiante_id and n.clase_id = m.clase_id and b.tipo='Parcial' and n.quimestre = %d and n.parcial = %d)", q, p, cls.getId(), q, p);
                 db.execSQL(sqlrap);
             }
         }
 
         String sqlrit = String.format("insert into registroitem (periodo_id, clase_id, estudiante_id, acreditable_id, itemacreditable_id, nota) " +
                 "select m.periodo_id, m.clase_id, m.estudiante_id, a.acreditable_id, a.id, 0 from matricula m, itemacreditable a where m.clase_id=a.clase_id and  m.clase_id = %d and " +
-                "not exists (select n.id from registroitem n, itemacreditable b where n.itemacreditable_id = b.id and n.estudiante_id = m.estudiante_id and b.id = a.id)", cls.getId());
+                "not exists (select n.id from registroitem n, itemacreditable b where n.itemacreditable_id = b.id and n.estudiante_id = m.estudiante_id and n.clase_id = m.clase_id and b.id = a.id)", cls.getId());
         db.execSQL(sqlrit);
 
         db.close();
