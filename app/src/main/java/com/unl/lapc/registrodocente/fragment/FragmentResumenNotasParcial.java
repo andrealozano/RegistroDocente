@@ -265,6 +265,7 @@ public class FragmentResumenNotasParcial extends Fragment {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Notas parcial " + parcial.getNumero() + ", Quimestre " + parcial.getQuimestre());
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Notas parcial: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getContext()));
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
                 }

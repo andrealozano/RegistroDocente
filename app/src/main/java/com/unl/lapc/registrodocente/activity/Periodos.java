@@ -195,6 +195,7 @@ public class Periodos extends AppCompatActivity {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Estadísticas");
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Estadísticas: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getApplicationContext()));
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
                 }

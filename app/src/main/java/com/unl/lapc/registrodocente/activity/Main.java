@@ -265,6 +265,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Backup");
             sendIntent.putExtra(Intent.EXTRA_TEXT, "Backup: " + backupDB.getName());
             sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+            sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(this));
             sendIntent.setType("text/html");
             startActivityForResult(Intent.createChooser(sendIntent, "Destino respaldo"), PICK_DESTINO_RESPALDO_REQUEST);
         }

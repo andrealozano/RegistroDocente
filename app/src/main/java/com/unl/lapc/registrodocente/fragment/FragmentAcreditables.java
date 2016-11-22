@@ -429,6 +429,7 @@ public class FragmentAcreditables extends Fragment {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - " + acreditable.getNombre());
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Acreditable: " + acreditable.getNombre() + "<br/>" + "Clase: " + clase.getNombre() + "<br/>Quimestre: " + quimestre+ "<br/>Parcial: " + parcial);
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getContext()));
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
                 }

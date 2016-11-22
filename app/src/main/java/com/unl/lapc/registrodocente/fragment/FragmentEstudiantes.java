@@ -168,6 +168,7 @@ public class FragmentEstudiantes extends Fragment {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Lista estudiantes");
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Lista estudiantes: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getContext()));
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
                 }

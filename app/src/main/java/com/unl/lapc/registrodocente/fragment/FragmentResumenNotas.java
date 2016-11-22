@@ -241,6 +241,7 @@ public class FragmentResumenNotas extends Fragment {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Resumen notas " + clase.getNombre());
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Resumen de notas: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getContext()));
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
                 }
@@ -309,6 +310,7 @@ public class FragmentResumenNotas extends Fragment {
                     sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Notas " + clase.getNombre());
                     sendIntent.putExtra(Intent.EXTRA_TEXT, "Notas: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
+                    sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getContext()));
                     sendIntent.setType("text/html");
                     startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
                 }
