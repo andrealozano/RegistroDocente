@@ -108,7 +108,7 @@ public class ClaseDao extends DBHandler {
         db.delete("registroquimestral", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
         db.delete("registroacreditable", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
         db.delete("itemacreditable", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
-        db.delete("estudiante", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
+        db.delete("matricula", "clase_id = ?", new String[] { String.valueOf(clase.getId()) });
         db.delete("clase", "id = ?", new String[] { String.valueOf(clase.getId()) });
         db.close();
     }

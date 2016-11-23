@@ -6,6 +6,7 @@ import android.content.IntentSender;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 
 import java.util.ArrayList;
@@ -150,10 +151,12 @@ public class PeriodoDao extends DBHandler {
      * @param per
      * @return
      */
-    public Map<String, Integer> estatisticas(Periodo per){
-        String selectQuery = "SELECT sum(case when estado ='Registrado' then 1 else 0 end) registrados, sum(case when estado ='Aprobado' then 1 else 0 end) aprobados, sum(case when estado ='Reprobado' then 1 else 0 end) reprobados FROM matricula where periodo_id = ?";
+    public Map<String, Integer> estatisticas(Periodo per, Clase clase){
+        int cid = clase != null ? clase.getId() : 0;
+
+        String selectQuery = "SELECT sum(case when estado ='Registrado' then 1 else 0 end) registrados, sum(case when estado ='Aprobado' then 1 else 0 end) aprobados, sum(case when estado ='Reprobado' then 1 else 0 end) reprobados FROM matricula where periodo_id = ? and (clase_id = ? or ? = 0)";
         SQLiteDatabase db = this.getWritableDatabase();
-        Cursor cursor = db.rawQuery(selectQuery, new  String[]{""+per.getId()});
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{""+per.getId(), ""+cid, ""+cid});
         cursor.moveToFirst();
 
         Map<String, Integer> r = new Hashtable<>();

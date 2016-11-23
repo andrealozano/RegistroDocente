@@ -19,6 +19,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.activity.PeriodoChart;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
 import com.unl.lapc.registrodocente.dto.ResumenGeneral;
 import com.unl.lapc.registrodocente.dto.ResumenQuimestre;
@@ -212,6 +213,11 @@ public class FragmentResumenNotas extends Fragment {
             return true;
         }
 
+        if (id == R.id.action_estatdisticas) {
+            estadisticas();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -326,6 +332,13 @@ public class FragmentResumenNotas extends Fragment {
                 emailFile = null;
             }
         }
+    }
+
+    private void estadisticas(){
+        Intent intent = new Intent(getContext(), PeriodoChart.class);
+        intent.putExtra("periodo", periodo);
+        intent.putExtra("clase", clase);
+        startActivityForResult(intent, 1);
     }
 
 

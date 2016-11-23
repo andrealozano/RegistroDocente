@@ -19,6 +19,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
+import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -36,6 +37,7 @@ public class PeriodoChart extends AppCompatActivity {
 
     private PeriodoDao periodoDao;
     private Periodo periodo;
+    private Clase clase;
     private File emailFile = null;
 
     @Override
@@ -45,17 +47,18 @@ public class PeriodoChart extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
+        clase = bundle.getParcelable("clase");
         periodoDao = new PeriodoDao(this);
 
         pieChart = (PieChart) findViewById(R.id.pieChart);
         txtPeriodo = (TextView)findViewById(R.id.txtPeriodo);
-        txtPeriodo.setText(periodo.getNombre());
+        txtPeriodo.setText(clase != null ? clase.getNombre() : periodo.getNombre());
 
         imgDown = (Button)findViewById(R.id.btnExportar);
         imgDown.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                exportarCsv(periodo);
+                exportarCsv();
             }
         });
 
@@ -63,7 +66,7 @@ public class PeriodoChart extends AppCompatActivity {
     }
 
     private void initChart(){
-        Map<String, Integer> lista = periodoDao.estatisticas(periodo);
+        Map<String, Integer> lista = periodoDao.estatisticas(periodo, clase);
 
         /*definimos algunos atributos*/
         pieChart.setHoleRadius(40f);
@@ -116,18 +119,17 @@ public class PeriodoChart extends AppCompatActivity {
 
     /**
      * Genera el reporte estadístico y lo envia a la memoria o al correo
-     * @param p
      */
-    private void exportarCsv(final Periodo p){
+    private void exportarCsv(){
         //
 
         new AlertDialog.Builder(this).setTitle("Estadísticas").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
-                Map<String, Integer> lista = periodoDao.estatisticas(p);
+                Map<String, Integer> lista = periodoDao.estatisticas(periodo, clase);
 
                 StringBuilder sb= new StringBuilder();
-                Utils.writeCsvLine(sb, "ESTADISTICAS: " + p.getNombre());
+                Utils.writeCsvLine(sb, "ESTADISTICAS: " + clase != null ? clase.getNombre() : periodo.getNombre());
 
 
                 for(String s : lista.keySet()){
@@ -135,7 +137,7 @@ public class PeriodoChart extends AppCompatActivity {
                 }
 
                 Utils.checkReportPermisions(PeriodoChart.this);
-                emailFile = Utils.getExternalStorageFile("reportes", String.format("Estadisticas_%s_%s.csv", p.getNombre(),  Utils.currentReportDate()));
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("Estadisticas_%s_%s.csv", clase != null ? clase.getNombre() : periodo.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){

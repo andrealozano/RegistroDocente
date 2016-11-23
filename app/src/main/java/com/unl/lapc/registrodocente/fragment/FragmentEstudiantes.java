@@ -20,6 +20,7 @@ import android.widget.ListView;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.activity.EstudianteList;
 import com.unl.lapc.registrodocente.activity.EditEstudiante;
+import com.unl.lapc.registrodocente.activity.PeriodoChart;
 import com.unl.lapc.registrodocente.adapter.EstudianteAdapter;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.dao.EstudianteDao;
@@ -134,8 +135,14 @@ public class FragmentEstudiantes extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
+
         if (id == R.id.action_share) {
             reporteEstudiantes();
+            return true;
+        }
+
+        if (id == R.id.action_estatdisticas) {
+            estadisticas();
             return true;
         }
 
@@ -196,5 +203,12 @@ public class FragmentEstudiantes extends Fragment {
                 mLeadsAdapter.addAll(estudianteDao.getEstudiantes(clase));
             }
         }
+    }
+
+    private void estadisticas(){
+        Intent intent = new Intent(getContext(), PeriodoChart.class);
+        intent.putExtra("periodo", periodo);
+        intent.putExtra("clase", clase);
+        startActivityForResult(intent, 1);
     }
 }
