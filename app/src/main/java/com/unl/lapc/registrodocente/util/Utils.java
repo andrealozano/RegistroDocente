@@ -2,11 +2,17 @@ package com.unl.lapc.registrodocente.util;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -17,6 +23,7 @@ import com.unl.lapc.registrodocente.activity.SettingsActivity;
 
 import java.io.File;
 import java.io.FileWriter;
+import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -242,5 +249,7 @@ public class Utils {
         String email = sharedPref.getString(SettingsActivity.KEY_PREF_SERGURIDAD_EMAIL, "");
         return new String[]{email};
     }
+
+
 
 }

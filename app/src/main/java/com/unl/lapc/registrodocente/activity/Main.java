@@ -1,5 +1,6 @@
 package com.unl.lapc.registrodocente.activity;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,18 +19,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.ClasesMainAdapter;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
+import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
+import com.unl.lapc.registrodocente.util.UriUtils;
 import com.unl.lapc.registrodocente.util.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.URI;
 import java.nio.channels.FileChannel;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 /**
@@ -40,6 +49,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
     static final int AUTENTICATION_REQUEST = 1;
     static final int PICK_DESTINO_RESPALDO_REQUEST = 2;
+    static final int FILE_SELECT_RESTORE = 3;
 
     protected static String login = null;
 
@@ -173,6 +183,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             backupDatabase();
         }
 
+        if (id == R.id.action_restore) {
+            showFileChooserRestore();
+        }
+
         /*
         if (id == R.id.nav_camera) {
             // Handle the camera action
@@ -271,6 +285,67 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    private void showFileChooserRestore() {
+        Utils.checkReportPermisions(this);
+
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("*/*");
+        //intent.setType("application/pdf");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult(Intent.createChooser(intent, "Base de datos a restaurar"), FILE_SELECT_RESTORE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "Por favor instale un administrador de archivos.", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void restoreDatabase(File backupDB){
+        try {
+
+            if(backupDB.getAbsolutePath().endsWith(".db")) {
+
+                File data = Environment.getDataDirectory();
+
+                String packageName = "com.unl.lapc.registrodocente";
+                String sourceDBName = "registro_docente.db";
+
+                String currentDBPath = "data/" + packageName + "/databases/" + sourceDBName;
+
+                //String currentDBPath = "//data/package name/databases/database_name";
+                File currentDB = new File(data, currentDBPath);
+
+
+                if (currentDB.exists()) {
+                    FileChannel src = new FileInputStream(backupDB).getChannel();
+                    FileChannel dst = new FileOutputStream(currentDB).getChannel();
+                    dst.transferFrom(src, 0, src.size());
+                    src.close();
+                    dst.close();
+
+                    AlertDialog.Builder builder=new AlertDialog.Builder(this);
+                    //builder.setView(myView);
+                    builder.setTitle("Datos restaurados!");
+                    builder.setMessage("La base de datos ha sido restaurada correctamente. Se procederá a cerrar la aplicación.");
+                    builder.setCancelable(false);
+                    builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            android.os.Process.killProcess(android.os.Process.myPid());
+                        }
+                    });
+                    AlertDialog alert=builder.create();
+                    alert.show();
+                }
+            }else{
+                Toast.makeText(this, "Archivo no válido", Toast.LENGTH_SHORT).show();
+            }
+
+        } catch (Exception e) {
+            Toast.makeText(this, "Error al restaurar", Toast.LENGTH_SHORT).show();
+            Log.e("Restore error", e.getMessage());
+        }
+    }
+
     /**
      * Procesa el resultado al lanzar las subactividades de autenticación y respaldo
      * @param requestCode Código de petición
@@ -293,6 +368,21 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
                 customInit();
             }else{
                 finish();
+            }
+        }
+
+        if(requestCode == FILE_SELECT_RESTORE){
+            if (resultCode == RESULT_OK) {
+                try{
+                    Uri uri = data.getData();
+                    Log.d("Restore uri", "File Uri: " + uri.toString());
+                    File myFile= new File(UriUtils.getFilePath(this, uri));
+                    Log.d("Restore path", "File Path: " + myFile.getAbsolutePath());
+                    restoreDatabase(myFile);
+                }catch (Exception e){
+
+                }
+
             }
         }
     }

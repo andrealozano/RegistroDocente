@@ -286,6 +286,19 @@ public class EditPeriodo extends AppCompatActivity {
             v = false;
         }
 
+        if(periodo.getEscala() > 100){
+            txtEscala.setError("No debe ser mayor a 100");
+            v = false;
+        }
+
+        if(periodo.getNotaMinima() > 100){
+            txtEscala.setError("No debe ser mayor a 100");
+            v = false;
+        }else if(periodo.getNotaMinima() > periodo.getEscala()){
+            txtEscala.setError("No debe ser mayor a la escala");
+            v = false;
+        }
+
         return v;
     }
 
