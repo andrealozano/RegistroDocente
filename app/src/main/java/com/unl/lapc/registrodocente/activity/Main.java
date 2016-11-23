@@ -304,40 +304,44 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         try {
 
             if(backupDB.getAbsolutePath().endsWith(".db")) {
+                if(backupDB.getAbsolutePath().contains("registro_docente")) {
 
-                File data = Environment.getDataDirectory();
+                    File data = Environment.getDataDirectory();
 
-                String packageName = "com.unl.lapc.registrodocente";
-                String sourceDBName = "registro_docente.db";
+                    String packageName = "com.unl.lapc.registrodocente";
+                    String sourceDBName = "registro_docente.db";
 
-                String currentDBPath = "data/" + packageName + "/databases/" + sourceDBName;
+                    String currentDBPath = "data/" + packageName + "/databases/" + sourceDBName;
 
-                //String currentDBPath = "//data/package name/databases/database_name";
-                File currentDB = new File(data, currentDBPath);
+                    //String currentDBPath = "//data/package name/databases/database_name";
+                    File currentDB = new File(data, currentDBPath);
 
 
-                if (currentDB.exists()) {
-                    FileChannel src = new FileInputStream(backupDB).getChannel();
-                    FileChannel dst = new FileOutputStream(currentDB).getChannel();
-                    dst.transferFrom(src, 0, src.size());
-                    src.close();
-                    dst.close();
+                    if (currentDB.exists()) {
+                        FileChannel src = new FileInputStream(backupDB).getChannel();
+                        FileChannel dst = new FileOutputStream(currentDB).getChannel();
+                        dst.transferFrom(src, 0, src.size());
+                        src.close();
+                        dst.close();
 
-                    AlertDialog.Builder builder=new AlertDialog.Builder(this);
-                    //builder.setView(myView);
-                    builder.setTitle("Datos restaurados!");
-                    builder.setMessage("La base de datos ha sido restaurada correctamente. Se procederá a cerrar la aplicación.");
-                    builder.setCancelable(false);
-                    builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            android.os.Process.killProcess(android.os.Process.myPid());
-                        }
-                    });
-                    AlertDialog alert=builder.create();
-                    alert.show();
+                        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                        //builder.setView(myView);
+                        builder.setTitle("Datos restaurados!");
+                        builder.setMessage("La base de datos ha sido restaurada correctamente. Se procederá a cerrar la aplicación.");
+                        builder.setCancelable(false);
+                        builder.setPositiveButton("Cerrar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                android.os.Process.killProcess(android.os.Process.myPid());
+                            }
+                        });
+                        AlertDialog alert = builder.create();
+                        alert.show();
+                    }
+                }else{
+                    Toast.makeText(this, "Archivo no contiene registro_docente en el nombre", Toast.LENGTH_SHORT).show();
                 }
             }else{
-                Toast.makeText(this, "Archivo no válido", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Archivo de base no válido", Toast.LENGTH_SHORT).show();
             }
 
         } catch (Exception e) {
