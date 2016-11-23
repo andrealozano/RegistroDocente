@@ -263,6 +263,19 @@ public class EditPeriodo extends AppCompatActivity {
             }
         }
 
+        if(periodo.getEquivalenciaExamenes() > 100){
+            txtEqvExamenes.setError("Porcentaje entre 0 y 100");
+            v = false;
+        }
+
+        if(periodo.getEquivalenciaParciales() > 100){
+            txtEqvParciales.setError("Porcentaje entre 0 y 100");
+            v = false;
+        }else if(periodo.getEquivalenciaExamenes() + periodo.getEquivalenciaParciales() != 100){
+            txtEqvParciales.setError("La suma de los porcentajes debe ser 100%");
+            v = false;
+        }
+
         return v;
     }
 

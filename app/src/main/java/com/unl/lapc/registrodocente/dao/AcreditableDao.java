@@ -219,6 +219,9 @@ public class AcreditableDao extends DBHandler {
     public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro, Periodo periodo, Clase clase, Estudiante estudiante, Acreditable acreditable, int quimestre, int parcial) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        double eqvExamenes = periodo.getEquivalenciaExamenes() / 10;
+        double eqvParciales = periodo.getEquivalenciaParciales() / 10;
+
         //Actualiza nota
         ContentValues vri = new ContentValues();
         vri.put("nota", registro.getNotaFinal());
@@ -246,7 +249,7 @@ public class AcreditableDao extends DBHandler {
                     "update registroquimestral set notaExamenes=(select round(((sum(ra.notaPromedio)/(select count(a.id) from acreditable a where a.periodo_id = %d and a.tipo = '%s')) * %s), 2) from registroacreditable ra where ra.clase_id = %d and ra.estudiante_id = %d and ra.quimestre = %d and ra.parcial = 0) " +
                             "where clase_id = %d and estudiante_id = %d and quimestre = %d",
                     periodo.getId(), Acreditable.TIPO_ACREDITABLE_QUIMESTRE,
-                    periodo.getEquivalenciaExamenes() / periodo.getEscala(),
+                    eqvExamenes / periodo.getEscala(),
                     clase.getId(), estudiante.getId(), quimestre,
                     clase.getId(), estudiante.getId(), quimestre);
             db.execSQL(s);
@@ -257,7 +260,7 @@ public class AcreditableDao extends DBHandler {
                 "update registroquimestral set notaParciales=(select round(((sum(rp.notaFinal)/%d)) * %s, 2) from registroparcial rp where rp.clase_id = %d and rp.estudiante_id = %d and rp.quimestre = %d) " +
                         "where clase_id = %d and estudiante_id = %d and quimestre = %d",
                 periodo.getParciales(),
-                periodo.getEquivalenciaParciales() / periodo.getEscala(),
+                eqvParciales / periodo.getEscala(),
                 clase.getId(), estudiante.getId(), quimestre,
                 clase.getId(), estudiante.getId(), quimestre);
         db.execSQL(s1);

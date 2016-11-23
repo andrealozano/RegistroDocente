@@ -62,7 +62,7 @@
             android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Equivalencia parciales"
+            android:text="Porcentaje parciales"
             android:id="@+id/tvEqvParciales"/>
 
         <EditText
@@ -83,7 +83,7 @@
             android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Equivalencia examenes"
+            android:text="Porcentaje examenes"
             android:id="@+id/tvEqvExamenes"/>
 
         <EditText

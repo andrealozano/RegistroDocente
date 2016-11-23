@@ -18,8 +18,8 @@ public class Periodo implements Parcelable{
     private double escala = 10; //escala calificacion sobre 10, 20, 100
     private int quimestres = 2;
     private int parciales = 3;
-    private double equivalenciaParciales = 8; //Equivalencia de los parciales
-    private double equivalenciaExamenes = 2; //Equivalencia de los examenes quimestrales
+    private double equivalenciaParciales = 80; //Porcentaje de los parciales
+    private double equivalenciaExamenes = 20; //Porcentaje de los examenes quimestrales
     private double porcentajeAsistencias = 80; //80%
     private double notaMinima = 7; //Nota minima para aprobar
 

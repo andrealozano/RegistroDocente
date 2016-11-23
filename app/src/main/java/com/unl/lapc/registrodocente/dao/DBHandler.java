@@ -113,8 +113,8 @@ public class DBHandler extends SQLiteOpenHelper {
         cvp.put("escala", 10);
         cvp.put("quimestres", 2);
         cvp.put("parciales", 3);
-        cvp.put("equivalenciaParciales", 8);
-        cvp.put("equivalenciaExamenes", 2);
+        cvp.put("equivalenciaParciales", 80); // 80%
+        cvp.put("equivalenciaExamenes", 20); // 20%
         cvp.put("porcentajeAsistencias", 80);
         cvp.put("notaMinima", 7);
         int pid = (int)db.insert("periodo", null, cvp);
