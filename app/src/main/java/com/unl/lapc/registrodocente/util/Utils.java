@@ -30,11 +30,15 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Clase de utilidad para hacer operacioes comunes de conversión, formato, escritura, etc.
  */
 public class Utils {
+
+    private static final String EMAIL = "^[a-zA-Z0-9_-]{2,15}@[a-zA-Z0-9_-]{2,15}.[a-zA-Z]{2,4}(.[a-zA-Z]{2,4})?$";
 
     /**
      * Convierte una cadena double
@@ -248,6 +252,26 @@ public class Utils {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
         String email = sharedPref.getString(SettingsActivity.KEY_PREF_SERGURIDAD_EMAIL, "");
         return new String[]{email};
+    }
+
+    public static boolean validarEmail(String value){
+        if(value != null){
+            String v = value.toString();
+
+            if(v.length() > 0){
+                //asignamos la expresion
+                Pattern p = Pattern.compile(EMAIL);
+                //comparamos con nuestro valor
+                Matcher m = p.matcher(v);
+                //si el correo es correcto devuelve TRUE o de lo contrario FALSE
+
+                if(!m.matches()){
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
 

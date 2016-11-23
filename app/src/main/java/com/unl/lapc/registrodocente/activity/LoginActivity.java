@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.util.Utils;
 
 /**
  * Pantalla para registrarse o autenticarse.
@@ -225,7 +226,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private boolean isEmailValid(String email) {
         //TODO: Replace this with your own logic
-        return email.contains("@");
+        return email.length() > 0 && Utils.validarEmail(email);
 
     }
 

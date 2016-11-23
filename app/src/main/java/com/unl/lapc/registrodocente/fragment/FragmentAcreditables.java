@@ -196,6 +196,8 @@ public class FragmentAcreditables extends Fragment {
             tv4.setBackgroundResource(R.drawable.cell_shape_head);
             tv4.setText(itemsAcreditables.get(j).getAlias());
             tv4.setClickable(true);
+            tv4.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_touch_app_black_18dp, 0, 0, 0);
+            //tv4.setCompoundDrawablesWithIntrinsicBounds(android.R.drawable.ic_, 0, 0, 0);
             tv4.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -271,7 +273,7 @@ public class FragmentAcreditables extends Fragment {
                 tvNot.setGravity(Gravity.CENTER);
                 tvNot.setTextSize(18);
                 tvNot.setPadding(5, 5, 5, 5);
-                tvNot.setBackgroundResource(R.drawable.cell_shape);
+                tvNot.setBackgroundResource(R.drawable.cell_shape_edit);
                 tvNot.setText(Utils.toString2(registro.getNotaFinal()));
                 tvNot.setClickable(true);
                 tvNot.setOnClickListener(new View.OnClickListener() {
