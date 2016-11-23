@@ -101,7 +101,7 @@ public class EditPeriodo extends AppCompatActivity {
             //Calendar c = GregorianCalendar.getInstance();
 
             txtNombre.setText(periodo.getNombre());
-            txtEscala.setText(""+periodo.getEscala());
+            txtEscala.setText(""+((int)periodo.getEscala()));
             txtQuimestres.setText(""+periodo.getQuimestres());
             txtParciales.setText(""+periodo.getParciales());
 
