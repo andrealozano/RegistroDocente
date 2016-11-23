@@ -17,6 +17,7 @@ import android.widget.ListView;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.adapter.PeriodosAdapter;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
+import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -106,9 +107,10 @@ public class Periodos extends AppCompatActivity {
             menu.add(0, 0, 0, "Editar");
             //------------------------------
             //menu.add(1, 1, 1, "Quimestres");
-            menu.add(1, 2, 2, "Acreditables");
-            menu.add(1, 3, 4, "Calendario");
-            menu.add(1, 4, 5, "Estadísticas");
+            menu.add(1, 2, 2, "Acreditables parcial");
+            menu.add(1, 3, 3, "Acreditables quimestre");
+            menu.add(1, 4, 4, "Calendario");
+            menu.add(1, 5, 5, "Estadísticas");
         }
     }
 
@@ -132,16 +134,24 @@ public class Periodos extends AppCompatActivity {
         if(id == 2) {
             Intent intent = new Intent(this, Acreditables.class);
             intent.putExtra("periodo", p);
+            intent.putExtra("tipo", Acreditable.TIPO_ACREDITABLE_PARCIAL);
             startActivity(intent);
         }
 
         if(id == 3) {
+            Intent intent = new Intent(this, Acreditables.class);
+            intent.putExtra("periodo", p);
+            intent.putExtra("tipo", Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
+            startActivity(intent);
+        }
+
+        if(id == 4) {
             Intent intent = new Intent(this, Calendarios.class);
             intent.putExtra("periodo", p);
             startActivity(intent);
         }
 
-        if(id == 4) {
+        if(id == 5) {
             estadisticas(p);
         }
 

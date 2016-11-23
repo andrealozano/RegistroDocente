@@ -30,34 +30,14 @@
         android:singleLine="true">
     </EditText>
 
-    <RadioGroup
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtAlias"
-        android:id="@+id/rgTipo"
-        android:orientation="horizontal">
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Parcial"
-            android:id="@+id/rbParcial"/>
-
-        <RadioButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Quimestre"
-            android:id="@+id/rbQuimestre"/>
-    </RadioGroup>
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/txtEquivalencia"
-        android:hint="Equivalencia"
-        android:layout_below="@+id/rgTipo"
+        android:hint="Porcentaje"
+        android:layout_below="@+id/txtAlias"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 

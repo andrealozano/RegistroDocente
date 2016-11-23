@@ -24,6 +24,7 @@ public class Acreditables extends AppCompatActivity {
     private ListView listView;
     private AcreditableDao acreditableDao;
     private Periodo periodo;
+    private String tipo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,12 +33,14 @@ public class Acreditables extends AppCompatActivity {
 
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
+        tipo = bundle.getString("tipo");
 
+        setTitle("Acreditables: " + tipo);
         listView = (ListView) findViewById(R.id.listView);
         acreditableDao = new AcreditableDao(this);
 
         // Inicializar el adaptador con la fuente de datos.
-        AcreditableAdapter mLeadsAdapter = new AcreditableAdapter(this, acreditableDao.getAll(periodo));
+        AcreditableAdapter mLeadsAdapter = new AcreditableAdapter(this, acreditableDao.getAll(periodo, tipo));
 
         //Relacionando la lista con el adaptador
         listView.setAdapter(mLeadsAdapter);
@@ -69,7 +72,7 @@ public class Acreditables extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_add) {
-            editAction(new Acreditable(periodo));
+            editAction(new Acreditable(periodo, tipo));
             return true;
         }
 
@@ -104,6 +107,8 @@ public class Acreditables extends AppCompatActivity {
         Intent intent = new Intent(this, EditAcreditable.class);
         intent.putExtra("periodo", periodo);
         intent.putExtra("acreditable", acreditable);
+        intent.putExtra("tipo", acreditable.getTipo());
+
         startActivity(intent);
         finish();
     }

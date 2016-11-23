@@ -13,16 +13,23 @@
     -->
 
     <item
-        android:id="@+id/action_acreditables"
+        android:id="@+id/action_acreditables_par"
         android:orderInCategory="201"
-        android:title="Acreditables"
+        android:title="Acreditables parcial"
+        android:icon="@drawable/ic_touch_app_black_18dp"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_acreditables_quim"
+        android:orderInCategory="202"
+        android:title="Acreditables quimestre"
         android:icon="@drawable/ic_touch_app_black_18dp"
         app:showAsAction="never" />
 
 
     <item
         android:id="@+id/action_calendario"
-        android:orderInCategory="202"
+        android:orderInCategory="203"
         android:title="Calendario"
         android:icon="@drawable/ic_touch_app_black_18dp"
         app:showAsAction="never" />

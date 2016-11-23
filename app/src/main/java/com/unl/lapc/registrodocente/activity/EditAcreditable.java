@@ -28,12 +28,13 @@ public class EditAcreditable extends AppCompatActivity {
 
     private Periodo periodo = null;
     private Acreditable acreditable = null;
+    private String tipo;
 
     private AcreditableDao acreditableDao = null;
 
     private EditText txtNombre;
     private EditText txtAlias;
-    private RadioGroup rgTipo;
+    //private RadioGroup rgTipo;
     private EditText txtEquivalencia;
     private EditText txtNumero;
 
@@ -45,13 +46,15 @@ public class EditAcreditable extends AppCompatActivity {
 
         txtNombre= (EditText)findViewById(R.id.txtNombre);
         txtAlias= (EditText)findViewById(R.id.txtAlias);
-        rgTipo= (RadioGroup)findViewById(R.id.rgTipo);
+        //rgTipo= (RadioGroup)findViewById(R.id.rgTipo);
         txtNumero= (EditText)findViewById(R.id.txtNumero);
         txtEquivalencia= (EditText)findViewById(R.id.txtEquivalencia);
 
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
         acreditable = bundle.getParcelable("acreditable");
+        tipo = bundle.getString("tipo");
+        setTitle("Editar acreditables: " + tipo);
 
         fijarValores();
 
@@ -69,11 +72,11 @@ public class EditAcreditable extends AppCompatActivity {
         txtNumero.setText(""+acreditable.getNumero());
         txtEquivalencia.setText(""+acreditable.getEquivalencia());
 
-        if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
+        /*if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
             rgTipo.check(R.id.rbParcial);
         }else{
             rgTipo.check(R.id.rbQuimestre);
-        }
+        }*/
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,13 +121,13 @@ public class EditAcreditable extends AppCompatActivity {
             acreditable.setAlias(txtAlias.getText().toString());
             acreditable.setNumero(Utils.toInt(txtNumero.getText().toString()));
             acreditable.setEquivalencia(Utils.toDouble(txtEquivalencia.getText().toString()));
-
-            int rbTipo = rgTipo.getCheckedRadioButtonId();
+            acreditable.setTipo(tipo);
+            /*int rbTipo = rgTipo.getCheckedRadioButtonId();
             if (rbTipo == R.id.rbParcial) {
                 acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_PARCIAL);
             } else {
                 acreditable.setTipo(Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
-            }
+            }*/
 
             if (validar()) {
                 if (acreditable.getId() == 0) {
@@ -147,6 +150,7 @@ public class EditAcreditable extends AppCompatActivity {
     public void onBackPressed(){
         Intent intent = new Intent(this, Acreditables.class);
         intent.putExtra("periodo", periodo);
+        intent.putExtra("tipo", tipo);
         startActivity(intent);
         finish();
     }
@@ -192,11 +196,19 @@ public class EditAcreditable extends AppCompatActivity {
             txtNombre.setError("Ingrese un nombre");
             v = false;
         }else{
-            /*boolean e = acreditableDao.existe(periodo);
-            if(e){
+            if(acreditableDao.existeNombre(acreditable)){
                 txtNombre.setError("Nombre duplicado");
                 v = false;
-            }*/
+            }
+        }
+
+        if(acreditableDao.existeNumero(acreditable)){
+            txtNumero.setError("Número duplicado");
+            v = false;
+        }
+
+        if(acreditable.getEquivalencia() > 100 || acreditable.getEquivalencia() <= 0){
+            txtEquivalencia.setError("Porcentaje entre 1 y 100");
         }
 
         return v;

@@ -124,7 +124,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ca1.put("nombre", "Actividad Indivial");
         ca1.put("alias", "AI");
         ca1.put("tipo", Acreditable.TIPO_ACREDITABLE_PARCIAL);
-        ca1.put("equivalencia", 2.0);
+        ca1.put("equivalencia", 20.0);
         ca1.put("numero", 1);
         ca1.put("periodo_id", pid);
         db.insert("acreditable", null, ca1);
@@ -152,7 +152,7 @@ public class DBHandler extends SQLiteOpenHelper {
         ca1.put("nombre", "Examen Quimestral");
         ca1.put("alias", "EQ");
         ca1.put("tipo", Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
-        ca1.put("numero", 6);
+        ca1.put("numero", 1); //Empieza nuevamente en 1
         db.insert("acreditable", null, ca1);
 
         //

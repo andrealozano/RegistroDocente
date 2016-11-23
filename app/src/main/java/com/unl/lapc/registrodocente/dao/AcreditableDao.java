@@ -303,10 +303,10 @@ public class AcreditableDao extends DBHandler {
      * @param periodo
      * @return
      */
-    public List<Acreditable> getAll(Periodo periodo) {
+    public List<Acreditable> getAll(Periodo periodo, String tipo) {
         List<Acreditable> lista = new ArrayList<>();
 
-        String selectQuery = "SELECT id, nombre, alias, tipo, equivalencia, numero FROM acreditable where periodo_id = " + periodo.getId();
+        String selectQuery = "SELECT id, nombre, alias, tipo, equivalencia, numero FROM acreditable where periodo_id = " + periodo.getId() + " and tipo='"+tipo+"' order by numero";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
@@ -397,6 +397,25 @@ public class AcreditableDao extends DBHandler {
         return lista;
     }
 
+    public boolean existeNombre(Acreditable acreditable){
+        String selectQuery = "SELECT count(*) FROM acreditable where lower(trim(nombre)) =? and id <> ? and periodo_id = ? and tipo = ?";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{acreditable.getNombre().toLowerCase(), ""+acreditable.getId(), ""+ acreditable.getPeriodo().getId(), acreditable.getTipo()});
+        cursor.moveToFirst();
+
+        return cursor.getInt(0) > 0;
+    }
+
+    public boolean existeNumero(Acreditable acreditable){
+        String selectQuery = "SELECT count(*) FROM acreditable where numero =? and id <> ? and periodo_id = ? and tipo =?";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{""+acreditable.getNumero(), ""+acreditable.getId(), ""+ acreditable.getPeriodo().getId(), acreditable.getTipo()});
+        cursor.moveToFirst();
+
+        return cursor.getInt(0) > 0;
+    }
 
 
 }

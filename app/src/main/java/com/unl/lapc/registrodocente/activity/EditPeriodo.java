@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.dao.CalendarioDao;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
+import com.unl.lapc.registrodocente.modelo.Acreditable;
 import com.unl.lapc.registrodocente.modelo.Periodo;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -161,9 +162,18 @@ public class EditPeriodo extends AppCompatActivity {
             return true;
         }*/
 
-        if (id == R.id.action_acreditables) {
+        if (id == R.id.action_acreditables_par) {
             Intent intent = new Intent(this, Acreditables.class);
             intent.putExtra("periodo", periodo);
+            intent.putExtra("tipo", Acreditable.TIPO_ACREDITABLE_PARCIAL);
+            startActivity(intent);
+            return true;
+        }
+
+        if (id == R.id.action_acreditables_quim) {
+            Intent intent = new Intent(this, Acreditables.class);
+            intent.putExtra("periodo", periodo);
+            intent.putExtra("tipo", Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
             startActivity(intent);
             return true;
         }

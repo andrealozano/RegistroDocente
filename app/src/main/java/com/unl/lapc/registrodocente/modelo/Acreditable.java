@@ -15,7 +15,7 @@ public class Acreditable implements Parcelable{
     private String nombre="";
     private String alias="";
     private String tipo= TIPO_ACREDITABLE_PARCIAL;
-    private double equivalencia=2;
+    private double equivalencia=20; //20%=2pts
     private int numero=0;
 
     private Periodo periodo;
@@ -29,6 +29,11 @@ public class Acreditable implements Parcelable{
 
     public Acreditable(Periodo periodo){
         this.periodo= periodo;
+    }
+
+    public Acreditable(Periodo periodo, String tipo){
+        this.periodo= periodo;
+        this.tipo = tipo;
     }
 
     public Acreditable(int id, String nombre){
