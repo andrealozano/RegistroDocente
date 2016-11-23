@@ -108,7 +108,11 @@ public class ResumenAcreditable {
         //Calculo nota final
         //      10   -> 2
         //      7.16 -> x
-        double equivalencia = acreditable.getEquivalencia() / 10;
+
+        //Calculo nota final
+        //      100   -> 20%
+        //      78    -> x
+        double equivalencia = acreditable.getEquivalencia();
         double nf = (notaPromedio * equivalencia) / periodo.getEscala();
         notaFinal = Utils.round(nf, 2);
     }
