@@ -43,7 +43,7 @@ public class AcreditableAdapter extends ArrayAdapter<Acreditable> {
 
 
         name.setText(lead.getNombre());
-        desc.setText(String.format("%s. %s (%s: %s)", lead.getNumero(), lead.getAlias(), lead.getTipo(), lead.getEquivalencia()));
+        desc.setText(String.format("%s. %s (%s: %s)", lead.getNumero(), lead.getAlias(), lead.getTipo(), lead.getEquivalencia() + "%"));
 
         return convertView;
     }
