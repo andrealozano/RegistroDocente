@@ -41,6 +41,7 @@
         android:inputType="numberDecimal"
         android:ems="10"
         android:id="@+id/txtNota"
+        android:maxLength="@integer/max_length_numero"
         android:layout_below="@+id/textView10"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />

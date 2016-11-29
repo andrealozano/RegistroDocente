@@ -16,7 +16,6 @@ public class Acreditable implements Parcelable{
     private String alias="";
     private String tipo= TIPO_ACREDITABLE_PARCIAL;
     private double equivalencia=20; //20%=2pts
-    private int numero=0;
 
     private Periodo periodo;
 
@@ -41,13 +40,12 @@ public class Acreditable implements Parcelable{
         this.nombre = nombre;
     }
 
-    public Acreditable(int id, String nombre, String alias, String tipo, double eqivalencia, int numero){
+    public Acreditable(int id, String nombre, String alias, String tipo, double eqivalencia){
         this.id = id;
         this.nombre = nombre;
         this.alias = alias;
         this.tipo = tipo;
         this.equivalencia = equivalencia;
-        this.numero = numero;
     }
 
     @Override
@@ -106,9 +104,6 @@ public class Acreditable implements Parcelable{
         this.equivalencia = equivalencia;
     }
 
-    public int getNumero() {return numero;}
-    public void setNumero(int numero) {this.numero = numero;}
-
     public Periodo getPeriodo() {return periodo;}
     public void setPeriodo(Periodo periodo) {this.periodo = periodo;}
 
@@ -124,7 +119,6 @@ public class Acreditable implements Parcelable{
         this.alias = in.readString();
         this.tipo = in.readString();
         this.equivalencia = in.readDouble();
-        this.numero = in.readInt();
         this.periodo = new Periodo(in.readInt());
     }
 
@@ -135,7 +129,6 @@ public class Acreditable implements Parcelable{
         parcel.writeString(alias);
         parcel.writeString(tipo);
         parcel.writeDouble(equivalencia);
-        parcel.writeInt(numero);
         parcel.writeInt(periodo.getId());
     }
 

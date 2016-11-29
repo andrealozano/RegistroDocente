@@ -19,6 +19,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:hint="Nombre del parcial"
+        android:maxLength="@integer/max_length_nombre"
         android:singleLine="true">
         <requestFocus />
     </EditText>

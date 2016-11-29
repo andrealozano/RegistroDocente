@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:singleLine="true"
+        android:maxLength="@integer/max_length_nombre"
         android:layout_below="@+id/tvNombre"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">

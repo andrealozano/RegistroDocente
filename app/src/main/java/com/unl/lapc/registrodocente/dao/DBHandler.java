@@ -61,7 +61,7 @@ public class DBHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String CREATE_PA = "CREATE TABLE periodo(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, inicio DATE, fin DATE, escala REAL, quimestres INTEGER, parciales INTEGER, equivalenciaParciales REAL, equivalenciaExamenes REAL, porcentajeAsistencias REAL, notaMinima REAL)";
-        String CREATE_AC = "CREATE TABLE acreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, alias TEXT, tipo TEXT, equivalencia REAL, numero INTEGER, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
+        String CREATE_AC = "CREATE TABLE acreditable(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, alias TEXT, tipo TEXT, equivalencia REAL, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         String CREATE_CR = "CREATE TABLE calendario(id INTEGER PRIMARY KEY AUTOINCREMENT, estado TEXT, fecha DATE, observacion TEXT, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         String CREATE_CL = "CREATE TABLE clase(id INTEGER PRIMARY KEY AUTOINCREMENT, nombre TEXT, activa BOOLEAN DEFAULT 1, periodo_id INTEGER NOT NULL, FOREIGN KEY(periodo_id) REFERENCES periodo(id))";
         //verificar
@@ -125,34 +125,28 @@ public class DBHandler extends SQLiteOpenHelper {
         ca1.put("alias", "AI");
         ca1.put("tipo", Acreditable.TIPO_ACREDITABLE_PARCIAL);
         ca1.put("equivalencia", 20.0);
-        ca1.put("numero", 1);
         ca1.put("periodo_id", pid);
         db.insert("acreditable", null, ca1);
 
         ca1.put("nombre", "Trabajos Individuales");
         ca1.put("alias", "TI");
-        ca1.put("numero", 2);
         db.insert("acreditable", null, ca1);
 
         ca1.put("nombre", "Trabajos Grupales");
         ca1.put("alias", "TG");
-        ca1.put("numero", 3);
         db.insert("acreditable", null, ca1);
 
         ca1.put("nombre", "Lecciones Orales o Escritas");
         ca1.put("alias", "LOE");
-        ca1.put("numero", 4);
         db.insert("acreditable", null, ca1);
 
         ca1.put("nombre", "Prueba de Bloque");
         ca1.put("alias", "PB");
-        ca1.put("numero", 5);
         db.insert("acreditable", null, ca1);
 
         ca1.put("nombre", "Examen Quimestral");
         ca1.put("alias", "EQ");
         ca1.put("tipo", Acreditable.TIPO_ACREDITABLE_QUIMESTRE);
-        ca1.put("numero", 1); //Empieza nuevamente en 1
         db.insert("acreditable", null, ca1);
 
         //

@@ -36,7 +36,6 @@ public class EditAcreditable extends AppCompatActivity {
     private EditText txtAlias;
     //private RadioGroup rgTipo;
     private EditText txtEquivalencia;
-    private EditText txtNumero;
 
 
     @Override
@@ -47,7 +46,6 @@ public class EditAcreditable extends AppCompatActivity {
         txtNombre= (EditText)findViewById(R.id.txtNombre);
         txtAlias= (EditText)findViewById(R.id.txtAlias);
         //rgTipo= (RadioGroup)findViewById(R.id.rgTipo);
-        txtNumero= (EditText)findViewById(R.id.txtNumero);
         txtEquivalencia= (EditText)findViewById(R.id.txtEquivalencia);
 
         Bundle bundle = getIntent().getExtras();
@@ -69,7 +67,6 @@ public class EditAcreditable extends AppCompatActivity {
 
         txtNombre.setText(acreditable.getNombre());
         txtAlias.setText(acreditable.getAlias());
-        txtNumero.setText(""+acreditable.getNumero());
         txtEquivalencia.setText(""+acreditable.getEquivalencia());
 
         /*if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
@@ -119,7 +116,6 @@ public class EditAcreditable extends AppCompatActivity {
         if(!acreditableDao.existenNotas(periodo)) {
             acreditable.setNombre(txtNombre.getText().toString());
             acreditable.setAlias(txtAlias.getText().toString());
-            acreditable.setNumero(Utils.toInt(txtNumero.getText().toString()));
             acreditable.setEquivalencia(Utils.toDouble(txtEquivalencia.getText().toString()));
             acreditable.setTipo(tipo);
             /*int rbTipo = rgTipo.getCheckedRadioButtonId();
@@ -200,11 +196,6 @@ public class EditAcreditable extends AppCompatActivity {
                 txtNombre.setError("Nombre duplicado");
                 v = false;
             }
-        }
-
-        if(acreditableDao.existeNumero(acreditable)){
-            txtNumero.setError("Número duplicado");
-            v = false;
         }
 
         if(acreditable.getEquivalencia() > 100 || acreditable.getEquivalencia() <= 0){

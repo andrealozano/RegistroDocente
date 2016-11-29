@@ -42,6 +42,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignRight="@+id/rgEstado"
         android:layout_alignEnd="@+id/rgEstado"
+        android:maxLength="@integer/max_length_nombre"
         android:hint="Observación" />
 
 

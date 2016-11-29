@@ -16,6 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:hint="Nombre"
+        android:maxLength="@integer/max_length_nombre"
         android:singleLine="true">
         <requestFocus />
     </EditText>
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:hint="Alias"
+        android:maxLength="@integer/max_length_alias"
         android:singleLine="true">
     </EditText>
 
@@ -37,18 +39,8 @@
         android:ems="10"
         android:id="@+id/txtEquivalencia"
         android:hint="Porcentaje"
+        android:maxLength="@integer/max_length_numero"
         android:layout_below="@+id/txtAlias"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="numberSigned"
-        android:ems="10"
-        android:id="@+id/txtNumero"
-        android:hint="Número de orden"
-        android:layout_below="@+id/txtEquivalencia"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
 
