@@ -176,11 +176,11 @@ public class EditItemAcreditable extends AppCompatActivity {
         Calendario c = calendarioDao.get(periodo, itemAcreditable.getFecha());
         if(c!= null){
             if(c.getEstado().equals(Calendario.ESTADO_FERIADO)){
-                Toast.makeText(this, "Seleccione un día laborable (No feriado)", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, R.string.msg_dia_feridado, Toast.LENGTH_LONG).show();
                 b = false;
             }
         }else{
-            Toast.makeText(this, "Seleccione un día laborable", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, R.string.msg_dia_no_calendario, Toast.LENGTH_LONG).show();
             b = false;
         }
 

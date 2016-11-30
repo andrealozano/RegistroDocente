@@ -24,6 +24,8 @@
     <string name="error_field_required">Entrada requerida</string>
 
     <string name="msg_bloque_controles_notas">Se ha bloqueado algunos controles, porque ya ha ingresado notas.</string>
+    <string name="msg_dia_no_calendario">Este día no está registrdo en el calendario académico</string>
+    <string name="msg_dia_feridado">Este día no está registrdo como feriado en el calendario académico</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

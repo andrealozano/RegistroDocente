@@ -170,7 +170,7 @@ public class FragmentAsistancias extends Fragment {
                     mostrarDia(newCal);
                     dialog.dismiss();
                 }else{
-                    Snackbar.make(tlAsistencias, "Este día no está registrdo en el calendario académico", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    Snackbar.make(tlAsistencias, R.string.msg_dia_no_calendario, Snackbar.LENGTH_LONG).setAction("Action", null).show();
                 }
             }
         });
