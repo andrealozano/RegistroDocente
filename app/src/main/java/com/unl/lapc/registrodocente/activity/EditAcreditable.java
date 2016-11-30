@@ -54,9 +54,9 @@ public class EditAcreditable extends AppCompatActivity {
         tipo = bundle.getString("tipo");
         setTitle("Editar acreditables: " + tipo);
 
-        fijarValores();
-
         acreditableDao = new AcreditableDao(this);
+
+        fijarValores();
     }
 
     /**
@@ -68,6 +68,14 @@ public class EditAcreditable extends AppCompatActivity {
         txtNombre.setText(acreditable.getNombre());
         txtAlias.setText(acreditable.getAlias());
         txtEquivalencia.setText(""+acreditable.getEquivalencia());
+
+        if(acreditableDao.existenNotas(periodo)) {
+            txtNombre.setEnabled(false);
+            txtAlias.setEnabled(false);
+            txtEquivalencia.setEnabled(false);
+
+            Snackbar.make(txtNombre, R.string.msg_bloque_controles_notas, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
 
         /*if(acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
             rgTipo.check(R.id.rbParcial);

@@ -131,6 +131,8 @@ public class EditPeriodo extends AppCompatActivity {
 
                 txtQuimestres.setEnabled(false);
                 txtParciales.setEnabled(false);
+
+                Snackbar.make(txtEscala, R.string.msg_bloque_controles_notas, Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }
         }
     }

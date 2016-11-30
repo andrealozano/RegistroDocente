@@ -23,6 +23,8 @@
     <string name="error_incorrect_password">Credenciales incorrectas</string>
     <string name="error_field_required">Entrada requerida</string>
 
+    <string name="msg_bloque_controles_notas">Se ha bloqueado algunos controles, porque ya ha ingresado notas.</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_main_notas">MainNotasNav</string>
