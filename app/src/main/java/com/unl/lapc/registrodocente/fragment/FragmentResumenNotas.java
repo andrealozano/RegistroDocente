@@ -223,7 +223,7 @@ public class FragmentResumenNotas extends Fragment {
 
 
     private void reporteNotas(){
-        new AlertDialog.Builder(getContext()).setTitle("Reporte resumen notas").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(getContext()).setTitle("Reporte notas finales").setItems(R.array.destino_respaldo_array, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
 
                 StringBuilder sb= new StringBuilder();
@@ -235,7 +235,7 @@ public class FragmentResumenNotas extends Fragment {
                 }
 
                 Utils.checkReportPermisions(getActivity());
-                emailFile = Utils.getExternalStorageFile("reportes", String.format("ResumenNotas_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
+                emailFile = Utils.getExternalStorageFile("reportes", String.format("NotasFinales_%s_%s.csv", clase.getNombre(),  Utils.currentReportDate()));
                 Utils.writeToFile(sb, emailFile);
 
                 if (which == 0){
@@ -244,8 +244,8 @@ public class FragmentResumenNotas extends Fragment {
                     //Envia al correo
                     Uri u1 = Uri.fromFile(emailFile);
                     Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Resumen notas " + clase.getNombre());
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Resumen de notas: " + emailFile.getName());
+                    sendIntent.putExtra(Intent.EXTRA_SUBJECT, "Registro Docente - Notas finales " + clase.getNombre());
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, "Notas finales: " + emailFile.getName());
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
                     sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getContext()));
                     sendIntent.setType("text/html");

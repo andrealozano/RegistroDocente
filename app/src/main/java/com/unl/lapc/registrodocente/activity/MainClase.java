@@ -118,26 +118,35 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         //List<Quimestre> quimestres = quimestreDao.getAll(clase.getPeriodo());
 
         //group_id , item_id , order, nombre
-        int gid = 1;
+        int gid = 2;
         int id = 1;
+        int ord = 1;
 
         for(int q = 1; q <= periodo.getQuimestres(); q++){
-            MenuItem s = menu.add(gid, id, id, "Quimestre " + q);
+            MenuItem s = menu.add(gid, id, ord, "Quimestre " + q);
+            s.setCheckable(true);
             s.setIcon(R.drawable.ic_dashboard_black_18dp);
             menuItems.put(s, new Quimestre(q));
             id++;
+            ord++;
 
             //List<Parcial> parciales = parcialDao.getAll(q);
             for (int p=1; p <= periodo.getParciales(); p++){
-                MenuItem sp = menu.add(gid, id, id, "Parcial " + p);
+                MenuItem sp = menu.add(gid, id, ord, "Parcial " + p);
+                sp.setCheckable(true);
                 sp.setIcon(R.drawable.ic_toc_black_18dp);
                 menuItems.put(sp, new Parcial(q, p));
 
                 id++;
+                ord++;
             }
 
             gid++;
         }
+
+        MenuItem s = menu.add(gid, 1000, ord, "Notas finales");
+        s.setCheckable(true);
+        s.setIcon(R.drawable.ic_menu_notas);
     }
 
     /*private void mostrarMenu(boolean b){
@@ -198,7 +207,7 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
         fragment.setArguments(args);
 
         getSupportFragmentManager().beginTransaction().replace(R.id.content_frame, fragment).commit();
-        getSupportActionBar().setTitle("Resumen notas");
+        getSupportActionBar().setTitle("Notas finales");
         //mostrarMenu(true);
     }
 
@@ -320,7 +329,7 @@ public class MainClase extends AppCompatActivity implements NavigationView.OnNav
             cargarEstudiantes();
         }
 
-        if(id == R.id.nav_notas){
+        if(id == 1000){ //notas
             cargarResumenNotas();
         }
 

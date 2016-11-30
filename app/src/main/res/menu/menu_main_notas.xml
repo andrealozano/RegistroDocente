@@ -6,7 +6,7 @@
         <item
         android:id="@+id/action_share"
         android:orderInCategory="102"
-        android:title="Exportar resumen - csv"
+        android:title="Exportar notas - csv"
         android:icon="@android:drawable/ic_menu_share"
         app:showAsAction="never" />
 
@@ -19,7 +19,7 @@
 
         <item
             android:id="@+id/action_estatdisticas"
-            android:orderInCategory="102"
+            android:orderInCategory="104"
             android:title="Estadísticas"
             android:icon="@android:drawable/ic_menu_report_image"
             app:showAsAction="never" />
