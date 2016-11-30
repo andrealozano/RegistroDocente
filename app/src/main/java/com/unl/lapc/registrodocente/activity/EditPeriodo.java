@@ -15,6 +15,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.dao.AcreditableDao;
 import com.unl.lapc.registrodocente.dao.CalendarioDao;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
 import com.unl.lapc.registrodocente.modelo.Acreditable;
@@ -32,6 +33,7 @@ public class EditPeriodo extends AppCompatActivity {
 
     private Periodo periodo = null;
     private PeriodoDao dao = null;
+    private AcreditableDao acreditableDao;
     private CalendarioDao calendarioDao;
 
     private EditText txtNombre;
@@ -87,10 +89,11 @@ public class EditPeriodo extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         periodo = bundle.getParcelable("periodo");
 
-        fijarValores();
-
         dao = new PeriodoDao(this);
         calendarioDao = new CalendarioDao(this);
+        acreditableDao = new AcreditableDao(this);
+
+        fijarValores();
     }
 
     /**
@@ -118,6 +121,17 @@ public class EditPeriodo extends AppCompatActivity {
             txtEqvExamenes.setText(""+periodo.getEquivalenciaExamenes());
             txtPorcentajeAsis.setText(""+periodo.getPorcentajeAsistencias());
             txtNotaMinima.setText(""+periodo.getNotaMinima());
+
+            if(periodo.getId() > 0 && acreditableDao.existenNotas(periodo)) {
+                txtEscala.setEnabled(false);
+                txtEqvParciales.setEnabled(false);
+                txtEqvExamenes.setEnabled(false);
+                txtPorcentajeAsis.setEnabled(false);
+                txtNotaMinima.setEnabled(false);
+
+                txtQuimestres.setEnabled(false);
+                txtParciales.setEnabled(false);
+            }
         }
     }
 
