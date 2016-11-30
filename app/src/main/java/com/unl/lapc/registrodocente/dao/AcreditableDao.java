@@ -216,8 +216,8 @@ public class AcreditableDao extends DBHandler {
     public int updateNota(ResumenAcreditable resumen, ResumenParcialAcreditable registro, Periodo periodo, Clase clase, Estudiante estudiante, Acreditable acreditable, int quimestre, int parcial) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        double eqvExamenes = periodo.getEquivalenciaExamenes();
-        double eqvParciales = periodo.getEquivalenciaParciales();
+        double eqvExamenes = (periodo.getEquivalenciaExamenes() * periodo.getEscala()) / 100.00;
+        double eqvParciales = (periodo.getEquivalenciaParciales() * periodo.getEscala()) / 100.00;
 
         //Actualiza nota
         ContentValues vri = new ContentValues();

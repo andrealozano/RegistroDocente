@@ -78,8 +78,6 @@ public class FragmentResumenNotasQuimestre extends Fragment {
         row.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.WRAP_CONTENT));
         row.setBackgroundColor(getResources().getColor(R.color.backgroundTh));
 
-
-
         TextView tv1 = new TextView(getContext());
         tv1.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT));
         tv1.setGravity(Gravity.CENTER);

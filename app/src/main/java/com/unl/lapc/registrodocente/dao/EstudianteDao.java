@@ -373,7 +373,7 @@ public class EstudianteDao extends DBHandler {
         }
 
 
-        String selectQuery1 = "SELECT r.id, e.id, a.id, r.notaFinal from estudiante e, registroacreditable r, acreditable a where r.estudiante_id = e.id and r.acreditable_id = a.id and r.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " and r.parcial = " + parcial + " order by a.numero asc, e.id asc";
+        String selectQuery1 = "SELECT r.id, e.id, a.id, r.notaFinal from estudiante e, registroacreditable r, acreditable a where r.estudiante_id = e.id and r.acreditable_id = a.id and r.clase_id = " + clase.getId() + " and r.quimestre = " + quimestre + " and r.parcial = " + parcial + " order by a.nombre asc, e.id asc";
         Cursor cursor1 = db.rawQuery(selectQuery1, null);
         List<ResumenParcialAcreditable> list1 = new ArrayList<>();
 
@@ -421,7 +421,7 @@ public class EstudianteDao extends DBHandler {
         }
 
 
-        String selectQuery1 = "SELECT r.id, e.id, r.itemacreditable_id, r.nota from estudiante e, registroitem r where r.estudiante_id = e.id and r.acreditable_id = " + acreditable.getId() + " and r.clase_id = " + clase.getId() + " order by e.id asc";
+        String selectQuery1 = "SELECT r.id, e.id, r.itemacreditable_id, r.nota from estudiante e, registroitem r, itemacreditable ia where r.itemacreditable_id = ia.id and r.estudiante_id = e.id and r.acreditable_id = " + acreditable.getId() + " and r.clase_id = " + clase.getId() + " and ia.quimestre = "+quimestre+" and ia.parcial="+parcial+" order by e.id asc";
         Cursor cursor1 = db.rawQuery(selectQuery1, null);
         List<ResumenParcialAcreditable> list1 = new ArrayList<>();
 
