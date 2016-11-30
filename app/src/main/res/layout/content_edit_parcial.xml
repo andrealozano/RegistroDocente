@@ -27,7 +27,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="numberSigned"
+        android:inputType="number"
         android:ems="10"
         android:id="@+id/txtNumero"
         android:hint="Número de orden"
