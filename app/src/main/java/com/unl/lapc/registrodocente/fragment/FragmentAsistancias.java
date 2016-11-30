@@ -257,45 +257,47 @@ public class FragmentAsistancias extends Fragment {
         tv2.setText("NOMBRES");
         row.addView(tv2);
 
-        final CheckBox chk = new CheckBox(getContext());
-        chk.setChecked(marcar);
-        row.addView(chk);
+        if(calendario != null && calendario.getEstado().equals(Calendario.ESTADO_ACTIVO)) {
 
-        chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
-                if(asistencias != null && cancelarMarcar == false) {
-                    new AlertDialog.Builder(getContext())
-                            .setCancelable(false)
-                            .setIcon(android.R.drawable.ic_dialog_alert)
-                            .setTitle(b ? "Marcar todo" :  "Desmarcar todo")
-                            .setMessage(b ? "¿Desea marcar a todos los estudiantes como presentes?" : "¿Desea marcar a todos los estudiantes como ausentes?")
-                            .setPositiveButton(b ? "Marcar" : "Desmarcar", new DialogInterface.OnClickListener()
-                            {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                for (Asistencia as : asistencias) {
-                                    as.setEstado(b ? "P" :  "F");
-                                    asistenciaDao.update(as, clase, periodo);
-                                }
-                                mostrarDia(calendario);
-                                }
-                            })
-                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    cancelarMarcar = true;
-                                    chk.setChecked(!chk.isChecked());
-                                }
-                            })
-                            .show();
-                }
+            final CheckBox chk = new CheckBox(getContext());
+            chk.setChecked(marcar);
+            row.addView(chk);
 
-                if(cancelarMarcar){
-                    cancelarMarcar = false;
+            chk.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, final boolean b) {
+                    if (asistencias != null && cancelarMarcar == false) {
+                        new AlertDialog.Builder(getContext())
+                                .setCancelable(false)
+                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                .setTitle(b ? "Marcar todo" : "Desmarcar todo")
+                                .setMessage(b ? "¿Desea marcar a todos los estudiantes como presentes?" : "¿Desea marcar a todos los estudiantes como ausentes?")
+                                .setPositiveButton(b ? "Marcar" : "Desmarcar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        for (Asistencia as : asistencias) {
+                                            as.setEstado(b ? "P" : "F");
+                                            asistenciaDao.update(as, clase, periodo);
+                                        }
+                                        mostrarDia(calendario);
+                                    }
+                                })
+                                .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        cancelarMarcar = true;
+                                        chk.setChecked(!chk.isChecked());
+                                    }
+                                })
+                                .show();
+                    }
+
+                    if (cancelarMarcar) {
+                        cancelarMarcar = false;
+                    }
                 }
-            }
-        });
+            });
+        }
 
         tlAsistencias.addView(row);
     }
