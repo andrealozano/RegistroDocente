@@ -359,7 +359,7 @@ public class FragmentAcreditables extends Fragment {
             public void onClick(View v)
             {
                 if(txtNota.getText().toString().length() > 0) {
-                    double nota = Utils.toDouble(txtNota.getText().toString());
+                    double nota =  Utils.round(Utils.toDouble(txtNota.getText().toString()), 2);
                     //validar ramgo
 
                     if(nota <= periodo.getEscala()) {
