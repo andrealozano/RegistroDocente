@@ -21,6 +21,7 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.unl.lapc.registrodocente.dao.PeriodoDao;
 import com.unl.lapc.registrodocente.modelo.Clase;
 import com.unl.lapc.registrodocente.modelo.Periodo;
+import com.unl.lapc.registrodocente.util.Constantes;
 import com.unl.lapc.registrodocente.util.Utils;
 
 import java.io.File;
@@ -28,8 +29,6 @@ import java.util.ArrayList;
 import java.util.Map;
 
 public class PeriodoChart extends AppCompatActivity {
-
-    static final int PICK_DESTINO_REPORTE_REQUEST = 1;
 
     private PieChart pieChart;
     private TextView txtPeriodo;
@@ -151,7 +150,7 @@ public class PeriodoChart extends AppCompatActivity {
                     sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
                     sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(getApplicationContext()));
                     sendIntent.setType("text/html");
-                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), PICK_DESTINO_REPORTE_REQUEST);
+                    startActivityForResult(Intent.createChooser(sendIntent, "Destino reporte"), Constantes.PICK_DESTINO_REPORTE_REQUEST);
                 }
             }
         }).create().show();

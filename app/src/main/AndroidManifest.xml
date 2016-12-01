@@ -69,6 +69,7 @@
             android:name=".activity.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".activity.RecoveryActivity" />
+        <activity android:name=".activity.PasswordActivity" />
         <activity
             android:name=".activity.EstudianteList"
             android:label="Estudiantes" />

@@ -18,14 +18,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.util.Constantes;
 import com.unl.lapc.registrodocente.util.Utils;
 
 /**
  * Pantalla para registrarse o autenticarse.
  */
 public class LoginActivity extends AppCompatActivity {
-
-    static final int RECUPERAR_REQUEST = 2;
 
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -216,7 +215,7 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void recuperar() {
         Intent intent = new Intent(this, RecoveryActivity.class);
-        startActivityForResult(intent, RECUPERAR_REQUEST);
+        startActivityForResult(intent, Constantes.RECUPERAR_REQUEST);
     }
 
     /**
@@ -272,7 +271,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RECUPERAR_REQUEST) {
+        if (requestCode == Constantes.RECUPERAR_REQUEST) {
             if (resultCode == RESULT_OK) {
                 Snackbar.make(txtClave, "Su contraseña ha sido cambiada correctamente!", Snackbar.LENGTH_LONG).setAction("Action", null).show();
             }

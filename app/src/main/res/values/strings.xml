@@ -15,6 +15,7 @@
     <string name="action_sign_in">Iniciar</string>
     <string name="action_registrar">Registrar</string>
     <string name="action_recuperar">Recuperar</string>
+    <string name="action_cambiar">Cambiar</string>
 
     <string name="error_invalid_user">Usuario no válido</string>
     <string name="error_invalid_email">Email no válido</string>
@@ -34,6 +35,7 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
+    <string name="action_cambiar_clave">Cambiar contraseña</string>
     <string name="action_settings">Configuración</string>
     <string name="title_activity_edit_parcial">Editar parcial</string>
     <string name="title_activity_settings">Configuración</string>

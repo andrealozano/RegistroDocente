@@ -28,6 +28,7 @@ import com.unl.lapc.registrodocente.adapter.ClasesMainAdapter;
 import com.unl.lapc.registrodocente.dao.ClaseDao;
 import com.unl.lapc.registrodocente.modelo.Calendario;
 import com.unl.lapc.registrodocente.modelo.Clase;
+import com.unl.lapc.registrodocente.util.Constantes;
 import com.unl.lapc.registrodocente.util.UriUtils;
 import com.unl.lapc.registrodocente.util.Utils;
 
@@ -46,10 +47,6 @@ import java.util.GregorianCalendar;
  * Esta actividad se lanza al arrancar la aplicación. Además verifica si el usuario no está autenticado para mostrar la pantalla de login.
  */
 public class Main extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
-
-    static final int AUTENTICATION_REQUEST = 1;
-    static final int PICK_DESTINO_RESPALDO_REQUEST = 2;
-    static final int FILE_SELECT_RESTORE = 3;
 
     protected static String login = null;
 
@@ -78,7 +75,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
 
         if(Main.login == null) {
             Intent intent = new Intent(this, LoginActivity.class);
-            startActivityForResult(intent, AUTENTICATION_REQUEST);
+            startActivityForResult(intent, Constantes.AUTENTICATION_REQUEST);
         }
 
     }
@@ -281,7 +278,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             sendIntent.putExtra(Intent.EXTRA_STREAM, u1);
             sendIntent.putExtra(Intent.EXTRA_EMAIL, Utils.getEmailPref(this));
             sendIntent.setType("text/html");
-            startActivityForResult(Intent.createChooser(sendIntent, "Destino respaldo"), PICK_DESTINO_RESPALDO_REQUEST);
+            startActivityForResult(Intent.createChooser(sendIntent, "Destino respaldo"), Constantes.PICK_DESTINO_RESPALDO_REQUEST);
         }
     }
 
@@ -294,7 +291,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         intent.addCategory(Intent.CATEGORY_OPENABLE);
 
         try {
-            startActivityForResult(Intent.createChooser(intent, "Base de datos a restaurar"), FILE_SELECT_RESTORE);
+            startActivityForResult(Intent.createChooser(intent, "Base de datos a restaurar"), Constantes.FILE_SELECT_RESTORE);
         } catch (android.content.ActivityNotFoundException ex) {
             Toast.makeText(this, "Por favor instale un administrador de archivos.", Toast.LENGTH_SHORT).show();
         }
@@ -360,14 +357,14 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == PICK_DESTINO_RESPALDO_REQUEST) {
+        if(requestCode == Constantes.PICK_DESTINO_RESPALDO_REQUEST) {
             if (resultCode == RESULT_OK && backupDB != null) {
                 backupDB.delete();
                 backupDB = null;
             }
         }
 
-        if(requestCode == AUTENTICATION_REQUEST) {
+        if(requestCode == Constantes.AUTENTICATION_REQUEST) {
             if (resultCode == RESULT_OK) {
                 customInit();
             }else{
@@ -375,7 +372,7 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
             }
         }
 
-        if(requestCode == FILE_SELECT_RESTORE){
+        if(requestCode == Constantes.FILE_SELECT_RESTORE){
             if (resultCode == RESULT_OK) {
                 try{
                     Uri uri = data.getData();

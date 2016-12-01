@@ -402,5 +402,15 @@ public class AcreditableDao extends DBHandler {
         return cursor.getInt(0) > 0;
     }
 
+    public boolean sumarEquivalenciaIgnoteThis(Acreditable acreditable){
+        String selectQuery = "SELECT sum(equivalencia) FROM acreditable where id <> ? and periodo_id = ? and tipo = ?";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{acreditable.getId()+"", ""+ acreditable.getPeriodo().getId(), acreditable.getTipo()});
+        cursor.moveToFirst();
+
+        return cursor.getInt(0) > 0;
+    }
+
 
 }

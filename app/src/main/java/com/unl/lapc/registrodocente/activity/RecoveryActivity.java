@@ -3,6 +3,7 @@ package com.unl.lapc.registrodocente.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.unl.lapc.registrodocente.R;
+import com.unl.lapc.registrodocente.util.Constantes;
 
 public class RecoveryActivity extends AppCompatActivity {
 
@@ -17,8 +19,6 @@ public class RecoveryActivity extends AppCompatActivity {
 
     private EditText txtUsuario;
     private EditText txtEmail;
-    private EditText txtClave;
-    private EditText txtConf;
 
     private String prefUsuario;
     private String prefEmail;
@@ -34,8 +34,6 @@ public class RecoveryActivity extends AppCompatActivity {
 
         txtUsuario = (EditText) findViewById(R.id.usuario);
         txtEmail = (EditText) findViewById(R.id.email);
-        txtClave = (EditText) findViewById(R.id.clave);
-        txtConf = (EditText) findViewById(R.id.confirmarclave);
 
         Button btnRecuperar = (Button) findViewById(R.id.btnRecuperar);
 
@@ -50,29 +48,13 @@ public class RecoveryActivity extends AppCompatActivity {
     private void recuperar(){
         // Reset errors.
         txtUsuario.setError(null);
-        txtClave.setError(null);
         txtEmail.setError(null);
-        txtConf.setError(null);
 
         String usuario = txtUsuario.getText().toString();
         String email = txtEmail.getText().toString();
-        String clave = txtClave.getText().toString();
-        String confClave = txtConf.getText().toString();
 
         boolean cancel = false;
         View focusView = null;
-
-        if (!isPasswordConfirmValid(clave, confClave)) {
-            txtConf.setError(getString(R.string.error_invalid_confirm_password));
-            focusView = txtConf;
-            cancel = true;
-        }
-
-        if (!isPasswordValid(clave)) {
-            txtClave.setError(getString(R.string.error_invalid_password));
-            focusView = txtClave;
-            cancel = true;
-        }
 
         if (!isEmailValid(email)) {
             txtEmail.setError("Correo no registrado");
@@ -89,13 +71,9 @@ public class RecoveryActivity extends AppCompatActivity {
         if (cancel) {
             focusView.requestFocus();
         } else {
-            //Actualiza la nueva clave
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(SettingsActivity.KEY_PREF_SERGURIDAD_CLAVE, clave);
-            editor.commit();
-
-            setResult(RESULT_OK, new Intent());
-            finish();
+            //Invoca a cambiar la clave
+            Intent i = new Intent(this, PasswordActivity.class);
+            startActivityForResult(i, Constantes.PASSWORD_REQUEST);
         }
     }
 
@@ -119,17 +97,15 @@ public class RecoveryActivity extends AppCompatActivity {
         return prefUsuario.equals(nombre);
     }
 
-    /**
-     * Valida la clave
-     * @param password
-     * @return
-     */
-    private boolean isPasswordValid(String password) {
-        //TODO: Replace this with your own logic
-        return password.length() >= 5;
-    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-    private boolean isPasswordConfirmValid(String password, String confirm) {
-        return password.equals(confirm);
+        if (requestCode == Constantes.PASSWORD_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                setResult(RESULT_OK, new Intent());
+                finish();
+            }
+        }
+
     }
 }
