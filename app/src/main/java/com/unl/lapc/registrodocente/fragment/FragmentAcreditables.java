@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
@@ -149,13 +150,19 @@ public class FragmentAcreditables extends Fragment {
      * @param itemAcreditable
      */
     private void editItem(ItemAcreditable itemAcreditable){
-        Intent mIntent = new Intent(getContext(), EditItemAcreditable.class);
-        mIntent.putExtra("clase", clase);
-        mIntent.putExtra("periodo", periodo);
-        mIntent.putExtra("acreditable", acreditable);
-        mIntent.putExtra("itemAcreditable", itemAcreditable);
 
-        startActivity(mIntent);
+        String msg = itemAcreditable.getId() == 0 ? acreditableDao.validarConfAcreditables(periodo) : null;
+
+        if(msg == null) {
+            Intent mIntent = new Intent(getContext(), EditItemAcreditable.class);
+            mIntent.putExtra("clase", clase);
+            mIntent.putExtra("periodo", periodo);
+            mIntent.putExtra("acreditable", acreditable);
+            mIntent.putExtra("itemAcreditable", itemAcreditable);
+            startActivity(mIntent);
+        }else{
+            Snackbar.make(tlResumenNotas, msg, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
     }
 
     /**
@@ -319,75 +326,81 @@ public class FragmentAcreditables extends Fragment {
      * @param registro
      */
     private void showDialogNota(final TextView tvNota, final TextView tvPm, final TextView tvEq, final ResumenAcreditable resumen, ItemAcreditable itemAcreditable, final ResumenParcialAcreditable registro){
-        final View myView = View.inflate(getContext(), R.layout.content_dlg_nota, null);
 
-        AlertDialog.Builder builder=new AlertDialog.Builder(getContext());
-        builder.setView(myView);
-        builder.setTitle("Asignar nota: " + acreditable.getNombre());
-        builder.setCancelable(false);
+        String msg = acreditableDao.validarConfAcreditables(periodo);
 
-        final TextView txtAcre = (TextView)myView.findViewById(R.id.txtAcreditable);
-        final TextView txtEstu = (TextView)myView.findViewById(R.id.txtEstudiante);
-        final EditText txtNota = (EditText)myView.findViewById(R.id.txtNota);
+        if(msg == null) {
 
-        txtAcre.setText("Acreditable: " + itemAcreditable.getNombre());
-        txtEstu.setText("Estudiante : " + resumen.getNombres());
-        txtNota.setText(""+registro.getNotaFinal());
-        txtNota.selectAll();
+            final View myView = View.inflate(getContext(), R.layout.content_dlg_nota, null);
 
-        final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+            builder.setView(myView);
+            builder.setTitle("Asignar nota: " + acreditable.getNombre());
+            builder.setCancelable(false);
 
-        builder.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                //NO usar en este caso. Se cierra automaticamnete
-            }
-        });
+            final TextView txtAcre = (TextView) myView.findViewById(R.id.txtAcreditable);
+            final TextView txtEstu = (TextView) myView.findViewById(R.id.txtEstudiante);
+            final EditText txtNota = (EditText) myView.findViewById(R.id.txtNota);
 
-        builder.setNegativeButton("Cerrar",new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dialog, int id){
-                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                dialog.dismiss();
-            }
-        });
+            txtAcre.setText("Acreditable: " + itemAcreditable.getNombre());
+            txtEstu.setText("Estudiante : " + resumen.getNombres());
+            txtNota.setText("" + registro.getNotaFinal());
+            txtNota.selectAll();
 
-        final AlertDialog alert=builder.create();
-        alert.show();
+            final InputMethodManager imm = (InputMethodManager) getContext().getSystemService(getContext().INPUT_METHOD_SERVICE);
 
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                if(txtNota.getText().toString().length() > 0) {
-                    double nota =  Utils.round(Utils.toDouble(txtNota.getText().toString()), 2);
-                    //validar ramgo
-
-                    if(nota <= periodo.getEscala()) {
-
-                        registro.setNotaFinal(nota);
-                        resumen.calcularPromedio(acreditable, periodo);
-
-                        Estudiante estudiante = new Estudiante(resumen.getEstudianteId());
-                        acreditableDao.updateNota(resumen, registro, periodo, clase, estudiante, acreditable, quimestre, parcial);
-
-                        tvNota.setText("" + nota);
-                        tvPm.setText("" + resumen.getNotaPromedio());
-                        tvEq.setText("" + resumen.getNotaFinal());
-                        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
-                        alert.dismiss();
-                    }else{
-                        //Snackbar.make(txtNota, "La nota no debe sobrepasar de " + periodo.getEscala(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                        txtNota.setError("La nota no debe sobrepasar de " + periodo.getEscala());
-                    }
-                }else{
-                    //Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();
-                    txtNota.setError("Ingrese la nota");
+            builder.setPositiveButton("Asignar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //NO usar en este caso. Se cierra automaticamnete
                 }
-            }
-        });
+            });
 
-        txtNota.requestFocus();
-        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+            builder.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                    dialog.dismiss();
+                }
+            });
+
+            final AlertDialog alert = builder.create();
+            alert.show();
+
+            alert.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (txtNota.getText().toString().length() > 0) {
+                        double nota = Utils.round(Utils.toDouble(txtNota.getText().toString()), 2);
+                        //validar ramgo
+
+                        if (nota <= periodo.getEscala()) {
+
+                            registro.setNotaFinal(nota);
+                            resumen.calcularPromedio(acreditable, periodo);
+
+                            Estudiante estudiante = new Estudiante(resumen.getEstudianteId());
+                            acreditableDao.updateNota(resumen, registro, periodo, clase, estudiante, acreditable, quimestre, parcial);
+
+                            tvNota.setText("" + nota);
+                            tvPm.setText("" + resumen.getNotaPromedio());
+                            tvEq.setText("" + resumen.getNotaFinal());
+                            imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+                            alert.dismiss();
+                        } else {
+                            //Snackbar.make(txtNota, "La nota no debe sobrepasar de " + periodo.getEscala(), Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                            txtNota.setError("La nota no debe sobrepasar de " + periodo.getEscala());
+                        }
+                    } else {
+                        //Snackbar.make(myView, "Ingrese la nota", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                        txtNota.setError("Ingrese la nota");
+                    }
+                }
+            });
+
+            txtNota.requestFocus();
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        }else{
+            Snackbar.make(tlResumenNotas, msg, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
     }
 
     /**

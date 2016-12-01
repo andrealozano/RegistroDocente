@@ -208,6 +208,13 @@ public class EditAcreditable extends AppCompatActivity {
 
         if(acreditable.getEquivalencia() > 100 || acreditable.getEquivalencia() <= 0){
             txtEquivalencia.setError("Porcentaje entre 1 y 100");
+            v = false;
+        }else {
+            String msgPorcentajes = acreditableDao.validarSumaEquivalencias(acreditable, periodo);
+            if (msgPorcentajes != null) {
+                txtEquivalencia.setError(msgPorcentajes);
+                v = false;
+            }
         }
 
         return v;

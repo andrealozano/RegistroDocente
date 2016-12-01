@@ -402,14 +402,54 @@ public class AcreditableDao extends DBHandler {
         return cursor.getInt(0) > 0;
     }
 
-    public boolean sumarEquivalenciaIgnoteThis(Acreditable acreditable){
+    public String validarSumaEquivalencias(Acreditable acreditable, Periodo periodo){
+
         String selectQuery = "SELECT sum(equivalencia) FROM acreditable where id <> ? and periodo_id = ? and tipo = ?";
         SQLiteDatabase db = this.getWritableDatabase();
 
         Cursor cursor = db.rawQuery(selectQuery, new  String[]{acreditable.getId()+"", ""+ acreditable.getPeriodo().getId(), acreditable.getTipo()});
         cursor.moveToFirst();
 
-        return cursor.getInt(0) > 0;
+        double suma = cursor.getDouble(0) + acreditable.getEquivalencia();
+
+        if (acreditable.getTipo().equals(Acreditable.TIPO_ACREDITABLE_PARCIAL)){
+            //En los parciales se valida que llege hasta 100%
+            if(suma > 100){
+                return "La suma de los porcentajes de todos los acreditables no debe ser mayor a 100%";
+            }
+        }else{
+            //En los quimestrales se valida que llege hasta el porcentaje de examenes (20%)
+            if(suma > periodo.getEquivalenciaExamenes()){
+                return "La suma de los porcentajes de los acreditables debe ser " + periodo.getEquivalenciaExamenes() + "%";
+            }
+        }
+
+        return null;
+    }
+
+
+    public String validarConfAcreditables(Periodo periodo){
+
+        String selectQuery = "SELECT sum(case when tipo='Parcial' then equivalencia else 0 end), sum(case when tipo='Quimestre' then equivalencia else 0 end) FROM acreditable where periodo_id = ?";
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(selectQuery, new  String[]{periodo.getId()+""});
+        cursor.moveToFirst();
+
+        double sumap = cursor.getDouble(0);
+        double sumaq = cursor.getDouble(1);
+
+        if (sumap != 100){
+            //En los parciales se valida que llege hasta 100%
+            return "Aún no ha configurado todos los acreditables para los parciales.";
+        }
+
+        if(sumaq != periodo.getEquivalenciaExamenes()){
+            //En los quimestrales se valida que llege hasta el porcentaje de examenes (20%)
+            return "Aún no ha configurado todos los acreditables para los quimestres.";
+        }
+
+        return null;
     }
 
 

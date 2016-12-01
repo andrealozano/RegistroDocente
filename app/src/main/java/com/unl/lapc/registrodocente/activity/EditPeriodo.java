@@ -315,6 +315,11 @@ public class EditPeriodo extends AppCompatActivity {
             v = false;
         }
 
+        if(periodo.getFin().before(periodo.getInicio())){
+            v=false;
+            Snackbar.make(txtNombre, "La fecha de fin debe ser mayor a la de inicio", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        }
+
         return v;
     }
 
@@ -334,9 +339,22 @@ public class EditPeriodo extends AppCompatActivity {
         final DatePicker dpFecha = (DatePicker)myView.findViewById(R.id.dpFecha);
         final Calendar c = GregorianCalendar.getInstance();
 
+
+
         if(tipo.equals("inicio")){
+            //1 año menos la fecha actual
+            c.setTime(new Date());
+            c.add(Calendar.MONTH, -6);
+            dpFecha.setMinDate(c.getTimeInMillis());
+
             c.setTime(periodo.getInicio());
+
         }else{
+            //Maximo 1 años de la fecha de inicio
+            c.setTime(periodo.getInicio());
+            c.add(Calendar.YEAR, 1);
+            dpFecha.setMaxDate(c.getTimeInMillis());
+
             c.setTime(periodo.getFin());
         }
 
