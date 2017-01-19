@@ -392,6 +392,11 @@ public class AcreditableDao extends DBHandler {
         return lista;
     }
 
+    /**
+     * Verifica si existe un acreditable con el mismo nombre
+     * @param acreditable
+     * @return
+     */
     public boolean existeNombre(Acreditable acreditable){
         String selectQuery = "SELECT count(*) FROM acreditable where lower(trim(nombre)) =? and id <> ? and periodo_id = ? and tipo = ?";
         SQLiteDatabase db = this.getWritableDatabase();
@@ -402,6 +407,12 @@ public class AcreditableDao extends DBHandler {
         return cursor.getInt(0) > 0;
     }
 
+    /**
+     * Valida que la sumatoria de los porcentajes sea correcto
+     * @param acreditable
+     * @param periodo
+     * @return Null si todo está bien, caso contrario una cadena con el mensaje de error
+     */
     public String validarSumaEquivalencias(Acreditable acreditable, Periodo periodo){
 
         String selectQuery = "SELECT sum(equivalencia) FROM acreditable where id <> ? and periodo_id = ? and tipo = ?";
@@ -428,6 +439,11 @@ public class AcreditableDao extends DBHandler {
     }
 
 
+    /**
+     * Valida la configuración de los acreditables (porcentajes)
+     * @param periodo
+     * @return Null si no hay error, caso contrario el mensaje de error
+     */
     public String validarConfAcreditables(Periodo periodo){
 
         String selectQuery = "SELECT sum(case when tipo='Parcial' then equivalencia else 0 end), sum(case when tipo='Quimestre' then equivalencia else 0 end) FROM acreditable where periodo_id = ?";

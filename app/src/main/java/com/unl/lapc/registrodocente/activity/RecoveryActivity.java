@@ -13,6 +13,9 @@ import android.widget.EditText;
 import com.unl.lapc.registrodocente.R;
 import com.unl.lapc.registrodocente.util.Constantes;
 
+/**
+ * Actividad para recuperar la contraseña
+ */
 public class RecoveryActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPref;
@@ -45,6 +48,9 @@ public class RecoveryActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Valida que los datos sean correctos e invoca a la actividad de cambio de contraseña
+     */
     private void recuperar(){
         // Reset errors.
         txtUsuario.setError(null);

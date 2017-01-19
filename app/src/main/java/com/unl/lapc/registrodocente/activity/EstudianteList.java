@@ -20,6 +20,10 @@ import com.unl.lapc.registrodocente.modelo.Estudiante;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Actividad para mostrar y buscar todos los estudiantes registrados.
+ * Tambi{en permite seleccionarlos para retornarlos a la actividad que los invocó
+ */
 public class EstudianteList extends AppCompatActivity {
 
     static final int ADD_ESTUDIANTE_REQUEST = 1;
@@ -113,6 +117,9 @@ public class EstudianteList extends AppCompatActivity {
         }
     }
 
+    /**
+     * Lanza actividad para crear nuevo estudiante
+     */
     private void addEstudiante(){
         Intent intent = new Intent(this, EditEstudiante.class);
         intent.putExtra("estudiante", new Estudiante());
@@ -120,6 +127,10 @@ public class EstudianteList extends AppCompatActivity {
         startActivityForResult(intent, ADD_ESTUDIANTE_REQUEST);
     }
 
+    /**
+     * Agrega a la lista de estudiantes seleccionados
+     * @param c
+     */
     public void Check(EstudianteCheck c){
 
         if(c!=null){
@@ -149,6 +160,10 @@ public class EstudianteList extends AppCompatActivity {
         setTitle("Estudiantes ("+ listaCheck.size()+")");
     }
 
+    /**
+     * Obtiene los ids de los estudiantes seleccionados
+     * @return
+     */
     public int[] getEstudiantes(){
         int[] ids = new int[listaCheck.size()];
         int i = 0;

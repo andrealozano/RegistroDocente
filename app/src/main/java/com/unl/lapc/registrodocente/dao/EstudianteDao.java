@@ -33,6 +33,8 @@ public class EstudianteDao extends DBHandler {
     /**
      * Inserta un estudiante
      * @param est
+     * @param clase
+     * @param periodo
      */
     public void add(Estudiante est, Clase clase, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -68,6 +70,12 @@ public class EstudianteDao extends DBHandler {
         db.close();
     }
 
+    /**
+     * Agrega los estudiantes a la clase
+     * @param estudiantes Id´s de los estudiantes
+     * @param clase La clase
+     * @param periodo El periodo
+     */
     public void add(int estudiantes[], Clase clase, Periodo periodo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -134,6 +142,7 @@ public class EstudianteDao extends DBHandler {
     /**
      * Borra un estudiante.
      * @param estudiante
+     * @param clase
      */
     public void delete(Estudiante estudiante, Clase clase) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -251,6 +260,7 @@ public class EstudianteDao extends DBHandler {
     /**
      * Obtiene el lsitado de estudiantes.
      * @param text El texto a buscar
+     * @param limit Numero de registros
      * @return
      */
     public List<Estudiante> getEstudiantes(String text, int limit) {

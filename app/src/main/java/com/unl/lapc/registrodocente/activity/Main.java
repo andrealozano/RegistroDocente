@@ -282,6 +282,9 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    /**
+     * Muestra el diálogo para seleccionar un fichero para restaurar la base de datos
+     */
     private void showFileChooserRestore() {
         Utils.checkReportPermisions(this);
 
@@ -297,6 +300,10 @@ public class Main extends AppCompatActivity implements NavigationView.OnNavigati
         }
     }
 
+    /**
+     * Restaura la base de datos desde el archivo indicado
+     * @param backupDB
+     */
     private void restoreDatabase(File backupDB){
         try {
 

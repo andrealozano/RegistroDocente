@@ -11,6 +11,9 @@ import android.widget.EditText;
 
 import com.unl.lapc.registrodocente.R;
 
+/***
+ * Actividad para cambiar la contraseña
+ */
 public class PasswordActivity extends AppCompatActivity {
 
     private EditText txtClave;
@@ -43,6 +46,9 @@ public class PasswordActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Cambia la contraseña y la guarda en las preferencias del usuario
+     */
     private void cambiar(){
         // Reset errors.
         txtClave.setError(null);

@@ -54,6 +54,9 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Inicializa formulario de registro
+     */
     private void initRegisterForm(){
         setContentView(R.layout.activity_login_register);
 
@@ -75,6 +78,9 @@ public class LoginActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Inicializa formulario de autenticación
+     */
     private void initLoginForm(){
         setContentView(R.layout.activity_login);
 
@@ -211,7 +217,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Envia al correo una contraseña temporal0000
+     * Inicializa la actividad para recuperar la contraseña
      */
     private void recuperar() {
         Intent intent = new Intent(this, RecoveryActivity.class);
