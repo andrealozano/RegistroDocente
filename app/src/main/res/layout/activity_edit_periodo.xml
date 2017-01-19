@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Nombre del periodo"
+        android:text="Nombre del período"
         android:id="@+id/tvNombre"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

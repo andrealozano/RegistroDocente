@@ -36,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Periodo académico"
+        android:text="Período académico"
         android:id="@+id/textView2"
         android:layout_below="@+id/txtNombreEditClase"
         android:layout_alignParentLeft="true"
