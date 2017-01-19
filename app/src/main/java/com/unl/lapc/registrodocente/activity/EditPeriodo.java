@@ -242,7 +242,7 @@ public class EditPeriodo extends AppCompatActivity {
             new AlertDialog.Builder(this)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .setTitle("Remover periodo")
-                    .setMessage("¿Desea remover esta periodo académico?")
+                    .setMessage("¿Desea remover éste periodo académico?")
                     .setPositiveButton("Remover", new DialogInterface.OnClickListener()
                     {
                         @Override

@@ -86,7 +86,7 @@
             android:layout_width="155dp"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="Porcentaje examenes"
+            android:text="Porcentaje exámenes"
             android:id="@+id/tvEqvExamenes"/>
 
         <EditText
